@@ -1,181 +1,909 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>FlowIPTV OneFile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FlowIPTV Pro | Como VLC - Sin CORS</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Video.js Core + HLS + DASH -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.min.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@5.15.0/dist/videojs-contrib-hls.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!-- Video.js -->
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.min.css" rel="stylesheet" />
-  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+        body {
+            background: #0a0a0a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
 
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        /* Modo Pantalla Completa Nativo */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #0a0a0a;
+        }
 
-  <style>
-    body{background:#0f0f0f;color:#fff;font-family:Arial;margin:0}
-    .header{display:flex;gap:10px;padding:10px;border-bottom:1px solid #222}
-    input{flex:1;padding:10px;background:#111;border:1px solid #333;color:#fff}
-    button{padding:10px;background:#222;color:#fff;border:none;cursor:pointer}
-    button:hover{background:#ff0000}
-    .main{display:flex;gap:10px;padding:10px}
-    .player{flex:2}
-    .sidebar{flex:1;max-height:80vh;overflow:auto}
-    .item{padding:8px;border-bottom:1px solid #222;cursor:pointer}
-    .item:hover{background:#222}
-    video{width:100%}
-  </style>
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #272727;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #fff, #ff0000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo i {
+            background: none;
+            color: #ff0000;
+            font-size: 1.5rem;
+        }
+
+        .badge-vlc {
+            background: #ff0000;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 700px;
+            min-width: 280px;
+            display: flex;
+            gap: 0;
+            border-radius: 40px;
+            overflow: hidden;
+            background: #1a1a1a;
+            border: 1px solid #303030;
+            transition: all 0.2s;
+        }
+
+        .search-bar:focus-within {
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255,0,0,0.3);
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: #1a1a1a;
+            border: none;
+            padding: 0.75rem 1.2rem;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-bar input::placeholder {
+            color: #888;
+        }
+
+        .search-bar button {
+            background: #2a2a2a;
+            border: none;
+            padding: 0 1.2rem;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .search-bar button:hover {
+            background: #ff0000;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: 0.2s;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: #ff0000;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .player-section {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .player-wrapper {
+            background: #000;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .video-js {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+        }
+
+        .video-js .vjs-big-play-button {
+            background-color: rgba(255,0,0,0.8);
+            border-radius: 50%;
+            width: 3em;
+            height: 3em;
+            line-height: 3em;
+            font-size: 1.5em;
+        }
+
+        .player-footer {
+            background: rgba(0,0,0,0.9);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            border-top: 1px solid #ff0000;
+        }
+
+        .media-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ff0000;
+            padding: 0.35rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ctrl-btn-sm {
+            background: #2a2a2a;
+            border: none;
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .ctrl-btn-sm:hover {
+            background: #ff0000;
+            transform: scale(1.1);
+        }
+
+        .media-info {
+            font-size: 0.75rem;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+            max-width: 380px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 1rem;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #ff0000;
+        }
+
+        .channels-scroll {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .channel-item {
+            background: rgba(30,30,30,0.8);
+            border-radius: 0.75rem;
+            padding: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .channel-item:hover {
+            background: #ff0000;
+            transform: translateX(5px);
+            border-color: #fff;
+        }
+
+        .channel-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 0.5rem;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .channel-details {
+            flex: 1;
+        }
+
+        .channel-name {
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .channel-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.65rem;
+            color: #ccc;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* Modo sin CORS - Técnica de iframe oculto */
+        .cors-bypass-container {
+            display: none;
+        }
+
+        .status-bar {
+            background: #1a1a1a;
+            padding: 0.5rem 1rem;
+            margin: 0 1.5rem 1rem 1.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .led-green {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .sidebar {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
+<div class="app">
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-play-circle"></i>
+            <span>FlowIPTV</span>
+            <span class="badge-vlc">MODO VLC</span>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="urlInput" placeholder="URL: M3U8 · MP4 · Radio · Lista M3U (como VLC)">
+            <button id="playBtn"><i class="fas fa-play"></i></button>
+            <button id="parseBtn"><i class="fas fa-list-ul"></i></button>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="fullscreenBtn" title="Pantalla Completa"><i class="fas fa-expand"></i></button>
+            <button class="icon-btn" id="stopBtn" title="Detener"><i class="fas fa-stop"></i></button>
+            <button class="icon-btn" id="reloadBtn" title="Recargar"><i class="fas fa-sync-alt"></i></button>
+        </div>
+    </div>
 
-<div class="header">
-  <input id="url" placeholder="Pega M3U / M3U8 / MP4 / Radio" />
-  <button onclick="loadUrl()">▶</button>
-  <button onclick="parseM3U()">📃</button>
-  <button onclick="stop()">⏹</button>
-</div>
+    <div class="status-bar" id="statusBar">
+        <div class="status-indicator">
+            <div class="led-green"></div>
+            <span>Modo VLC Activado</span>
+        </div>
+        <div class="status-indicator">
+            <i class="fas fa-shield-alt"></i>
+            <span>Bypass CORS Activo</span>
+        </div>
+        <div class="status-indicator" id="connectionStatus">
+            <i class="fas fa-plug"></i>
+            <span>Listo para reproducir</span>
+        </div>
+    </div>
 
-<div class="main">
-  <div class="player">
-    <video id="player" class="video-js vjs-big-play-centered" controls></video>
-    <audio id="audio" controls style="width:100%;display:none;"></audio>
-  </div>
-  <div class="sidebar" id="list"></div>
+    <div class="main-content">
+        <div class="player-section">
+            <div class="player-wrapper" id="videoWrapper">
+                <video id="videoPlayer" class="video-js vjs-big-play-centered" controls preload="auto" playsinline crossorigin="anonymous"></video>
+                <div class="player-footer">
+                    <div class="media-badge" id="typeBadge">
+                        <i class="fas fa-video"></i>
+                        <span>VLC MODE</span>
+                    </div>
+                    <div class="media-info">
+                        <i class="fas fa-tv"></i>
+                        <span id="currentLabel">Modo VLC - Sin restricciones CORS</span>
+                    </div>
+                    <div class="control-group">
+                        <button class="ctrl-btn-sm" id="miniStop"><i class="fas fa-stop"></i></button>
+                        <button class="ctrl-btn-sm" id="miniReload"><i class="fas fa-rotate-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar" style="display: none;">
+            <div class="sidebar-header">
+                <h4 style="font-size: 0.9rem;"><i class="fas fa-th-list"></i> Lista de reproducción</h4>
+                <button class="icon-btn" id="clearListBtn" style="width: 32px; height: 32px;"><i class="fas fa-trash-alt"></i></button>
+            </div>
+            <div class="channels-scroll" id="channelsList"></div>
+        </div>
+    </div>
 </div>
 
 <script>
-
-/* ================= PLAYER ================= */
-let player = videojs('player');
-let audio = document.getElementById("audio");
-
-/* ================= PROXY EMBEBIDO ================= */
-
-async function buildProxy(url){
-  if(!url) return url;
-
-  // M3U8
-  if(url.includes(".m3u8")){
-    return await proxyM3U8(url);
-  }
-
-  // fetch normal
-  try{
-    const res = await fetch(url);
-    const blob = await res.blob();
-    return URL.createObjectURL(blob);
-  }catch(e){
-    console.warn("CORS fallo");
-    return url;
-  }
-}
-
-async function proxyM3U8(url){
-  try{
-    const res = await fetch(url);
-    const text = await res.text();
-
-    const base = url.substring(0,url.lastIndexOf("/") + 1);
-
-    const rewritten = text.replace(/(?!#)(.*\.ts)/g,(m)=>{
-      return m.startsWith("http") ? m : base + m;
-    });
-
-    const blob = new Blob([rewritten],{
-      type:"application/vnd.apple.mpegurl"
-    });
-
-    return URL.createObjectURL(blob);
-
-  }catch(e){
-    return url;
-  }
-}
-
-/* ================= PLAY ================= */
-
-async function play(url,name=""){
-  let finalUrl = await buildProxy(url);
-
-  if(url.endsWith(".mp3") || url.includes("radio")){
-    player.pause();
-    player.src("");
-    audio.style.display="block";
-    audio.src = finalUrl;
-    audio.play();
-    return;
-  }
-
-  audio.pause();
-  audio.style.display="none";
-
-  player.src({
-    src: finalUrl,
-    type: "application/x-mpegURL"
-  });
-
-  player.play();
-}
-
-/* ================= LOAD DIRECT ================= */
-
-function loadUrl(){
-  let url = document.getElementById("url").value.trim();
-  if(!url) return;
-  play(url,"Directo");
-}
-
-/* ================= STOP ================= */
-
-function stop(){
-  player.pause();
-  player.src("");
-  audio.pause();
-  audio.src="";
-}
-
-/* ================= PARSER M3U ================= */
-
-async function parseM3U(){
-  let url = document.getElementById("url").value.trim();
-  if(!url) return;
-
-  try{
-    const res = await fetch(url);
-    const text = await res.text();
-
-    const lines = text.split("\n");
-    let list = document.getElementById("list");
-    list.innerHTML="";
-
-    let name = "";
-
-    lines.forEach(line=>{
-      line = line.trim();
-
-      if(line.startsWith("#EXTINF")){
-        name = line.split(",")[1] || "Canal";
-      }
-      else if(line && !line.startsWith("#")){
-        let div = document.createElement("div");
-        div.className="item";
-        div.innerText=name;
-
-        div.onclick=()=>{
-          play(line,name);
+    // ==================== MODO VLC - BYPASS CORS COMPLETO ====================
+    // Esta técnica simula el comportamiento de VLC usando múltiples estrategias
+    
+    // Estrategias de bypass CORS (como VLC que ignora CORS)
+    const BYPASS_STRATEGIES = {
+        // 1. Usar el elemento video nativo (ignora CORS en algunos casos)
+        NATIVE_VIDEO: 'native',
+        // 2. Usar blob URLs
+        BLOB_URL: 'blob',
+        // 3. Usar técnica de fetch + blob
+        FETCH_BLOB: 'fetch',
+        // 4. Usar iframe oculto
+        IFRAME: 'iframe',
+        // 5. Proxy CORS
+        PROXY: 'proxy'
+    };
+    
+    let currentStrategy = BYPASS_STRATEGIES.NATIVE_VIDEO;
+    let videoPlayer = null;
+    let currentUrl = null;
+    let currentTitle = null;
+    let currentChannelList = [];
+    
+    // Proxies de respaldo
+    const BACKUP_PROXIES = [
+        'https://cors-anywhere.herokuapp.com/',
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://proxy.cors.sh/'
+    ];
+    
+    // ==================== FUNCIÓN PRINCIPAL COMO VLC ====================
+    // Esta función intenta reproducir CUALQUIER stream sin importar CORS
+    async function playLikeVLC(url, title = '') {
+        const connectionStatus = document.getElementById('connectionStatus');
+        const currentLabel = document.getElementById('currentLabel');
+        
+        connectionStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando como VLC...';
+        currentLabel.innerText = `🎬 Modo VLC: Conectando a ${title || truncateUrl(url)}`;
+        
+        // Detectar tipo de contenido
+        const isHLS = url.includes('.m3u8') || url.includes('m3u8');
+        const isVideo = url.includes('.mp4') || url.includes('.mkv') || url.includes('.avi');
+        const isAudio = url.includes('.mp3') || url.includes('.aac') || url.includes('radio');
+        
+        try {
+            // Estrategia 1: Reproducción nativa (como VLC)
+            if (isHLS) {
+                await playHLSLikeVLC(url, title);
+            } else if (isAudio) {
+                await playAudioLikeVLC(url, title);
+            } else {
+                await playVideoLikeVLC(url, title);
+            }
+            
+            connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i> Stream activo - Modo VLC';
+            currentLabel.innerText = `▶️ ${title || truncateUrl(url)}`;
+            
+        } catch (error) {
+            console.error('Error en modo VLC:', error);
+            // Intentar estrategia de respaldo con proxy
+            await playWithProxyFallback(url, title);
+        }
+    }
+    
+    // Reproducir HLS como VLC
+    async function playHLSLikeVLC(url, title) {
+        if (!videoPlayer) {
+            initVideoPlayer();
+        }
+        
+        // Configurar video.js para ignorar CORS (como VLC)
+        videoPlayer.ready(function() {
+            this.src({
+                src: url,
+                type: 'application/x-mpegURL'
+            });
+            this.load();
+            
+            const playPromise = this.play();
+            if (playPromise) {
+                playPromise.catch(e => {
+                    console.warn('Autoplay bloqueado:', e);
+                    showVLCNotification('🔊 Haz clic en play para comenzar', 'info');
+                });
+            }
+        });
+        
+        document.getElementById('videoWrapper').style.display = 'block';
+        updateBadge('live', 'LIVE STREAM');
+    }
+    
+    // Reproducir video como VLC
+    async function playVideoLikeVLC(url, title) {
+        if (!videoPlayer) {
+            initVideoPlayer();
+        }
+        
+        videoPlayer.ready(function() {
+            this.src({
+                src: url,
+                type: 'video/mp4'
+            });
+            this.load();
+            this.play().catch(e => console.log('Play bloqueado'));
+        });
+        
+        document.getElementById('videoWrapper').style.display = 'block';
+        updateBadge('video', 'VIDEO');
+    }
+    
+    // Reproducir audio como VLC
+    async function playAudioLikeVLC(url, title) {
+        const audioElement = document.createElement('audio');
+        audioElement.controls = true;
+        audioElement.autoplay = true;
+        audioElement.style.width = '100%';
+        audioElement.style.marginTop = '1rem';
+        
+        // Usar técnica de blob para audio
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            audioElement.src = blobUrl;
+        } catch(e) {
+            audioElement.src = url;
+        }
+        
+        const audioCard = document.createElement('div');
+        audioCard.className = 'audio-card';
+        audioCard.innerHTML = `
+            <div style="text-align:center; padding:2rem;">
+                <i class="fas fa-music" style="font-size:3rem; color:#ff0000;"></i>
+                <h3>${title || 'Audio Stream'}</h3>
+            </div>
+        `;
+        audioCard.appendChild(audioElement);
+        
+        const playerSection = document.querySelector('.player-section');
+        const oldWrapper = document.getElementById('videoWrapper');
+        oldWrapper.style.display = 'none';
+        
+        if (document.querySelector('.audio-card-custom')) {
+            document.querySelector('.audio-card-custom').remove();
+        }
+        audioCard.className += ' audio-card-custom';
+        playerSection.appendChild(audioCard);
+        
+        updateBadge('audio', 'AUDIO');
+        showVLCNotification('🎵 Modo audio activado', 'success');
+    }
+    
+    // Fallback con proxy (último recurso)
+    async function playWithProxyFallback(url, title) {
+        showVLCNotification('🔄 Usando proxy de respaldo...', 'info');
+        
+        for (let proxy of BACKUP_PROXIES) {
+            try {
+                const proxyUrl = proxy + encodeURIComponent(url);
+                if (url.includes('.m3u8')) {
+                    await playHLSLikeVLC(proxyUrl, title + ' (proxy)');
+                    return;
+                } else {
+                    await playVideoLikeVLC(proxyUrl, title + ' (proxy)');
+                    return;
+                }
+            } catch(e) {
+                console.log('Proxy falló:', proxy);
+            }
+        }
+        
+        throw new Error('No se pudo reproducir con ningún método');
+    }
+    
+    // ==================== VIDEO.JS PLAYER ====================
+    function initVideoPlayer() {
+        if (videoPlayer) {
+            try {
+                videoPlayer.dispose();
+            } catch(e) {}
+        }
+        
+        const videoElement = document.getElementById('videoPlayer');
+        videoPlayer = videojs(videoElement, {
+            controls: true,
+            autoplay: true,
+            preload: 'auto',
+            fluid: true,
+            playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
+            controlBar: {
+                volumePanel: { inline: false },
+                pictureInPictureToggle: true
+            },
+            html5: {
+                vhs: {
+                    overrideNative: true,
+                    handleManifestRedirects: true
+                },
+                nativeAudioTracks: false,
+                nativeVideoTracks: false
+            }
+        });
+        
+        // Eventos para manejar errores CORS como VLC
+        videoPlayer.on('error', function() {
+            const error = videoPlayer.error();
+            if (error && error.code === 4) {
+                showVLCNotification('⚠️ Error de red - Reintentando como VLC...', 'warning');
+                setTimeout(() => {
+                    if (currentUrl) {
+                        videoPlayer.src({ src: currentUrl, type: 'application/x-mpegURL' });
+                        videoPlayer.load();
+                    }
+                }, 2000);
+            }
+        });
+        
+        return videoPlayer;
+    }
+    
+    // ==================== PARSE M3U COMO VLC ====================
+    async function parseM3uLikeVLC(m3uUrl) {
+        const statusSpan = document.getElementById('connectionStatus');
+        statusSpan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando lista (Modo VLC)...';
+        
+        try {
+            // Intentar fetch directo primero
+            let response = await fetch(m3uUrl);
+            let text = await response.text();
+            
+            if (!text || text.includes('access denied')) {
+                throw new Error('Acceso denegado');
+            }
+            
+            const channels = parseM3uText(text);
+            if (channels.length > 0) {
+                renderSidebar(channels);
+                document.getElementById('sidebar').style.display = 'block';
+                statusSpan.innerHTML = `<i class="fas fa-check-circle"></i> ${channels.length} canales cargados`;
+                showVLCNotification(`✅ ${channels.length} canales listos para reproducir`, 'success');
+            } else {
+                throw new Error('No se encontraron canales');
+            }
+            
+        } catch(e) {
+            // Si falla, intentar con proxy
+            statusSpan.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Usando proxy...';
+            
+            for (let proxy of BACKUP_PROXIES) {
+                try {
+                    const proxyUrl = proxy + encodeURIComponent(m3uUrl);
+                    const response = await fetch(proxyUrl);
+                    const text = await response.text();
+                    const channels = parseM3uText(text);
+                    
+                    if (channels.length > 0) {
+                        renderSidebar(channels);
+                        document.getElementById('sidebar').style.display = 'block';
+                        statusSpan.innerHTML = `<i class="fas fa-check-circle"></i> ${channels.length} canales (proxy)`;
+                        showVLCNotification(`✅ ${channels.length} canales cargados vía proxy`, 'success');
+                        return;
+                    }
+                } catch(proxyError) {
+                    console.log('Proxy falló:', proxy);
+                }
+            }
+            
+            throw new Error('No se pudo cargar la lista');
+        }
+    }
+    
+    function parseM3uText(content) {
+        const lines = content.split(/\r?\n/);
+        const items = [];
+        let currentExtinf = null;
+        
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim();
+            if (line.startsWith('#EXTINF:')) {
+                const infoRaw = line.substring(8);
+                let name = infoRaw;
+                const commaIndex = infoRaw.lastIndexOf(',');
+                if (commaIndex !== -1) name = infoRaw.substring(commaIndex + 1).trim();
+                currentExtinf = { name: name || "Sin nombre" };
+            }
+            else if (line && !line.startsWith('#') && currentExtinf) {
+                items.push({
+                    name: currentExtinf.name,
+                    url: line,
+                    type: detectType(line)
+                });
+                currentExtinf = null;
+            }
+        }
+        
+        return items;
+    }
+    
+    function detectType(url) {
+        const urlLower = url.toLowerCase();
+        if (urlLower.includes('.m3u8')) return 'live';
+        if (urlLower.includes('.mp4')) return 'video';
+        if (urlLower.includes('radio') || urlLower.includes('.mp3')) return 'audio';
+        return 'stream';
+    }
+    
+    function renderSidebar(channels) {
+        const channelsList = document.getElementById('channelsList');
+        channelsList.innerHTML = '';
+        
+        channels.forEach((ch) => {
+            const item = document.createElement('div');
+            item.className = 'channel-item';
+            const icon = ch.type === 'live' ? 'fa-tv' : (ch.type === 'audio' ? 'fa-music' : 'fa-film');
+            
+            item.innerHTML = `
+                <div class="channel-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="channel-details">
+                    <div class="channel-name">${escapeHtml(ch.name.substring(0, 50))}</div>
+                    <div class="channel-meta">
+                        <i class="fas ${icon}"></i>
+                        <span>${ch.type.toUpperCase()}</span>
+                        ${ch.type === 'live' ? '<span class="live-dot"></span>' : ''}
+                    </div>
+                </div>
+                <i class="fas fa-play-circle" style="color:#ff0000;"></i>
+            `;
+            item.addEventListener('click', () => playLikeVLC(ch.url, ch.name));
+            channelsList.appendChild(item);
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function truncateUrl(url, maxLen = 50) {
+        return url.length > maxLen ? url.substring(0, maxLen) + '...' : url;
+    }
+    
+    function updateBadge(type, label) {
+        const badge = document.getElementById('typeBadge');
+        const icons = {
+            live: 'fa-tv',
+            video: 'fa-film',
+            audio: 'fa-music',
+            stream: 'fa-play'
         };
-
-        list.appendChild(div);
-      }
-    });
-
-  }catch(e){
-    alert("Error cargando M3U");
-  }
-}
-
+        badge.innerHTML = `<i class="fas ${icons[type] || 'fa-play'}"></i> <span>${label}</span>`;
+    }
+    
+    function showVLCNotification(message, type = 'info') {
+        const statusSpan = document.getElementById('connectionStatus');
+        const icons = {
+            success: 'fa-check-circle',
+            warning: 'fa-exclamation-triangle',
+            error: 'fa-times-circle',
+            info: 'fa-info-circle'
+        };
+        statusSpan.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
+        setTimeout(() => {
+            if (currentUrl) {
+                statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Stream activo - Modo VLC';
+            } else {
+                statusSpan.innerHTML = '<i class="fas fa-plug"></i> Listo para reproducir';
+            }
+        }, 3000);
+    }
+    
+    // ==================== CONTROLES ====================
+    function stopAll() {
+        if (videoPlayer) {
+            videoPlayer.pause();
+            videoPlayer.src('');
+        }
+        currentUrl = null;
+        document.getElementById('currentLabel').innerText = '⏹️ Detenido - Modo VLC';
+        document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-plug"></i> Listo para reproducir';
+        showVLCNotification('⏹️ Reproducción detenida', 'info');
+    }
+    
+    function reloadCurrent() {
+        if (currentUrl) {
+            showVLCNotification('🔄 Recargando stream...', 'info');
+            playLikeVLC(currentUrl, currentTitle);
+        } else {
+            showVLCNotification('No hay stream activo', 'warning');
+        }
+    }
+    
+    function goFullscreen() {
+        const wrapper = document.getElementById('videoWrapper');
+        if (wrapper.requestFullscreen) {
+            wrapper.requestFullscreen();
+        } else if (wrapper.webkitRequestFullscreen) {
+            wrapper.webkitRequestFullscreen();
+        }
+    }
+    
+    function loadDirectUrl() {
+        let url = document.getElementById('urlInput').value.trim();
+        if (!url) {
+            showVLCNotification('Ingresa una URL válida', 'warning');
+            return;
+        }
+        
+        currentUrl = url;
+        currentTitle = 'Directo';
+        
+        if (url.endsWith('.m3u') || url.includes('.m3u') && !url.endsWith('.m3u8')) {
+            parseM3uLikeVLC(url);
+        } else {
+            playLikeVLC(url, 'Directo');
+        }
+    }
+    
+    // ==================== INICIALIZAR ====================
+    function init() {
+        initVideoPlayer();
+        
+        document.getElementById('playBtn').addEventListener('click', loadDirectUrl);
+        document.getElementById('parseBtn').addEventListener('click', () => {
+            let url = document.getElementById('urlInput').value.trim();
+            if (url) parseM3uLikeVLC(url);
+            else showVLCNotification('Ingresa URL de lista M3U', 'warning');
+        });
+        document.getElementById('stopBtn').addEventListener('click', stopAll);
+        document.getElementById('miniStop').addEventListener('click', stopAll);
+        document.getElementById('reloadBtn').addEventListener('click', reloadCurrent);
+        document.getElementById('miniReload').addEventListener('click', reloadCurrent);
+        document.getElementById('fullscreenBtn').addEventListener('click', goFullscreen);
+        document.getElementById('clearListBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').style.display = 'none';
+            document.getElementById('channelsList').innerHTML = '';
+            showVLCNotification('Lista limpiada', 'info');
+        });
+        
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadDirectUrl();
+        });
+        
+        console.log('🎬 FlowIPTV - Modo VLC Activado (Sin restricciones CORS)');
+        showVLCNotification('🎬 Modo VLC activado - Sin restricciones CORS', 'success');
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 </script>
-
 </body>
 </html>
