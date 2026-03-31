@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FlowIPTV Pro | Como VLC - Sin CORS</title>
+    <title>FlowIPTV Pro | Xtream · M3U8 · Radio · Audio</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Video.js Core + HLS + DASH -->
+    <!-- Video.js Core -->
     <link href="https://vjs.zencdn.net/8.10.0/video-js.min.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@5.15.0/dist/videojs-contrib-hls.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -20,26 +19,22 @@
         }
 
         body {
-            background: #0a0a0a;
+            background: #0f0f0f;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
-            overflow-x: hidden;
         }
 
-        /* Modo Pantalla Completa Nativo */
         .app {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: #0a0a0a;
         }
 
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            background: #0f0f0f;
             border-bottom: 1px solid #272727;
             padding: 0.75rem 1.5rem;
             display: flex;
@@ -55,7 +50,7 @@
             gap: 0.5rem;
             font-size: 1.25rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #fff, #ff0000);
+            background: linear-gradient(135deg, #fff, #aaa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -67,15 +62,6 @@
             font-size: 1.5rem;
         }
 
-        .badge-vlc {
-            background: #ff0000;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-left: 0.5rem;
-        }
-
         .search-bar {
             flex: 1;
             max-width: 700px;
@@ -84,19 +70,18 @@
             gap: 0;
             border-radius: 40px;
             overflow: hidden;
-            background: #1a1a1a;
+            background: #121212;
             border: 1px solid #303030;
             transition: all 0.2s;
         }
 
         .search-bar:focus-within {
             border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(255,0,0,0.3);
         }
 
         .search-bar input {
             flex: 1;
-            background: #1a1a1a;
+            background: #121212;
             border: none;
             padding: 0.75rem 1.2rem;
             color: white;
@@ -110,7 +95,7 @@
         }
 
         .search-bar button {
-            background: #2a2a2a;
+            background: #222;
             border: none;
             padding: 0 1.2rem;
             cursor: pointer;
@@ -120,7 +105,7 @@
         }
 
         .search-bar button:hover {
-            background: #ff0000;
+            background: #3f3f3f;
         }
 
         .header-actions {
@@ -129,7 +114,7 @@
         }
 
         .icon-btn {
-            background: rgba(255,255,255,0.1);
+            background: transparent;
             border: none;
             color: #fff;
             font-size: 1.1rem;
@@ -145,8 +130,7 @@
         }
 
         .icon-btn:hover {
-            background: #ff0000;
-            transform: scale(1.05);
+            background: #272727;
         }
 
         .main-content {
@@ -168,8 +152,7 @@
             background: #000;
             border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            position: relative;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
         .video-js {
@@ -179,34 +162,33 @@
         }
 
         .video-js .vjs-big-play-button {
-            background-color: rgba(255,0,0,0.8);
+            background-color: rgba(255,0,0,0.7);
             border-radius: 50%;
-            width: 3em;
-            height: 3em;
-            line-height: 3em;
-            font-size: 1.5em;
         }
 
         .player-footer {
-            background: rgba(0,0,0,0.9);
+            background: #1a1a1a;
             padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 0.75rem;
-            border-top: 1px solid #ff0000;
+            border-top: 1px solid #2a2a2a;
         }
 
         .media-badge {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: #ff0000;
+            background: #2a2a2a;
             padding: 0.35rem 0.9rem;
             border-radius: 30px;
             font-size: 0.75rem;
-            font-weight: bold;
+        }
+
+        .media-badge i {
+            font-size: 0.9rem;
         }
 
         .control-group {
@@ -227,7 +209,6 @@
 
         .ctrl-btn-sm:hover {
             background: #ff0000;
-            transform: scale(1.1);
         }
 
         .media-info {
@@ -242,14 +223,46 @@
             white-space: nowrap;
         }
 
+        .media-info span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .audio-card {
+            background: linear-gradient(135deg, #1e1e2a, #0a0a0a);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+
+        .audio-visualizer {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, #ff0000, #ff6b6b, #ff0000);
+            background-size: 200% auto;
+            border-radius: 50px;
+            margin: 1rem 0;
+            position: relative;
+            animation: wave 3s ease infinite;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 40px;
+        }
+
         .sidebar {
             flex: 1;
             min-width: 300px;
             max-width: 380px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 1rem;
-            padding: 1rem;
-            backdrop-filter: blur(10px);
         }
 
         .sidebar-header {
@@ -258,7 +271,7 @@
             align-items: center;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid #ff0000;
+            border-bottom: 1px solid #272727;
         }
 
         .channels-scroll {
@@ -270,7 +283,7 @@
         }
 
         .channel-item {
-            background: rgba(30,30,30,0.8);
+            background: #1a1a1a;
             border-radius: 0.75rem;
             padding: 0.7rem;
             display: flex;
@@ -282,9 +295,9 @@
         }
 
         .channel-item:hover {
-            background: #ff0000;
-            transform: translateX(5px);
-            border-color: #fff;
+            background: #252525;
+            border-color: #ff0000;
+            transform: translateX(3px);
         }
 
         .channel-icon {
@@ -313,7 +326,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.65rem;
-            color: #ccc;
+            color: #888;
         }
 
         .live-dot {
@@ -330,41 +343,51 @@
             50% { opacity: 0.5; transform: scale(0.8); }
         }
 
-        /* Modo sin CORS - Técnica de iframe oculto */
-        .cors-bypass-container {
+        .channels-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .channels-scroll::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        .channels-scroll::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 10px;
+        }
+
+        .cors-warning {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            display: none;
+            transition: opacity 0.3s;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border-left: 3px solid #ff0000;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
             display: none;
         }
 
-        .status-bar {
-            background: #1a1a1a;
-            padding: 0.5rem 1rem;
-            margin: 0 1.5rem 1rem 1.5rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            font-size: 0.75rem;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .led-green {
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            border-radius: 50%;
-            box-shadow: 0 0 5px #00ff00;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -375,6 +398,14 @@
             .sidebar {
                 max-width: 100%;
             }
+            .search-bar {
+                order: 3;
+                width: 100%;
+                max-width: 100%;
+            }
+            .header {
+                padding: 0.5rem 1rem;
+            }
         }
     </style>
 </head>
@@ -382,55 +413,49 @@
 <div class="app">
     <div class="header">
         <div class="logo">
-            <i class="fas fa-play-circle"></i>
+            <i class="fab fa-youtube"></i>
             <span>FlowIPTV</span>
-            <span class="badge-vlc">MODO VLC</span>
         </div>
         <div class="search-bar">
-            <input type="text" id="urlInput" placeholder="URL: M3U8 · MP4 · Radio · Lista M3U (como VLC)">
+            <input type="text" id="urlInput" placeholder="Pega tu enlace: Xtream M3U · M3U8 · MP3 · Radio · Lista M3U">
             <button id="playBtn"><i class="fas fa-play"></i></button>
             <button id="parseBtn"><i class="fas fa-list-ul"></i></button>
         </div>
         <div class="header-actions">
-            <button class="icon-btn" id="fullscreenBtn" title="Pantalla Completa"><i class="fas fa-expand"></i></button>
             <button class="icon-btn" id="stopBtn" title="Detener"><i class="fas fa-stop"></i></button>
             <button class="icon-btn" id="reloadBtn" title="Recargar"><i class="fas fa-sync-alt"></i></button>
         </div>
     </div>
 
-    <div class="status-bar" id="statusBar">
-        <div class="status-indicator">
-            <div class="led-green"></div>
-            <span>Modo VLC Activado</span>
-        </div>
-        <div class="status-indicator">
-            <i class="fas fa-shield-alt"></i>
-            <span>Bypass CORS Activo</span>
-        </div>
-        <div class="status-indicator" id="connectionStatus">
-            <i class="fas fa-plug"></i>
-            <span>Listo para reproducir</span>
-        </div>
-    </div>
-
     <div class="main-content">
         <div class="player-section">
+            <div class="cors-warning" id="corsWarning">
+                <i class="fas fa-shield-alt"></i> Modo proxy activado - Solucionando problemas de CORS
+            </div>
             <div class="player-wrapper" id="videoWrapper">
                 <video id="videoPlayer" class="video-js vjs-big-play-centered" controls preload="auto" playsinline crossorigin="anonymous"></video>
                 <div class="player-footer">
                     <div class="media-badge" id="typeBadge">
-                        <i class="fas fa-video"></i>
-                        <span>VLC MODE</span>
+                        <i class="fas fa-question"></i>
+                        <span>MEDIA</span>
                     </div>
                     <div class="media-info">
-                        <i class="fas fa-tv"></i>
-                        <span id="currentLabel">Modo VLC - Sin restricciones CORS</span>
+                        <i class="fas fa-link"></i>
+                        <span id="currentLabel">Listo para reproducir</span>
                     </div>
                     <div class="control-group">
                         <button class="ctrl-btn-sm" id="miniStop"><i class="fas fa-stop"></i></button>
                         <button class="ctrl-btn-sm" id="miniReload"><i class="fas fa-rotate-right"></i></button>
                     </div>
                 </div>
+            </div>
+
+            <div class="audio-card" id="audioCard">
+                <div class="audio-visualizer">
+                    <i class="fas fa-music" style="font-size: 2.5rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.7;"></i>
+                </div>
+                <audio id="nativeAudio" controls crossorigin="anonymous"></audio>
+                <div class="media-info" style="justify-content: center; margin-top: 0.75rem;" id="audioInfo"></div>
             </div>
         </div>
 
@@ -444,276 +469,360 @@
     </div>
 </div>
 
+<div id="toast" class="toast-notification"></div>
+
 <script>
-    // ==================== MODO VLC - BYPASS CORS COMPLETO ====================
-    // Esta técnica simula el comportamiento de VLC usando múltiples estrategias
-    
-    // Estrategias de bypass CORS (como VLC que ignora CORS)
-    const BYPASS_STRATEGIES = {
-        // 1. Usar el elemento video nativo (ignora CORS en algunos casos)
-        NATIVE_VIDEO: 'native',
-        // 2. Usar blob URLs
-        BLOB_URL: 'blob',
-        // 3. Usar técnica de fetch + blob
-        FETCH_BLOB: 'fetch',
-        // 4. Usar iframe oculto
-        IFRAME: 'iframe',
-        // 5. Proxy CORS
-        PROXY: 'proxy'
-    };
-    
-    let currentStrategy = BYPASS_STRATEGIES.NATIVE_VIDEO;
-    let videoPlayer = null;
-    let currentUrl = null;
-    let currentTitle = null;
-    let currentChannelList = [];
-    
-    // Proxies de respaldo
-    const BACKUP_PROXIES = [
+    // ==================== CONFIGURACIÓN MEJORADA PARA NETLIFY ====================
+    // Múltiples proxies CORS para máxima compatibilidad
+    const CORS_PROXIES = [
         'https://cors-anywhere.herokuapp.com/',
         'https://api.allorigins.win/raw?url=',
         'https://corsproxy.io/?',
-        'https://proxy.cors.sh/'
+        'https://proxy.cors.sh/',
+        'https://cors.zirk.eu/',
+        'https://cors-proxy.htmldriven.com/?url='
     ];
     
-    // ==================== FUNCIÓN PRINCIPAL COMO VLC ====================
-    // Esta función intenta reproducir CUALQUIER stream sin importar CORS
-    async function playLikeVLC(url, title = '') {
-        const connectionStatus = document.getElementById('connectionStatus');
-        const currentLabel = document.getElementById('currentLabel');
+    let currentProxyIndex = 0;
+    let currentStreamRetries = 0;
+    const MAX_RETRIES = 3;
+    
+    // Detectar entorno Netlify
+    function isNetlify() {
+        return window.location.hostname.includes('netlify.app') || 
+               window.location.hostname.includes('.netlify');
+    }
+    
+    // Mostrar notificaciones toast
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('toast');
+        toast.style.backgroundColor = isError ? 'rgba(255,0,0,0.9)' : '#1a1a1a';
+        toast.style.borderLeftColor = isError ? '#ff0000' : '#00ff00';
+        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${message}`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.style.display = 'none';
+                toast.style.opacity = '1';
+            }, 500);
+        }, 3000);
+    }
+    
+    // Determinar si una URL necesita proxy
+    function needsProxy(url) {
+        if (!url) return false;
+        if (url.startsWith('/') || 
+            url.startsWith(window.location.origin) ||
+            url.includes('netlify.app') ||
+            url.includes('blob:') ||
+            url.startsWith('data:')) {
+            return false;
+        }
+        return true;
+    }
+    
+    // Obtener URL con proxy inteligente
+    function getProxyUrl(url, forceProxy = false) {
+        if (!forceProxy && !needsProxy(url)) return url;
         
-        connectionStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando como VLC...';
-        currentLabel.innerText = `🎬 Modo VLC: Conectando a ${title || truncateUrl(url)}`;
+        // No aplicar proxy a URLs de streaming directo
+        if (url.includes('.m3u8') || url.includes('.mp4') || url.includes('.ts') || 
+            url.includes('manifest') || url.includes('playlist')) {
+            return url;
+        }
         
-        // Detectar tipo de contenido
-        const isHLS = url.includes('.m3u8') || url.includes('m3u8');
-        const isVideo = url.includes('.mp4') || url.includes('.mkv') || url.includes('.avi');
-        const isAudio = url.includes('.mp3') || url.includes('.aac') || url.includes('radio');
-        
+        return CORS_PROXIES[currentProxyIndex] + encodeURIComponent(url);
+    }
+    
+    // Cambiar proxy automáticamente
+    function switchProxy() {
+        currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
+        const proxyName = CORS_PROXIES[currentProxyIndex].split('//')[1]?.split('/')[0] || 'proxy';
+        showToast(`Cambiando a ${proxyName}`, false);
+        return CORS_PROXIES[currentProxyIndex];
+    }
+    
+    // Fetch inteligente con múltiples intentos
+    async function smartFetch(url, maxAttempts = 3) {
+        // Intentar directo primero
         try {
-            // Estrategia 1: Reproducción nativa (como VLC)
-            if (isHLS) {
-                await playHLSLikeVLC(url, title);
-            } else if (isAudio) {
-                await playAudioLikeVLC(url, title);
-            } else {
-                await playVideoLikeVLC(url, title);
-            }
-            
-            connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i> Stream activo - Modo VLC';
-            currentLabel.innerText = `▶️ ${title || truncateUrl(url)}`;
-            
-        } catch (error) {
-            console.error('Error en modo VLC:', error);
-            // Intentar estrategia de respaldo con proxy
-            await playWithProxyFallback(url, title);
-        }
-    }
-    
-    // Reproducir HLS como VLC
-    async function playHLSLikeVLC(url, title) {
-        if (!videoPlayer) {
-            initVideoPlayer();
-        }
-        
-        // Configurar video.js para ignorar CORS (como VLC)
-        videoPlayer.ready(function() {
-            this.src({
-                src: url,
-                type: 'application/x-mpegURL'
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            const response = await fetch(url, { 
+                signal: controller.signal,
+                mode: 'cors',
+                credentials: 'omit'
             });
-            this.load();
-            
-            const playPromise = this.play();
-            if (playPromise) {
-                playPromise.catch(e => {
-                    console.warn('Autoplay bloqueado:', e);
-                    showVLCNotification('🔊 Haz clic en play para comenzar', 'info');
-                });
-            }
-        });
-        
-        document.getElementById('videoWrapper').style.display = 'block';
-        updateBadge('live', 'LIVE STREAM');
-    }
-    
-    // Reproducir video como VLC
-    async function playVideoLikeVLC(url, title) {
-        if (!videoPlayer) {
-            initVideoPlayer();
-        }
-        
-        videoPlayer.ready(function() {
-            this.src({
-                src: url,
-                type: 'video/mp4'
-            });
-            this.load();
-            this.play().catch(e => console.log('Play bloqueado'));
-        });
-        
-        document.getElementById('videoWrapper').style.display = 'block';
-        updateBadge('video', 'VIDEO');
-    }
-    
-    // Reproducir audio como VLC
-    async function playAudioLikeVLC(url, title) {
-        const audioElement = document.createElement('audio');
-        audioElement.controls = true;
-        audioElement.autoplay = true;
-        audioElement.style.width = '100%';
-        audioElement.style.marginTop = '1rem';
-        
-        // Usar técnica de blob para audio
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-            audioElement.src = blobUrl;
+            clearTimeout(timeoutId);
+            if (response.ok) return await response.text();
         } catch(e) {
-            audioElement.src = url;
+            console.log('Direct fetch failed:', e.message);
         }
         
-        const audioCard = document.createElement('div');
-        audioCard.className = 'audio-card';
-        audioCard.innerHTML = `
-            <div style="text-align:center; padding:2rem;">
-                <i class="fas fa-music" style="font-size:3rem; color:#ff0000;"></i>
-                <h3>${title || 'Audio Stream'}</h3>
-            </div>
-        `;
-        audioCard.appendChild(audioElement);
-        
-        const playerSection = document.querySelector('.player-section');
-        const oldWrapper = document.getElementById('videoWrapper');
-        oldWrapper.style.display = 'none';
-        
-        if (document.querySelector('.audio-card-custom')) {
-            document.querySelector('.audio-card-custom').remove();
-        }
-        audioCard.className += ' audio-card-custom';
-        playerSection.appendChild(audioCard);
-        
-        updateBadge('audio', 'AUDIO');
-        showVLCNotification('🎵 Modo audio activado', 'success');
-    }
-    
-    // Fallback con proxy (último recurso)
-    async function playWithProxyFallback(url, title) {
-        showVLCNotification('🔄 Usando proxy de respaldo...', 'info');
-        
-        for (let proxy of BACKUP_PROXIES) {
-            try {
-                const proxyUrl = proxy + encodeURIComponent(url);
-                if (url.includes('.m3u8')) {
-                    await playHLSLikeVLC(proxyUrl, title + ' (proxy)');
-                    return;
-                } else {
-                    await playVideoLikeVLC(proxyUrl, title + ' (proxy)');
-                    return;
+        // Intentar con diferentes proxies
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            for (let i = 0; i < CORS_PROXIES.length; i++) {
+                try {
+                    currentProxyIndex = i;
+                    const proxyUrl = CORS_PROXIES[i] + encodeURIComponent(url);
+                    const response = await fetch(proxyUrl);
+                    if (response.ok) {
+                        showToast(`Conectado vía proxy ${i + 1}/${CORS_PROXIES.length}`, false);
+                        return await response.text();
+                    }
+                } catch(e) {
+                    console.log(`Proxy ${i} failed:`, e.message);
                 }
-            } catch(e) {
-                console.log('Proxy falló:', proxy);
+            }
+            if (attempt < maxAttempts - 1) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
         
-        throw new Error('No se pudo reproducir con ningún método');
+        throw new Error('No se pudo acceder al recurso después de múltiples intentos');
     }
     
-    // ==================== VIDEO.JS PLAYER ====================
+    // ==================== DOM Elements ====================
+    const videoElement = document.getElementById('videoPlayer');
+    const urlInput = document.getElementById('urlInput');
+    const playBtn = document.getElementById('playBtn');
+    const parseBtn = document.getElementById('parseBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const miniStop = document.getElementById('miniStop');
+    const miniReload = document.getElementById('miniReload');
+    const typeBadge = document.getElementById('typeBadge');
+    const currentLabel = document.getElementById('currentLabel');
+    const audioCard = document.getElementById('audioCard');
+    const videoWrapper = document.getElementById('videoWrapper');
+    const nativeAudio = document.getElementById('nativeAudio');
+    const audioInfo = document.getElementById('audioInfo');
+    const sidebar = document.getElementById('sidebar');
+    const channelsList = document.getElementById('channelsList');
+    const clearListBtn = document.getElementById('clearListBtn');
+    const corsWarning = document.getElementById('corsWarning');
+
+    // ==================== Variables ====================
+    let videoPlayer = null;
+    let currentUrl = null;
+    let currentTitle = null;
+    let currentMediaType = null;
+    let currentChannelList = [];
+    
+    // ==================== Detección de tipo ====================
+    function detectMediaType(url, title = '') {
+        const urlLower = url.toLowerCase();
+        const titleLower = title.toLowerCase();
+        
+        if (urlLower.includes('get.php') && (urlLower.includes('username=') || urlLower.includes('password='))) {
+            return { type: 'xtream', icon: 'fa-tower-cell', color: '#ff6b6b', label: 'XTREAM' };
+        }
+        if (urlLower.includes('.m3u8') || urlLower.includes('m3u8') || (urlLower.includes('live') && urlLower.includes('.ts'))) {
+            return { type: 'live', icon: 'fa-circle', color: '#ff0000', label: 'LIVE' };
+        }
+        if (urlLower.includes('radio') || urlLower.includes('icecast') || urlLower.includes(':8000') || 
+            urlLower.includes('/radio') || (titleLower.includes('radio') && !urlLower.includes('.m3u8'))) {
+            return { type: 'radio', icon: 'fa-broadcast-tower', color: '#3b82f6', label: 'RADIO' };
+        }
+        if (urlLower.endsWith('.mp3') || urlLower.endsWith('.aac') || urlLower.endsWith('.ogg') || 
+            urlLower.endsWith('.wav') || urlLower.endsWith('.flac') || urlLower.includes('/stream') || 
+            urlLower.includes('listen') || urlLower.includes('audio')) {
+            return { type: 'audio', icon: 'fa-headphones', color: '#10b981', label: 'AUDIO' };
+        }
+        if (urlLower.endsWith('.mp4') || urlLower.endsWith('.mkv') || urlLower.endsWith('.mov') || 
+            urlLower.endsWith('.avi') || urlLower.endsWith('.ts') || urlLower.includes('video')) {
+            return { type: 'video', icon: 'fa-film', color: '#f59e0b', label: 'VIDEO' };
+        }
+        return { type: 'media', icon: 'fa-play-circle', color: '#fff', label: 'MEDIA' };
+    }
+    
+    function updateBadge(url, title) {
+        const info = detectMediaType(url, title);
+        typeBadge.innerHTML = `<i class="fas ${info.icon}" style="color: ${info.color};"></i> <span>${info.label}</span>`;
+        return info;
+    }
+    
+    // ==================== Video.js Player ====================
     function initVideoPlayer() {
         if (videoPlayer) {
             try {
                 videoPlayer.dispose();
             } catch(e) {}
         }
-        
-        const videoElement = document.getElementById('videoPlayer');
         videoPlayer = videojs(videoElement, {
             controls: true,
             autoplay: true,
             preload: 'auto',
             fluid: true,
             playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
-            controlBar: {
-                volumePanel: { inline: false },
-                pictureInPictureToggle: true
-            },
             html5: {
-                vhs: {
-                    overrideNative: true,
-                    handleManifestRedirects: true
-                },
-                nativeAudioTracks: false,
-                nativeVideoTracks: false
+                hls: {
+                    enableLowInitialPlaylist: true,
+                    smoothQualityChange: true,
+                    overrideNative: true
+                }
+            },
+            controlBar: {
+                volumePanel: { inline: false }
             }
         });
-        
-        // Eventos para manejar errores CORS como VLC
-        videoPlayer.on('error', function() {
-            const error = videoPlayer.error();
-            if (error && error.code === 4) {
-                showVLCNotification('⚠️ Error de red - Reintentando como VLC...', 'warning');
-                setTimeout(() => {
-                    if (currentUrl) {
-                        videoPlayer.src({ src: currentUrl, type: 'application/x-mpegURL' });
-                        videoPlayer.load();
-                    }
-                }, 2000);
-            }
-        });
-        
         return videoPlayer;
     }
     
-    // ==================== PARSE M3U COMO VLC ====================
-    async function parseM3uLikeVLC(m3uUrl) {
-        const statusSpan = document.getElementById('connectionStatus');
-        statusSpan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando lista (Modo VLC)...';
-        
+    function getMimeType(url) {
+        const urlLower = url.toLowerCase();
+        if (urlLower.includes('.m3u8')) return 'application/x-mpegURL';
+        if (urlLower.includes('.mp4')) return 'video/mp4';
+        if (urlLower.includes('.ts')) return 'video/MP2T';
+        return 'application/x-mpegURL';
+    }
+    
+    function playWithVideoJs(url, title = '') {
         try {
-            // Intentar fetch directo primero
-            let response = await fetch(m3uUrl);
-            let text = await response.text();
-            
-            if (!text || text.includes('access denied')) {
-                throw new Error('Acceso denegado');
-            }
-            
-            const channels = parseM3uText(text);
-            if (channels.length > 0) {
-                renderSidebar(channels);
-                document.getElementById('sidebar').style.display = 'block';
-                statusSpan.innerHTML = `<i class="fas fa-check-circle"></i> ${channels.length} canales cargados`;
-                showVLCNotification(`✅ ${channels.length} canales listos para reproducir`, 'success');
+            if (!videoPlayer) {
+                initVideoPlayer();
             } else {
-                throw new Error('No se encontraron canales');
+                videoPlayer.pause();
+                videoPlayer.src('');
             }
             
-        } catch(e) {
-            // Si falla, intentar con proxy
-            statusSpan.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Usando proxy...';
+            videoWrapper.style.display = 'block';
+            audioCard.style.display = 'none';
             
-            for (let proxy of BACKUP_PROXIES) {
-                try {
-                    const proxyUrl = proxy + encodeURIComponent(m3uUrl);
-                    const response = await fetch(proxyUrl);
-                    const text = await response.text();
-                    const channels = parseM3uText(text);
-                    
-                    if (channels.length > 0) {
-                        renderSidebar(channels);
-                        document.getElementById('sidebar').style.display = 'block';
-                        statusSpan.innerHTML = `<i class="fas fa-check-circle"></i> ${channels.length} canales (proxy)`;
-                        showVLCNotification(`✅ ${channels.length} canales cargados vía proxy`, 'success');
-                        return;
+            videoPlayer.src({ src: url, type: getMimeType(url) });
+            videoPlayer.load();
+            
+            const playPromise = videoPlayer.play();
+            if (playPromise) {
+                playPromise.catch(e => {
+                    console.warn("Error de reproducción:", e);
+                    if (e.name === 'NotAllowedError') {
+                        currentLabel.innerText = `🔇 Click play para reproducir: ${title || truncateUrl(url)}`;
+                        showToast('Autoplay bloqueado por el navegador', true);
+                    } else if (e.name === 'NetworkError') {
+                        currentLabel.innerText = `🌐 Error de red/CORS: ${title || truncateUrl(url)}`;
+                        corsWarning.style.display = 'block';
+                        showToast('Error CORS detectado, usando proxy...', true);
                     }
-                } catch(proxyError) {
-                    console.log('Proxy falló:', proxy);
-                }
+                });
             }
             
-            throw new Error('No se pudo cargar la lista');
+            videoPlayer.off('error');
+            videoPlayer.on('error', function() {
+                const error = videoPlayer.error();
+                console.error("Video error:", error);
+                if (error && error.code === 4) {
+                    currentLabel.innerText = `🌐 Error CORS/Red: ${title || truncateUrl(url)}`;
+                    corsWarning.style.display = 'block';
+                    showToast('Error CORS - Verifica que el enlace sea accesible', true);
+                } else {
+                    currentLabel.innerText = `❌ Error: ${title || truncateUrl(url)}`;
+                }
+            });
+            
+            videoPlayer.on('playing', () => {
+                currentLabel.innerText = title || truncateUrl(url);
+                corsWarning.style.display = 'none';
+                currentStreamRetries = 0;
+            });
+            
+            currentUrl = url;
+            currentTitle = title;
+            currentMediaType = 'video';
+            updateBadge(url, title);
+            currentLabel.innerText = title || truncateUrl(url);
+            
+            if (isNetlify()) {
+                console.log('✅ Reproduciendo en Netlify con soporte CORS mejorado');
+            }
+            
+        } catch(err) {
+            console.error(err);
+            currentLabel.innerText = 'Error al iniciar reproductor';
+            showToast('Error al iniciar el reproductor', true);
+        }
+    }
+    
+    // ==================== Audio Player ====================
+    function playAudio(url, title = '') {
+        if (videoPlayer) {
+            videoPlayer.pause();
+            videoPlayer.src('');
+        }
+        
+        videoWrapper.style.display = 'none';
+        audioCard.style.display = 'block';
+        
+        nativeAudio.pause();
+        nativeAudio.src = '';
+        nativeAudio.load();
+        
+        nativeAudio.src = url;
+        nativeAudio.load();
+        
+        nativeAudio.play().catch(e => {
+            console.warn("Autoplay bloqueado:", e);
+            audioInfo.innerHTML = '<i class="fas fa-volume-off"></i> Haz clic en play para reproducir';
+            showToast('Haz clic en play para iniciar la reproducción', false);
+        });
+        
+        audioInfo.innerHTML = `<i class="fas fa-headphones"></i> ${title || truncateUrl(url)}`;
+        currentLabel.innerText = title || truncateUrl(url);
+        currentUrl = url;
+        currentTitle = title;
+        currentMediaType = 'audio';
+        updateBadge(url, title);
+        
+        nativeAudio.onerror = (e) => {
+            console.error("Audio error:", e);
+            audioInfo.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error al reproducir audio';
+            showToast('Error al reproducir audio - Verifica el enlace', true);
+        };
+    }
+    
+    // ==================== Decisión principal ====================
+    function playMedia(url, title = '') {
+        if (!url) {
+            showToast('URL no válida', true);
+            return;
+        }
+        const typeInfo = detectMediaType(url, title);
+        
+        if (typeInfo.type === 'radio' || typeInfo.type === 'audio') {
+            playAudio(url, title);
+        } else {
+            playWithVideoJs(url, title);
+        }
+    }
+    
+    // ==================== Parse M3U ====================
+    async function parseM3uFromUrl(m3uUrl) {
+        try {
+            currentLabel.innerText = '📡 Cargando lista de canales...';
+            corsWarning.style.display = 'block';
+            corsWarning.innerHTML = '<i class="fas fa-shield-alt"></i> Conectando al servidor...';
+            showToast('Cargando lista de reproducción...', false);
+            
+            const text = await smartFetch(m3uUrl);
+            const channels = parseM3uText(text);
+            
+            if (channels.length === 0) throw new Error("No se encontraron canales");
+            
+            currentChannelList = channels;
+            renderSidebar(channels);
+            sidebar.style.display = 'block';
+            currentLabel.innerText = `✅ ${channels.length} canales cargados`;
+            corsWarning.style.display = 'none';
+            showToast(`${channels.length} canales cargados correctamente`, false);
+            
+        } catch(err) {
+            console.error('Error loading playlist:', err);
+            const errorMsg = "Error al cargar lista: " + err.message;
+            alert(errorMsg + "\n\n💡 Consejos:\n- Verifica que el enlace sea correcto\n- Algunos servidores requieren autenticación\n- Prueba con otro enlace");
+            currentLabel.innerText = '❌ Error al cargar lista';
+            corsWarning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error al cargar la lista';
+            showToast('Error al cargar la lista de reproducción', true);
         }
     }
     
@@ -729,53 +838,65 @@
                 let name = infoRaw;
                 const commaIndex = infoRaw.lastIndexOf(',');
                 if (commaIndex !== -1) name = infoRaw.substring(commaIndex + 1).trim();
-                currentExtinf = { name: name || "Sin nombre" };
+                let group = "General";
+                const groupMatch = infoRaw.match(/group-title="([^"]+)"/i);
+                if (groupMatch) group = groupMatch[1];
+                let logo = null;
+                const logoMatch = infoRaw.match(/tvg-logo="([^"]+)"/i);
+                if (logoMatch) logo = logoMatch[1];
+                currentExtinf = { name: name || "Sin nombre", group, logo };
             }
             else if (line && !line.startsWith('#') && currentExtinf) {
+                const url = line;
+                const typeInfo = detectMediaType(url, currentExtinf.name);
                 items.push({
                     name: currentExtinf.name,
-                    url: line,
-                    type: detectType(line)
+                    url: url,
+                    type: typeInfo.type,
+                    icon: typeInfo.icon,
+                    group: currentExtinf.group,
+                    logo: currentExtinf.logo
                 });
                 currentExtinf = null;
             }
+            if (line.startsWith('#') && !line.startsWith('#EXTINF')) currentExtinf = null;
         }
         
+        if (items.length === 0 && content.includes('http')) {
+            const urls = content.match(/https?:\/\/[^\s]+/g);
+            if (urls) {
+                urls.forEach(url => {
+                    const typeInfo = detectMediaType(url);
+                    items.push({ name: "Enlace directo", url: url, type: typeInfo.type, icon: typeInfo.icon });
+                });
+            }
+        }
         return items;
     }
     
-    function detectType(url) {
-        const urlLower = url.toLowerCase();
-        if (urlLower.includes('.m3u8')) return 'live';
-        if (urlLower.includes('.mp4')) return 'video';
-        if (urlLower.includes('radio') || urlLower.includes('.mp3')) return 'audio';
-        return 'stream';
-    }
-    
     function renderSidebar(channels) {
-        const channelsList = document.getElementById('channelsList');
         channelsList.innerHTML = '';
-        
         channels.forEach((ch) => {
             const item = document.createElement('div');
             item.className = 'channel-item';
-            const icon = ch.type === 'live' ? 'fa-tv' : (ch.type === 'audio' ? 'fa-music' : 'fa-film');
+            const isLive = ch.type === 'live';
+            const iconClass = ch.icon || detectMediaType(ch.url, ch.name).icon;
             
             item.innerHTML = `
                 <div class="channel-icon">
-                    <i class="fas ${icon}"></i>
+                    ${ch.logo ? `<img src="${ch.logo}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;" onerror="this.src=''">` : `<i class="fas ${iconClass}"></i>`}
                 </div>
                 <div class="channel-details">
                     <div class="channel-name">${escapeHtml(ch.name.substring(0, 50))}</div>
                     <div class="channel-meta">
-                        <i class="fas ${icon}"></i>
+                        <i class="fas ${iconClass}" style="font-size:0.6rem;"></i>
                         <span>${ch.type.toUpperCase()}</span>
-                        ${ch.type === 'live' ? '<span class="live-dot"></span>' : ''}
+                        ${isLive ? '<span class="live-dot"></span>' : ''}
                     </div>
                 </div>
-                <i class="fas fa-play-circle" style="color:#ff0000;"></i>
+                <i class="fas fa-play-circle" style="color:#ff0000; font-size:1.2rem;"></i>
             `;
-            item.addEventListener('click', () => playLikeVLC(ch.url, ch.name));
+            item.addEventListener('click', () => playMedia(ch.url, ch.name));
             channelsList.appendChild(item);
         });
     }
@@ -794,109 +915,88 @@
         return url.length > maxLen ? url.substring(0, maxLen) + '...' : url;
     }
     
-    function updateBadge(type, label) {
-        const badge = document.getElementById('typeBadge');
-        const icons = {
-            live: 'fa-tv',
-            video: 'fa-film',
-            audio: 'fa-music',
-            stream: 'fa-play'
-        };
-        badge.innerHTML = `<i class="fas ${icons[type] || 'fa-play'}"></i> <span>${label}</span>`;
+    function loadDirectUrl() {
+        let rawUrl = urlInput.value.trim();
+        if (!rawUrl) {
+            showToast('Ingresa un enlace para reproducir', true);
+            return;
+        }
+        if ((rawUrl.endsWith('.m3u') || rawUrl.includes('type=m3u')) && !rawUrl.endsWith('.m3u8')) {
+            parseM3uFromUrl(rawUrl);
+        } else {
+            playMedia(rawUrl, "Directo");
+        }
     }
     
-    function showVLCNotification(message, type = 'info') {
-        const statusSpan = document.getElementById('connectionStatus');
-        const icons = {
-            success: 'fa-check-circle',
-            warning: 'fa-exclamation-triangle',
-            error: 'fa-times-circle',
-            info: 'fa-info-circle'
-        };
-        statusSpan.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
-        setTimeout(() => {
-            if (currentUrl) {
-                statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Stream activo - Modo VLC';
-            } else {
-                statusSpan.innerHTML = '<i class="fas fa-plug"></i> Listo para reproducir';
-            }
-        }, 3000);
-    }
-    
-    // ==================== CONTROLES ====================
     function stopAll() {
         if (videoPlayer) {
             videoPlayer.pause();
             videoPlayer.src('');
+            videoPlayer.load();
         }
+        nativeAudio.pause();
+        nativeAudio.src = '';
+        nativeAudio.load();
+        audioCard.style.display = 'none';
+        videoWrapper.style.display = 'block';
         currentUrl = null;
-        document.getElementById('currentLabel').innerText = '⏹️ Detenido - Modo VLC';
-        document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-plug"></i> Listo para reproducir';
-        showVLCNotification('⏹️ Reproducción detenida', 'info');
+        currentTitle = null;
+        currentMediaType = null;
+        currentLabel.innerText = '⏹️ Reproducción detenida';
+        typeBadge.innerHTML = '<i class="fas fa-stop-circle"></i> <span>DETENIDO</span>';
+        audioInfo.innerHTML = '';
+        showToast('Reproducción detenida', false);
     }
     
     function reloadCurrent() {
-        if (currentUrl) {
-            showVLCNotification('🔄 Recargando stream...', 'info');
-            playLikeVLC(currentUrl, currentTitle);
+        if (currentUrl && currentMediaType) {
+            currentLabel.innerText = '🔄 Recargando...';
+            playMedia(currentUrl, currentTitle || "Recargado");
         } else {
-            showVLCNotification('No hay stream activo', 'warning');
+            showToast('No hay ningún stream activo para recargar', true);
         }
     }
     
-    function goFullscreen() {
-        const wrapper = document.getElementById('videoWrapper');
-        if (wrapper.requestFullscreen) {
-            wrapper.requestFullscreen();
-        } else if (wrapper.webkitRequestFullscreen) {
-            wrapper.webkitRequestFullscreen();
-        }
+    function clearSidebar() {
+        currentChannelList = [];
+        channelsList.innerHTML = '';
+        sidebar.style.display = 'none';
+        currentLabel.innerText = '🗑️ Lista limpiada';
+        showToast('Lista de reproducción limpiada', false);
     }
     
-    function loadDirectUrl() {
-        let url = document.getElementById('urlInput').value.trim();
-        if (!url) {
-            showVLCNotification('Ingresa una URL válida', 'warning');
-            return;
-        }
-        
-        currentUrl = url;
-        currentTitle = 'Directo';
-        
-        if (url.endsWith('.m3u') || url.includes('.m3u') && !url.endsWith('.m3u8')) {
-            parseM3uLikeVLC(url);
-        } else {
-            playLikeVLC(url, 'Directo');
-        }
-    }
-    
-    // ==================== INICIALIZAR ====================
+    // ==================== Inicializar ====================
     function init() {
         initVideoPlayer();
         
-        document.getElementById('playBtn').addEventListener('click', loadDirectUrl);
-        document.getElementById('parseBtn').addEventListener('click', () => {
-            let url = document.getElementById('urlInput').value.trim();
-            if (url) parseM3uLikeVLC(url);
-            else showVLCNotification('Ingresa URL de lista M3U', 'warning');
+        playBtn.addEventListener('click', loadDirectUrl);
+        parseBtn.addEventListener('click', async () => {
+            let url = urlInput.value.trim();
+            if (!url) { 
+                showToast('Ingresa URL de lista M3U o Xtream', true);
+                return; 
+            }
+            await parseM3uFromUrl(url);
         });
-        document.getElementById('stopBtn').addEventListener('click', stopAll);
-        document.getElementById('miniStop').addEventListener('click', stopAll);
-        document.getElementById('reloadBtn').addEventListener('click', reloadCurrent);
-        document.getElementById('miniReload').addEventListener('click', reloadCurrent);
-        document.getElementById('fullscreenBtn').addEventListener('click', goFullscreen);
-        document.getElementById('clearListBtn').addEventListener('click', () => {
-            document.getElementById('sidebar').style.display = 'none';
-            document.getElementById('channelsList').innerHTML = '';
-            showVLCNotification('Lista limpiada', 'info');
-        });
+        stopBtn.addEventListener('click', stopAll);
+        miniStop.addEventListener('click', stopAll);
+        reloadBtn.addEventListener('click', reloadCurrent);
+        miniReload.addEventListener('click', reloadCurrent);
+        clearListBtn.addEventListener('click', clearSidebar);
         
-        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+        urlInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') loadDirectUrl();
         });
         
-        console.log('🎬 FlowIPTV - Modo VLC Activado (Sin restricciones CORS)');
-        showVLCNotification('🎬 Modo VLC activado - Sin restricciones CORS', 'success');
+        // Mostrar información de entorno
+        if (isNetlify()) {
+            showToast('✅ FlowIPTV optimizado para Netlify', false);
+            console.log('🚀 Ejecutándose en Netlify con soporte CORS mejorado');
+        } else {
+            console.log('💻 Entorno local - Modo desarrollo');
+        }
+        
+        console.log('✅ FlowIPTV cargado con', CORS_PROXIES.length, 'proxies CORS disponibles');
     }
     
     if (document.readyState === 'loading') {
