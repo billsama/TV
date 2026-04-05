@@ -3,849 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FlowIPTV Pro | Xtream · M3U8 · Radio · Audio</title>
-    <!-- Font Awesome Icons -->
+    <title>ZymarGo Pro | FlowIPTV</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Video.js Core + HLS Plugin -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://vjs.zencdn.net/8.10.0/video-js.min.css" rel="stylesheet">
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #6c63ff;
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --text: #ffffff;
+            --accent: #00f2fe;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0f0f0f;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #fff;
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
         }
-
-        .app {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header estilo YouTube */
+        .container { display: flex; flex-direction: column; height: 100vh; }
+        
+        /* Header & Controls */
         .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #0f0f0f;
-            border-bottom: 1px solid #272727;
-            padding: 0.75rem 1.5rem;
+            padding: 15px;
+            background: #121212;
+            border-bottom: 1px solid #333;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            display: flex;
+            gap: 10px;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #fff, #aaa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
-
-        .logo i {
-            background: none;
-            color: #ff0000;
-            font-size: 1.5rem;
-        }
-
-        .search-bar {
+        .input-group {
             flex: 1;
-            max-width: 700px;
-            min-width: 280px;
             display: flex;
-            gap: 0;
-            border-radius: 40px;
-            overflow: hidden;
-            background: #121212;
-            border: 1px solid #303030;
-            transition: all 0.2s;
+            min-width: 300px;
+            background: #252525;
+            border-radius: 8px;
+            padding: 5px;
         }
-
-        .search-bar:focus-within {
-            border-color: #ff0000;
-        }
-
-        .search-bar input {
+        input {
             flex: 1;
-            background: #121212;
-            border: none;
-            padding: 0.75rem 1.2rem;
-            color: white;
-            font-size: 0.9rem;
-            outline: none;
-            font-family: inherit;
-        }
-
-        .search-bar input::placeholder {
-            color: #888;
-        }
-
-        .search-bar button {
-            background: #222;
-            border: none;
-            padding: 0 1.2rem;
-            cursor: pointer;
-            color: #fff;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .search-bar button:hover {
-            background: #3f3f3f;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .icon-btn {
             background: transparent;
             border: none;
-            color: #fff;
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: 0.2s;
-            width: 40px;
-            height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-btn:hover {
-            background: #272727;
-        }
-
-        /* Main layout */
-        .main-content {
-            display: flex;
-            flex: 1;
-            padding: 1.5rem;
-            gap: 1.5rem;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .player-section {
-            flex: 2;
-            min-width: 0;
-        }
-
-        .player-wrapper {
-            background: #000;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-
-        .video-js {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-        }
-
-        .video-js .vjs-big-play-button {
-            background-color: rgba(255,0,0,0.7);
-            border-radius: 50%;
-        }
-
-        /* Controles inferiores */
-        .player-footer {
-            background: #1a1a1a;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            border-top: 1px solid #2a2a2a;
-        }
-
-        .media-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #2a2a2a;
-            padding: 0.35rem 0.9rem;
-            border-radius: 30px;
-            font-size: 0.75rem;
-        }
-
-        .media-badge i {
-            font-size: 0.9rem;
-        }
-
-        .control-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .ctrl-btn-sm {
-            background: #2a2a2a;
-            border: none;
             color: white;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
+            padding: 10px;
+            outline: none;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        button:hover { opacity: 0.8; transform: scale(1.02); }
+        .btn-secondary { background: #333; }
+
+        /* Main Layout */
+        .main-content { display: flex; flex: 1; overflow: hidden; position: relative; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background: #121212;
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            transition: 0.3s;
+            z-index: 100;
+        }
+        .channel-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #222;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             transition: 0.2s;
         }
+        .channel-item:hover { background: #1e1e1e; }
+        .ch-icon { width: 40px; height: 40px; background: #252525; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+        .ch-info { flex: 1; overflow: hidden; }
+        .ch-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ch-url { font-size: 11px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .ctrl-btn-sm:hover {
-            background: #ff0000;
-        }
-
-        .media-info {
-            font-size: 0.75rem;
-            color: #aaa;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        /* Video Area */
+        .video-container {
             flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .media-info span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Audio player */
-        .audio-card {
-            background: linear-gradient(135deg, #1e1e2a, #0a0a0a);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            display: none;
-            text-align: center;
-        }
-
-        .audio-visualizer {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(90deg, #ff0000, #ff6b6b, #ff0000);
-            background-size: 200% auto;
-            border-radius: 50px;
-            margin: 1rem 0;
-            position: relative;
-            animation: wave 3s ease infinite;
-        }
-
-        @keyframes wave {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        audio {
-            width: 100%;
-            margin-top: 1rem;
-            border-radius: 40px;
-        }
-
-        /* Sidebar lista */
-        .sidebar {
-            flex: 1;
-            min-width: 300px;
-            max-width: 380px;
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #272727;
-        }
-
-        .channels-scroll {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
+            background: #000;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .channel-item {
-            background: #1a1a1a;
-            border-radius: 0.75rem;
-            padding: 0.7rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .channel-item:hover {
-            background: #252525;
-            border-color: #ff0000;
-            transform: translateX(3px);
-        }
-
-        .channel-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 0.5rem;
-            background: #2a2a2a;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            position: relative;
+        }
+        .video-js { width: 100% !important; height: 100% !important; }
+
+        .current-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            border-left: 4px solid var(--primary);
+            z-index: 10;
         }
 
-        .channel-details {
-            flex: 1;
-        }
-
-        .channel-name {
-            font-weight: 500;
-            font-size: 0.85rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .channel-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.65rem;
-            color: #888;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ff0000;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        /* Scroll */
-        .channels-scroll::-webkit-scrollbar {
-            width: 5px;
-        }
-        .channels-scroll::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        .channels-scroll::-webkit-scrollbar-thumb {
-            background: #ff0000;
-            border-radius: 10px;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            .sidebar {
-                max-width: 100%;
-            }
-            .search-bar {
-                order: 3;
-                width: 100%;
-                max-width: 100%;
-            }
-            .header {
-                padding: 0.5rem 1rem;
-            }
+            .sidebar { position: absolute; left: -100%; height: 100%; width: 80%; }
+            .sidebar.active { left: 0; }
         }
     </style>
 </head>
 <body>
-<div class="app">
+
+<div class="container">
     <div class="header">
-        <div class="logo">
-            <i class="fab fa-youtube"></i>
-            <span>FlowIPTV</span>
-        </div>
-        <div class="search-bar">
-            <input type="text" id="urlInput" placeholder="Pega tu enlace: Xtream M3U · M3U8 · MP3 · Radio · Lista M3U">
+        <button id="toggleMenu" class="btn-secondary"><i class="fas fa-bars"></i></button>
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="URL M3U8, Xtream o Directa...">
             <button id="playBtn"><i class="fas fa-play"></i></button>
-            <button id="parseBtn"><i class="fas fa-list-ul"></i></button>
         </div>
-        <div class="header-actions">
-            <button class="icon-btn" id="stopBtn" title="Detener"><i class="fas fa-stop"></i></button>
-            <button class="icon-btn" id="reloadBtn" title="Recargar"><i class="fas fa-sync-alt"></i></button>
-        </div>
+        <button id="parseBtn" class="btn-secondary">Cargar Lista</button>
+        <button id="clearBtn" style="background:#e74c3c;"><i class="fas fa-trash"></i></button>
     </div>
 
     <div class="main-content">
-        <div class="player-section">
-            <div class="player-wrapper" id="videoWrapper">
-                <video id="videoPlayer" class="video-js vjs-big-play-centered" controls preload="auto" playsinline></video>
-                <div class="player-footer">
-                    <div class="media-badge" id="typeBadge">
-                        <i class="fas fa-question"></i>
-                        <span>MEDIA</span>
-                    </div>
-                    <div class="media-info">
-                        <i class="fas fa-link"></i>
-                        <span id="currentLabel">Listo para reproducir</span>
-                    </div>
-                    <div class="control-group">
-                        <button class="ctrl-btn-sm" id="miniStop"><i class="fas fa-stop"></i></button>
-                        <button class="ctrl-btn-sm" id="miniReload"><i class="fas fa-rotate-right"></i></button>
-                    </div>
-                </div>
+        <div id="sidebar" class="sidebar">
             </div>
-
-            <div class="audio-card" id="audioCard">
-                <div class="audio-visualizer">
-                    <i class="fas fa-music" style="font-size: 2.5rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.7;"></i>
-                </div>
-                <audio id="nativeAudio" controls></audio>
-                <div class="media-info" style="justify-content: center; margin-top: 0.75rem;" id="audioInfo"></div>
-            </div>
-        </div>
-
-        <div class="sidebar" id="sidebar" style="display: none;">
-            <div class="sidebar-header">
-                <h4 style="font-size: 0.9rem;"><i class="fas fa-th-list"></i> Lista de reproducción</h4>
-                <button class="icon-btn" id="clearListBtn" style="width: 32px; height: 32px;"><i class="fas fa-trash-alt"></i></button>
-            </div>
-            <div class="channels-scroll" id="channelsList"></div>
+        
+        <div class="video-container">
+            <div id="currentLabel" class="current-info">ZymarGo Ready</div>
+            <video id="main-player" class="video-js vjs-big-play-centered" controls preload="auto" crossorigin="anonymous">
+                <p class="vjs-no-js">Para ver este video, habilita JavaScript.</p>
+            </video>
         </div>
     </div>
 </div>
 
 <script>
-    // ==================== DOM Elements ====================
-    const videoElement = document.getElementById('videoPlayer');
+    // ==================== CONFIGURACIÓN PROXY STEALTH ====================
+    // Tu Worker de Cloudflare v4.0
+    const ZYMARGO_PROXY = "https://cors-proxy-zymargo.billsama1996.workers.dev/?url=";
+
+    // Función crítica para evadir bloqueos
+    function getSafeUrl(originalUrl) {
+        if (!originalUrl) return "";
+        // Si la URL es HTTP o de un servidor externo, la pasamos por el Proxy Stealth
+        if (originalUrl.startsWith("http")) {
+            console.log("🛠️ Aplicando Proxy Stealth a:", originalUrl);
+            return ZYMARGO_PROXY + encodeURIComponent(originalUrl);
+        }
+        return originalUrl;
+    }
+
+    // ==================== REPRODUCTOR ====================
+    let player = videojs('main-player', {
+        fluid: true,
+        html5: { vhs: { overrideNative: true }, nativeAudioTracks: false, nativeVideoTracks: false }
+    });
+
     const urlInput = document.getElementById('urlInput');
-    const playBtn = document.getElementById('playBtn');
-    const parseBtn = document.getElementById('parseBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const reloadBtn = document.getElementById('reloadBtn');
-    const miniStop = document.getElementById('miniStop');
-    const miniReload = document.getElementById('miniReload');
-    const typeBadge = document.getElementById('typeBadge');
-    const currentLabel = document.getElementById('currentLabel');
-    const audioCard = document.getElementById('audioCard');
-    const videoWrapper = document.getElementById('videoWrapper');
-    const nativeAudio = document.getElementById('nativeAudio');
-    const audioInfo = document.getElementById('audioInfo');
     const sidebar = document.getElementById('sidebar');
-    const channelsList = document.getElementById('channelsList');
-    const clearListBtn = document.getElementById('clearListBtn');
+    const currentLabel = document.getElementById('currentLabel');
 
-    // ==================== Variables ====================
-    let videoPlayer = null;
-    let currentUrl = null;
-    let currentTitle = null;
-    let currentMediaType = null;
-    let currentChannelList = [];
+    // Cargar URL directa (botón Play)
+    async function loadDirectUrl() {
+        const url = urlInput.value.trim();
+        if (!url) return;
 
-    // ==================== Detección de tipo (solo iconos) ====================
-    function detectMediaType(url, title = '') {
-        const urlLower = url.toLowerCase();
-        const titleLower = title.toLowerCase();
+        const proxiedUrl = getSafeUrl(url);
+        const type = url.includes(".m3u8") ? 'application/x-mpegURL' : 'video/mp4';
+
+        currentLabel.innerText = "📺 Cargando Stream...";
         
-        // Xtream Codes
-        if (urlLower.includes('get.php') && (urlLower.includes('username=') || urlLower.includes('password='))) {
-            return { type: 'xtream', icon: 'fa-tower-cell', color: '#ff6b6b', label: 'XTREAM' };
-        }
-        // Live / M3U8
-        if (urlLower.includes('.m3u8') || urlLower.includes('m3u8') || (urlLower.includes('live') && urlLower.includes('.ts'))) {
-            return { type: 'live', icon: 'fa-circle', color: '#ff0000', label: 'LIVE' };
-        }
-        // Radio
-        if (urlLower.includes('radio') || urlLower.includes('icecast') || urlLower.includes(':8000') || 
-            urlLower.includes('/radio') || (titleLower.includes('radio') && !urlLower.includes('.m3u8'))) {
-            return { type: 'radio', icon: 'fa-broadcast-tower', color: '#3b82f6', label: 'RADIO' };
-        }
-        // Audio
-        if (urlLower.endsWith('.mp3') || urlLower.endsWith('.aac') || urlLower.endsWith('.ogg') || 
-            urlLower.endsWith('.wav') || urlLower.endsWith('.flac') || urlLower.includes('/stream') || 
-            urlLower.includes('listen') || urlLower.includes('audio')) {
-            return { type: 'audio', icon: 'fa-headphones', color: '#10b981', label: 'AUDIO' };
-        }
-        // Video
-        if (urlLower.endsWith('.mp4') || urlLower.endsWith('.mkv') || urlLower.endsWith('.mov') || 
-            urlLower.endsWith('.avi') || urlLower.endsWith('.ts') || urlLower.includes('video')) {
-            return { type: 'video', icon: 'fa-film', color: '#f59e0b', label: 'VIDEO' };
-        }
-        // Default
-        return { type: 'media', icon: 'fa-play-circle', color: '#fff', label: 'MEDIA' };
+        player.src({ src: proxiedUrl, type: type });
+        player.play().catch(e => console.error("Error al reproducir", e));
     }
 
-    function updateBadge(url, title) {
-        const info = detectMediaType(url, title);
-        typeBadge.innerHTML = `<i class="fas ${info.icon}" style="color: ${info.color};"></i> <span>${info.label}</span>`;
-        return info;
-    }
-
-    // ==================== Video.js Player ====================
-    function initVideoPlayer() {
-        if (videoPlayer) {
-            try {
-                videoPlayer.dispose();
-            } catch(e) {}
-        }
-        videoPlayer = videojs(videoElement, {
-            controls: true,
-            autoplay: true,
-            preload: 'auto',
-            fluid: true,
-            playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
-            controlBar: {
-                volumePanel: {
-                    inline: false
-                }
-            }
-        });
-        return videoPlayer;
-    }
-
-    function getMimeType(url) {
-        const urlLower = url.toLowerCase();
-        if (urlLower.includes('.m3u8')) return 'application/x-mpegURL';
-        if (urlLower.includes('.mp4')) return 'video/mp4';
-        if (urlLower.includes('.ts')) return 'video/MP2T';
-        if (urlLower.includes('.mkv')) return 'video/x-matroska';
-        return 'application/x-mpegURL';
-    }
-
-    function playWithVideoJs(url, title = '') {
+    // Parsear Lista M3U
+    async function parseM3u() {
+        const url = urlInput.value.trim();
+        if (!url) return;
+        
+        // Usamos el proxy para descargar la lista M3U y evitar bloqueo CORS al leer el archivo
+        const proxiedListUrl = getSafeUrl(url);
+        
         try {
-            if (!videoPlayer) {
-                initVideoPlayer();
-            } else {
-                // Limpiar fuente anterior
-                videoPlayer.pause();
-                videoPlayer.src('');
-            }
-            
-            videoWrapper.style.display = 'block';
-            audioCard.style.display = 'none';
-            
-            // Configurar nueva fuente
-            videoPlayer.src({ src: url, type: getMimeType(url) });
-            videoPlayer.load();
-            videoPlayer.play().catch(e => {
-                console.warn("Autoplay bloqueado:", e);
-                currentLabel.innerText = `🔇 Click play: ${title || truncateUrl(url)}`;
-            });
-            
-            // Limpiar eventos anteriores y agregar nuevos
-            videoPlayer.off('error');
-            videoPlayer.off('playing');
-            
-            videoPlayer.on('error', function() {
-                console.error("Video error");
-                currentLabel.innerText = `❌ Error: ${title || truncateUrl(url)}`;
-            });
-            
-            videoPlayer.on('playing', function() {
-                currentLabel.innerText = title || truncateUrl(url);
-            });
-            
-            currentUrl = url;
-            currentTitle = title;
-            currentMediaType = 'video';
-            updateBadge(url, title);
-            currentLabel.innerText = title || truncateUrl(url);
-            
-        } catch(err) {
-            console.error(err);
-            currentLabel.innerText = 'Error al iniciar reproductor';
-        }
-    }
-
-    // ==================== Audio Player ====================
-    function playAudio(url, title = '') {
-        // Detener video si estaba reproduciendo
-        if (videoPlayer) {
-            videoPlayer.pause();
-            videoPlayer.src('');
-        }
-        
-        videoWrapper.style.display = 'none';
-        audioCard.style.display = 'block';
-        
-        // Limpiar audio anterior
-        nativeAudio.pause();
-        nativeAudio.src = '';
-        nativeAudio.load();
-        
-        // Configurar nueva fuente
-        nativeAudio.src = url;
-        nativeAudio.load();
-        
-        nativeAudio.play().catch(e => {
-            console.warn("Autoplay bloqueado");
-            audioInfo.innerHTML = '<i class="fas fa-volume-off"></i> Haz clic en play';
-        });
-        
-        audioInfo.innerHTML = `<i class="fas fa-headphones"></i> ${title || truncateUrl(url)}`;
-        currentLabel.innerText = title || truncateUrl(url);
-        currentUrl = url;
-        currentTitle = title;
-        currentMediaType = 'audio';
-        updateBadge(url, title);
-        
-        // Limpiar eventos anteriores
-        nativeAudio.onerror = null;
-        nativeAudio.onerror = () => {
-            audioInfo.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error en audio - formato no compatible';
-        };
-    }
-
-    // ==================== Decisión principal ====================
-    function playMedia(url, title = '') {
-        if (!url) {
-            alert("URL no válida");
-            return;
-        }
-        const typeInfo = detectMediaType(url, title);
-        
-        if (typeInfo.type === 'radio' || typeInfo.type === 'audio') {
-            playAudio(url, title);
-        } else {
-            playWithVideoJs(url, title);
-        }
-    }
-
-    // ==================== Cargar URL directa ====================
-    function loadDirectUrl() {
-        let rawUrl = urlInput.value.trim();
-        if (!rawUrl) {
-            alert("🔗 Ingresa un enlace (Xtream M3U, M3U8, MP3, Radio, etc)");
-            return;
-        }
-        // Si es lista M3U (no .m3u8)
-        if ((rawUrl.endsWith('.m3u') || rawUrl.includes('type=m3u')) && !rawUrl.endsWith('.m3u8')) {
-            parseM3uFromUrl(rawUrl);
-        } else {
-            playMedia(rawUrl, "Directo");
-        }
-    }
-
-    // ==================== Parsear M3U / Xtream ====================
-    async function parseM3uFromUrl(m3uUrl) {
-        try {
-            currentLabel.innerText = '📡 Cargando lista de canales...';
-            const response = await fetch(m3uUrl);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            currentLabel.innerText = "📂 Descargando lista...";
+            const response = await fetch(proxiedListUrl);
             const text = await response.text();
-            const channels = parseM3uText(text);
-            if (channels.length === 0) throw new Error("No se encontraron canales");
-            currentChannelList = channels;
+            
+            const channels = [];
+            const lines = text.split('\n');
+            let currentName = "";
+
+            lines.forEach(line => {
+                if (line.startsWith('#EXTINF:')) {
+                    currentName = line.split(',')[1] || "Canal sin nombre";
+                } else if (line.startsWith('http')) {
+                    channels.push({ name: currentName, url: line.trim() });
+                }
+            });
+
             renderSidebar(channels);
-            sidebar.style.display = 'block';
             currentLabel.innerText = `✅ ${channels.length} canales cargados`;
-        } catch(err) {
-            alert("Error al cargar lista: " + err.message);
-            currentLabel.innerText = '❌ Error al cargar lista';
+        } catch (e) {
+            alert("Error al cargar la lista. Verifica el Proxy.");
         }
     }
 
-    // ==================== Parsear texto M3U (compatible Xtream) ====================
-    function parseM3uText(content) {
-        const lines = content.split(/\r?\n/);
-        const items = [];
-        let currentExtinf = null;
-        
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].trim();
-            if (line.startsWith('#EXTINF:')) {
-                const infoRaw = line.substring(8);
-                let name = infoRaw;
-                const commaIndex = infoRaw.lastIndexOf(',');
-                if (commaIndex !== -1) name = infoRaw.substring(commaIndex + 1).trim();
-                let group = "General";
-                const groupMatch = infoRaw.match(/group-title="([^"]+)"/i);
-                if (groupMatch) group = groupMatch[1];
-                let logo = null;
-                const logoMatch = infoRaw.match(/tvg-logo="([^"]+)"/i);
-                if (logoMatch) logo = logoMatch[1];
-                currentExtinf = { name: name || "Sin nombre", group, logo };
-            }
-            else if (line && !line.startsWith('#') && currentExtinf) {
-                const url = line;
-                const typeInfo = detectMediaType(url, currentExtinf.name);
-                items.push({
-                    name: currentExtinf.name,
-                    url: url,
-                    type: typeInfo.type,
-                    icon: typeInfo.icon,
-                    group: currentExtinf.group,
-                    logo: currentExtinf.logo
-                });
-                currentExtinf = null;
-            }
-            if (line.startsWith('#') && !line.startsWith('#EXTINF')) currentExtinf = null;
-        }
-        
-        // Si no hay items pero hay URLs sueltas
-        if (items.length === 0 && content.includes('http')) {
-            const urls = content.match(/https?:\/\/[^\s]+/g);
-            if (urls) {
-                urls.forEach(url => {
-                    const typeInfo = detectMediaType(url);
-                    items.push({ name: "Enlace directo", url: url, type: typeInfo.type, icon: typeInfo.icon });
-                });
-            }
-        }
-        return items;
-    }
-
-    // ==================== Renderizar sidebar ====================
     function renderSidebar(channels) {
-        channelsList.innerHTML = '';
-        channels.forEach((ch) => {
+        sidebar.innerHTML = "";
+        channels.forEach(ch => {
             const item = document.createElement('div');
             item.className = 'channel-item';
-            const isLive = ch.type === 'live';
-            const iconClass = ch.icon || detectMediaType(ch.url, ch.name).icon;
-            
             item.innerHTML = `
-                <div class="channel-icon">
-                    ${ch.logo ? `<img src="${ch.logo}" style="width:36px;height:36px;object-fit:cover;border-radius:8px;" onerror="this.src=''">` : `<i class="fas ${iconClass}"></i>`}
+                <div class="ch-icon"><i class="fas fa-tv"></i></div>
+                <div class="ch-info">
+                    <div class="ch-name">${ch.name}</div>
+                    <div class="ch-url">${ch.url}</div>
                 </div>
-                <div class="channel-details">
-                    <div class="channel-name">${escapeHtml(ch.name.substring(0, 50))}</div>
-                    <div class="channel-meta">
-                        <i class="fas ${iconClass}" style="font-size:0.6rem;"></i>
-                        <span>${ch.type.toUpperCase()}</span>
-                        ${isLive ? '<span class="live-dot"></span>' : ''}
-                    </div>
-                </div>
-                <i class="fas fa-play-circle" style="color:#ff0000; font-size:1.2rem;"></i>
             `;
-            item.addEventListener('click', () => playMedia(ch.url, ch.name));
-            channelsList.appendChild(item);
+            item.onclick = () => {
+                const safeStreamUrl = getSafeUrl(ch.url);
+                currentLabel.innerText = `📺 ${ch.name}`;
+                player.src({ src: safeStreamUrl, type: 'application/x-mpegURL' });
+                player.play();
+                if (window.innerWidth < 768) sidebar.classList.remove('active');
+            };
+            sidebar.appendChild(item);
         });
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+    // Eventos
+    document.getElementById('playBtn').onclick = loadDirectUrl;
+    document.getElementById('parseBtn').onclick = parseM3u;
+    document.getElementById('clearBtn').onclick = () => { sidebar.innerHTML = ""; urlInput.value = ""; };
+    document.getElementById('toggleMenu').onclick = () => sidebar.classList.toggle('active');
 
-    function truncateUrl(url, maxLen = 50) {
-        return url.length > maxLen ? url.substring(0, maxLen) + '...' : url;
-    }
-
-    // ==================== Controles (AHORA FUNCIONALES) ====================
-    function stopAll() {
-        // Detener video
-        if (videoPlayer) {
-            videoPlayer.pause();
-            videoPlayer.src('');
-            videoPlayer.load();
-        }
-        
-        // Detener audio
-        nativeAudio.pause();
-        nativeAudio.src = '';
-        nativeAudio.load();
-        
-        // Resetear UI
-        audioCard.style.display = 'none';
-        videoWrapper.style.display = 'block';
-        
-        // Resetear variables
-        currentUrl = null;
-        currentTitle = null;
-        currentMediaType = null;
-        
-        // Actualizar labels
-        currentLabel.innerText = '⏹️ Reproducción detenida';
-        typeBadge.innerHTML = '<i class="fas fa-stop-circle"></i> <span>DETENIDO</span>';
-        audioInfo.innerHTML = '';
-        
-        console.log("✅ Reproducción detenida correctamente");
-    }
-
-    function reloadCurrent() {
-        if (currentUrl && currentMediaType) {
-            console.log("🔄 Recargando:", currentUrl);
-            // Mostrar feedback
-            currentLabel.innerText = '🔄 Recargando...';
-            // Volver a reproducir el mismo contenido
-            playMedia(currentUrl, currentTitle || "Recargado");
-        } else {
-            alert("No hay ningún stream activo para recargar");
-            console.warn("No hay stream activo para recargar");
-        }
-    }
-
-    function clearSidebar() {
-        currentChannelList = [];
-        channelsList.innerHTML = '';
-        sidebar.style.display = 'none';
-        currentLabel.innerText = '🗑️ Lista limpiada';
-    }
-
-    // ==================== Inicializar ====================
-    function init() {
-        initVideoPlayer();
-        
-        // Event Listeners
-        playBtn.addEventListener('click', loadDirectUrl);
-        parseBtn.addEventListener('click', async () => {
-            let url = urlInput.value.trim();
-            if (!url) { alert("📋 Ingresa URL de lista M3U o Xtream"); return; }
-            await parseM3uFromUrl(url);
-        });
-        
-        // Botones Stop (ambos funcionan)
-        stopBtn.addEventListener('click', stopAll);
-        miniStop.addEventListener('click', stopAll);
-        
-        // Botones Recargar (ambos funcionan)
-        reloadBtn.addEventListener('click', reloadCurrent);
-        miniReload.addEventListener('click', reloadCurrent);
-        
-        clearListBtn.addEventListener('click', clearSidebar);
-        
-        urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadDirectUrl();
-        });
-        
-        console.log("✅ FlowIPTV cargado - Todos los botones funcionales");
-    }
-    
-    // Iniciar cuando el DOM esté listo
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    console.log("🚀 ZymarGo Engine v4.0 con Proxy Inyectado listo.");
 </script>
+
 </body>
 </html>
