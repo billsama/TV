@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FlowIPTV Pro | Xtream · M3U8 · Radio · Audio · Sin CORS</title>
+    <title>FlowIPTV Pro | Xtream · M3U8 · Radio · Audio</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google Fonts -->
@@ -362,12 +362,6 @@
             border-radius: 0.5rem;
             font-size: 0.7rem;
             display: none;
-            transition: opacity 0.3s;
-        }
-
-        .proxy-status {
-            background: rgba(0, 255, 0, 0.1);
-            border-left: 3px solid #00ff00;
         }
 
         @media (max-width: 768px) {
@@ -394,7 +388,7 @@
     <div class="header">
         <div class="logo">
             <i class="fab fa-youtube"></i>
-            <span>FlowIPTV Pro</span>
+            <span>FlowIPTV</span>
         </div>
         <div class="search-bar">
             <input type="text" id="urlInput" placeholder="Pega tu enlace: Xtream M3U · M3U8 · MP3 · Radio · Lista M3U">
@@ -450,77 +444,42 @@
 </div>
 
 <script>
-    // ==================== PROXY CORS MEJORADO - IGUAL QUE APPCREATOR 24 ====================
-    // Múltiples proxies para máxima compatibilidad
+    // ==================== PROXY CORS ====================
+    // Múltiples opciones de proxy para mayor confiabilidad
     const CORS_PROXIES = [
         'https://cors-anywhere.herokuapp.com/',
         'https://api.allorigins.win/raw?url=',
         'https://corsproxy.io/?',
-        'https://proxy.cors.sh/',
-        'https://cors.zebr.me/',
-        'https://thingproxy.freeboard.io/fetch/'
+        'https://proxy.cors.sh/'
     ];
     
     let currentProxyIndex = 0;
     
-    // 🔥 FUNCIÓN PRINCIPAL - APLICA PROXY A TODOS LOS CONTENIDOS SIN EXCEPCIÓN
-    function getProxyUrl(url) {
-        // URLs locales o datos no necesitan proxy
-        if (!url || url.startsWith('/') || url.startsWith('data:') || url.startsWith('blob:')) {
+    function getProxyUrl(url, useProxy = true) {
+        if (!useProxy) return url;
+        // No aplicar proxy a URLs que ya son locales o relativas
+        if (url.startsWith('/') || url.startsWith(window.location.origin)) return url;
+        // Detectar si es un stream HLS o video (no usar proxy para reproducción directa)
+        if (url.includes('.m3u8') || url.includes('.mp4') || url.includes('.ts')) {
+            // Para reproducción de video, no usamos proxy (el video element maneja CORS diferente)
             return url;
         }
-        
-        // Si ya tiene proxy, no aplicar doble
-        for (let proxy of CORS_PROXIES) {
-            if (url.startsWith(proxy)) {
-                return url;
-            }
-        }
-        
-        // APLICAR PROXY A TODO: .m3u8, .mp4, .ts, .mp3, etc.
         return CORS_PROXIES[currentProxyIndex] + encodeURIComponent(url);
     }
     
-    function showMessage(msg, isError = false) {
+    function switchProxy() {
+        currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
         const warning = document.getElementById('corsWarning');
         warning.style.display = 'block';
-        warning.style.background = isError ? 'rgba(255,0,0,0.2)' : 'rgba(0,255,0,0.1)';
-        warning.style.borderLeftColor = isError ? '#ff0000' : '#00ff00';
-        warning.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${msg}`;
-        
+        warning.innerHTML = `<i class="fas fa-sync-alt"></i> Cambiando proxy a: ${CORS_PROXIES[currentProxyIndex].split('//')[1]?.split('/')[0] || 'nuevo proxy'}`;
         setTimeout(() => {
             warning.style.opacity = '0';
             setTimeout(() => {
                 warning.style.display = 'none';
                 warning.style.opacity = '1';
-                warning.style.background = 'rgba(255,0,0,0.1)';
-                warning.style.borderLeftColor = '#ff0000';
-            }, 500);
-        }, 4000);
-    }
-    
-    function switchToNextProxy() {
-        currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
-        const proxyName = CORS_PROXIES[currentProxyIndex].split('//')[1]?.split('/')[0] || 'nuevo proxy';
-        showMessage(`🔄 Cambiando a proxy: ${proxyName}`, false);
-        return currentProxyIndex;
-    }
-    
-    async function fetchWithAutoProxy(url) {
-        for (let i = 0; i < CORS_PROXIES.length; i++) {
-            try {
-                const proxyUrl = CORS_PROXIES[i] + encodeURIComponent(url);
-                const response = await fetch(proxyUrl);
-                if (response.ok) {
-                    currentProxyIndex = i;
-                    showMessage(`✅ Proxy conectado: ${CORS_PROXIES[i].split('//')[1]?.split('/')[0]}`, false);
-                    return await response.text();
-                }
-            } catch(e) {
-                console.warn(`Proxy ${i} falló:`, e);
-            }
-        }
-        throw new Error("Todos los proxies fallaron");
+            }, 2000);
+        }, 3000);
+        return CORS_PROXIES[currentProxyIndex];
     }
     
     // ==================== DOM Elements ====================
@@ -541,6 +500,7 @@
     const sidebar = document.getElementById('sidebar');
     const channelsList = document.getElementById('channelsList');
     const clearListBtn = document.getElementById('clearListBtn');
+    const corsWarning = document.getElementById('corsWarning');
 
     // ==================== Variables ====================
     let videoPlayer = null;
@@ -548,8 +508,7 @@
     let currentTitle = null;
     let currentMediaType = null;
     let currentChannelList = [];
-    let retryCount = 0;
-    const MAX_RETRIES = 3;
+    let useProxy = true;
 
     // ==================== Detección de tipo ====================
     function detectMediaType(url, title = '') {
@@ -619,7 +578,6 @@
         return 'application/x-mpegURL';
     }
 
-    // 🔥 FUNCIÓN PRINCIPAL DE REPRODUCCIÓN - CON PROXY EN TODO
     function playWithVideoJs(url, title = '') {
         try {
             if (!videoPlayer) {
@@ -632,30 +590,22 @@
             videoWrapper.style.display = 'block';
             audioCard.style.display = 'none';
             
-            // APLICAR PROXY A LA URL DEL VIDEO
-            const proxiedUrl = getProxyUrl(url);
-            console.log(`🎬 Reproduciendo: ${proxiedUrl.substring(0, 80)}...`);
+            // Para HLS/M3U8, video.js maneja CORS internamente
+            const sourceUrl = url;
             
-            videoPlayer.src({ src: proxiedUrl, type: getMimeType(proxiedUrl) });
+            videoPlayer.src({ src: sourceUrl, type: getMimeType(sourceUrl) });
             videoPlayer.load();
             
             const playPromise = videoPlayer.play();
             if (playPromise) {
                 playPromise.catch(e => {
-                    console.warn("Error:", e);
+                    console.warn("Error de reproducción:", e);
                     if (e.name === 'NotAllowedError') {
-                        currentLabel.innerText = `🔇 Click play: ${title || truncateUrl(url)}`;
-                    } else if (e.message && (e.message.includes('CORS') || e.message.includes('Network'))) {
-                        if (retryCount < MAX_RETRIES) {
-                            retryCount++;
-                            showMessage(`⚠️ Error CORS, cambiando proxy (intento ${retryCount}/${MAX_RETRIES})`, true);
-                            switchToNextProxy();
-                            setTimeout(() => playWithVideoJs(url, title), 1000);
-                        } else {
-                            currentLabel.innerText = `🌐 Error CORS persistente - Prueba otro enlace`;
-                            showMessage(`❌ Error CORS: El servidor bloquea la reproducción. Prueba con otro enlace.`, true);
-                            retryCount = 0;
-                        }
+                        currentLabel.innerText = `🔇 Click play para reproducir: ${title || truncateUrl(url)}`;
+                    } else if (e.name === 'NetworkError') {
+                        currentLabel.innerText = `🌐 Error de red/CORS: ${title || truncateUrl(url)}`;
+                        corsWarning.style.display = 'block';
+                        corsWarning.innerHTML = '<i class="fas fa-shield-alt"></i> Posible problema CORS. Si el error persiste, intenta con otro enlace.';
                     } else {
                         currentLabel.innerText = `❌ Error: ${title || truncateUrl(url)}`;
                     }
@@ -666,16 +616,9 @@
             videoPlayer.on('error', function() {
                 const error = videoPlayer.error();
                 console.error("Video error:", error);
-                if (error && (error.code === 4 || error.message?.includes('CORS'))) {
-                    if (retryCount < MAX_RETRIES) {
-                        retryCount++;
-                        showMessage(`⚠️ Error CORS, cambiando proxy (intento ${retryCount}/${MAX_RETRIES})`, true);
-                        switchToNextProxy();
-                        setTimeout(() => playWithVideoJs(url, title), 1000);
-                    } else {
-                        currentLabel.innerText = `🌐 Error CORS - Servidor bloquea acceso`;
-                        retryCount = 0;
-                    }
+                if (error && error.code === 4) {
+                    currentLabel.innerText = `🌐 Error CORS/Red: ${title || truncateUrl(url)}`;
+                    corsWarning.style.display = 'block';
                 } else {
                     currentLabel.innerText = `❌ Error: ${title || truncateUrl(url)}`;
                 }
@@ -683,8 +626,7 @@
             
             videoPlayer.on('playing', () => {
                 currentLabel.innerText = title || truncateUrl(url);
-                retryCount = 0;
-                showMessage(`🎉 Reproduciendo: ${title || truncateUrl(url)}`, false);
+                corsWarning.style.display = 'none';
             });
             
             currentUrl = url;
@@ -713,21 +655,15 @@
         nativeAudio.src = '';
         nativeAudio.load();
         
-        const audioUrl = getProxyUrl(url);
+        // Para audio, usar proxy si es necesario
+        const audioUrl = (url.includes('.mp3') || url.includes('.m3u8')) ? url : getProxyUrl(url, useProxy);
         nativeAudio.src = audioUrl;
         nativeAudio.load();
         
         nativeAudio.play().catch(e => {
-            console.warn("Audio error:", e);
-            if (retryCount < MAX_RETRIES) {
-                retryCount++;
-                showMessage(`⚠️ Error en audio, cambiando proxy (${retryCount}/${MAX_RETRIES})`, true);
-                switchToNextProxy();
-                setTimeout(() => playAudio(url, title), 1000);
-            } else {
-                audioInfo.innerHTML = '<i class="fas fa-volume-off"></i> Error CORS - prueba otro enlace';
-                retryCount = 0;
-            }
+            console.warn("Autoplay bloqueado o error CORS:", e);
+            audioInfo.innerHTML = '<i class="fas fa-volume-off"></i> Haz clic en play - Posible problema CORS';
+            corsWarning.style.display = 'block';
         });
         
         audioInfo.innerHTML = `<i class="fas fa-headphones"></i> ${title || truncateUrl(url)}`;
@@ -737,17 +673,14 @@
         currentMediaType = 'audio';
         updateBadge(url, title);
         
-        nativeAudio.onerror = () => {
-            if (retryCount < MAX_RETRIES) {
-                retryCount++;
-                switchToNextProxy();
-                setTimeout(() => playAudio(url, title), 1000);
-            }
+        nativeAudio.onerror = (e) => {
+            console.error("Audio error:", e);
+            audioInfo.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error CORS o formato no compatible';
+            corsWarning.style.display = 'block';
         };
         
         nativeAudio.oncanplay = () => {
-            retryCount = 0;
-            showMessage(`🎵 Reproduciendo audio: ${title || truncateUrl(url)}`, false);
+            corsWarning.style.display = 'none';
         };
     }
 
@@ -766,14 +699,32 @@
         }
     }
 
-    // ==================== Cargar M3U ====================
+    // ==================== Cargar URL con soporte CORS ====================
+    async function fetchWithCors(url) {
+        for (let i = 0; i < CORS_PROXIES.length; i++) {
+            try {
+                const proxyUrl = CORS_PROXIES[i] + encodeURIComponent(url);
+                const response = await fetch(proxyUrl);
+                if (response.ok) {
+                    currentProxyIndex = i;
+                    return await response.text();
+                }
+            } catch(e) {
+                console.warn(`Proxy ${i} falló:`, e);
+            }
+        }
+        throw new Error("Todos los proxies fallaron");
+    }
+
     async function parseM3uFromUrl(m3uUrl) {
         try {
             currentLabel.innerText = '📡 Cargando lista de canales...';
-            showMessage('📡 Cargando lista con proxy CORS...', false);
+            corsWarning.style.display = 'block';
+            corsWarning.innerHTML = '<i class="fas fa-shield-alt"></i> Usando proxy CORS para cargar la lista...';
             
             let text;
             try {
+                // Intentar fetch directo primero
                 const response = await fetch(m3uUrl);
                 if (response.ok) {
                     text = await response.text();
@@ -781,7 +732,8 @@
                     throw new Error("Direct fetch failed");
                 }
             } catch(e) {
-                text = await fetchWithAutoProxy(m3uUrl);
+                // Si falla, usar proxy
+                text = await fetchWithCors(m3uUrl);
             }
             
             const channels = parseM3uText(text);
@@ -790,9 +742,9 @@
             renderSidebar(channels);
             sidebar.style.display = 'block';
             currentLabel.innerText = `✅ ${channels.length} canales cargados`;
-            showMessage(`✅ ${channels.length} canales listos para reproducir`, false);
+            corsWarning.style.display = 'none';
         } catch(err) {
-            alert("Error al cargar lista: " + err.message + "\n\n💡 Tip: Algunos servidores bloquean CORS. Prueba con otro enlace.");
+            alert("Error al cargar lista: " + err.message + "\n\n💡 Tip: Algunos servidores bloquean CORS. Prueba con otro enlace o recarga la página.");
             currentLabel.innerText = '❌ Error al cargar lista';
         }
     }
@@ -916,13 +868,11 @@
         currentLabel.innerText = '⏹️ Reproducción detenida';
         typeBadge.innerHTML = '<i class="fas fa-stop-circle"></i> <span>DETENIDO</span>';
         audioInfo.innerHTML = '';
-        retryCount = 0;
     }
 
     function reloadCurrent() {
         if (currentUrl && currentMediaType) {
             currentLabel.innerText = '🔄 Recargando...';
-            retryCount = 0;
             playMedia(currentUrl, currentTitle || "Recargado");
         } else {
             alert("No hay ningún stream activo para recargar");
@@ -936,29 +886,9 @@
         currentLabel.innerText = '🗑️ Lista limpiada';
     }
 
-    // 🔥 Botón para cambiar proxy manualmente
-    function addProxySwitcher() {
-        const headerActions = document.querySelector('.header-actions');
-        if (headerActions) {
-            const proxyBtn = document.createElement('button');
-            proxyBtn.className = 'icon-btn';
-            proxyBtn.title = 'Cambiar proxy CORS';
-            proxyBtn.innerHTML = '<i class="fas fa-exchange-alt"></i>';
-            proxyBtn.onclick = () => {
-                switchToNextProxy();
-                if (currentUrl) {
-                    retryCount = 0;
-                    reloadCurrent();
-                }
-            };
-            headerActions.appendChild(proxyBtn);
-        }
-    }
-
     // ==================== Inicializar ====================
     function init() {
         initVideoPlayer();
-        addProxySwitcher();
         
         playBtn.addEventListener('click', loadDirectUrl);
         parseBtn.addEventListener('click', async () => {
@@ -976,9 +906,8 @@
             if (e.key === 'Enter') loadDirectUrl();
         });
         
-        console.log("✅ FlowIPTV PRO - CORS completamente resuelto");
-        console.log("🎬 Ahora reproduce igual que AppCreator 24 (ExoPlayer)");
-        console.log("🌐 Proxies disponibles:", CORS_PROXIES.length);
+        console.log("✅ FlowIPTV cargado con soporte CORS para Vercel");
+        console.log("💡 Proxies disponibles:", CORS_PROXIES.length);
     }
     
     if (document.readyState === 'loading') {
