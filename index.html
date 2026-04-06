@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Clappr Player - Con Proxy CORS</title>
+    <title>Reproductor IPTV Pro</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,595 +14,589 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .header { text-align:center; color:#fff; margin-bottom:24px; }
+        .header h1 { font-size:2rem; margin-bottom:6px; }
+        .header p  { font-size:1rem; opacity:0.8; }
+
+        /* ── PLAYER ── */
+        .player-wrap {
+            background:#000;
+            border-radius:14px;
+            overflow:hidden;
+            box-shadow:0 20px 50px rgba(0,0,0,0.6);
+            margin-bottom:20px;
         }
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
+        .video-shell {
+            position:relative;
+            width:100%;
+            aspect-ratio:16/9;
+            background:#000;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        #videoPlayer {
+            width:100%; height:100%;
+            display:block; background:#000;
         }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+        /* loader */
+        .loader {
+            display:none;
+            position:absolute; inset:0;
+            background:rgba(0,0,0,0.72);
+            align-items:center; justify-content:center;
+            flex-direction:column; gap:14px; z-index:10;
+        }
+        .loader.active { display:flex; }
+        .spinner {
+            width:48px; height:48px;
+            border:4px solid rgba(255,255,255,0.15);
+            border-top-color:#e94560;
+            border-radius:50%;
+            animation:spin 0.8s linear infinite;
+        }
+        .loader-txt { color:#fff; font-size:0.9rem; opacity:0.85; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* controles */
+        .controls {
+            position:absolute; bottom:0; left:0; right:0;
+            padding:12px 16px 14px;
+            background:linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            display:flex; align-items:center; gap:10px;
+            opacity:0; transition:opacity 0.25s; z-index:20;
+        }
+        .video-shell:hover .controls,
+        .video-shell.show-ctrl .controls { opacity:1; }
+
+        .ctrl-btn {
+            background:rgba(255,255,255,0.18);
+            border:none; color:#fff;
+            width:36px; height:36px;
+            border-radius:50%; cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            font-size:15px; transition:background 0.2s; flex-shrink:0;
+        }
+        .ctrl-btn:hover { background:rgba(255,255,255,0.32); }
+
+        .progress-wrap { flex:1; cursor:pointer; padding:8px 0; }
+        .progress-track {
+            height:3px; background:rgba(255,255,255,0.2);
+            border-radius:99px; position:relative;
+        }
+        .progress-fill {
+            position:absolute; left:0; top:0; height:100%;
+            background:#e94560; border-radius:99px;
+            width:0%; transition:width 0.1s linear;
         }
 
-        .player-card {
-            background: #000;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            overflow: hidden;
-            margin-bottom: 20px;
+        .time-tag {
+            font-size:10px; color:rgba(255,255,255,0.75);
+            font-family:monospace; white-space:nowrap; flex-shrink:0;
         }
 
-        #player {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
+        .vol-wrap { display:flex; align-items:center; gap:5px; flex-shrink:0; }
+        .vol-slider {
+            width:64px; height:3px;
+            -webkit-appearance:none; appearance:none;
+            background:rgba(255,255,255,0.25);
+            border-radius:99px; cursor:pointer;
+        }
+        .vol-slider::-webkit-slider-thumb {
+            -webkit-appearance:none;
+            width:11px; height:11px;
+            border-radius:50%; background:#e94560; cursor:pointer;
         }
 
+        /* live badge */
+        .live-badge {
+            display:none;
+            position:absolute; top:12px; left:14px;
+            background:#e94560; color:#fff;
+            font-size:10px; font-weight:700; letter-spacing:0.08em;
+            padding:3px 10px; border-radius:20px; z-index:15;
+        }
+        .live-badge.active { display:flex; align-items:center; gap:5px; }
+        .live-dot {
+            width:6px; height:6px; background:#fff; border-radius:50%;
+            animation:blink 1.2s ease-in-out infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+        /* ── PANEL ── */
         .controls-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background:#fff; border-radius:14px;
+            padding:24px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
         }
+
+        .proxy-row {
+            display:flex; align-items:center; gap:10px;
+            margin-bottom:16px; flex-wrap:wrap;
+        }
+
+        .toggle-switch { position:relative; width:44px; height:24px; flex-shrink:0; }
+        .toggle-switch input { opacity:0; width:0; height:0; }
+        .toggle-slider {
+            position:absolute; inset:0;
+            background:#ccc; border-radius:24px;
+            cursor:pointer; transition:background 0.3s;
+        }
+        .toggle-slider:before {
+            content:''; position:absolute;
+            width:18px; height:18px; left:3px; bottom:3px;
+            background:#fff; border-radius:50%;
+            transition:transform 0.3s; box-shadow:0 1px 3px rgba(0,0,0,0.3);
+        }
+        .toggle-switch input:checked + .toggle-slider { background:#e94560; }
+        .toggle-switch input:checked + .toggle-slider:before { transform:translateX(20px); }
+
+        .toggle-label { font-size:0.88rem; color:#555; font-weight:500; }
 
         .proxy-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #a5d6a7;
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 16px;
+            display:inline-flex; align-items:center; gap:6px;
+            background:#e8f5e9; color:#2e7d32;
+            border:1px solid #a5d6a7; border-radius:20px;
+            padding:3px 11px; font-size:0.75rem; font-weight:600;
+            margin-left:auto; flex-shrink:0;
         }
-
+        .proxy-badge.off { background:#f5f5f5; color:#888; border-color:#ddd; }
         .proxy-badge .dot {
-            width: 7px;
-            height: 7px;
-            background: #43a047;
-            border-radius: 50%;
-            animation: blink 1.2s ease-in-out infinite;
+            width:6px; height:6px; background:#43a047;
+            border-radius:50%; animation:blink 1.2s ease-in-out infinite;
         }
+        .proxy-badge.off .dot { background:#bbb; animation:none; }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.2; }
+        .url-group label {
+            display:block; margin-bottom:8px;
+            font-weight:600; color:#333; font-size:0.9rem;
         }
-
-        .url-input-group {
-            margin-bottom: 20px;
+        .url-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .url-row input {
+            flex:1; padding:11px 14px;
+            border:2px solid #e0e0e0; border-radius:8px;
+            font-size:0.95rem; font-family:monospace;
+            transition:border-color 0.2s; min-width:0;
         }
-
-        .url-input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95rem;
-        }
-
-        .url-input-wrapper {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .url-input-wrapper input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            font-family: monospace;
-            min-width: 0;
-        }
-
-        .url-input-wrapper input:focus {
-            outline: none;
-            border-color: #e94560;
-            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
-        }
-
-        /* Toggle proxy */
-        .proxy-toggle-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .toggle-label {
-            font-size: 0.88rem;
-            color: #555;
-            font-weight: 500;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            flex-shrink: 0;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            inset: 0;
-            background: #ccc;
-            border-radius: 24px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .toggle-slider:before {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background: #e94560;
-        }
-
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(20px);
-        }
-
-        .proxy-url-display {
-            font-size: 0.75rem;
-            color: #888;
-            font-family: monospace;
-            word-break: break-all;
-            background: #f5f5f5;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .proxy-url-display.visible {
-            display: block;
+        .url-row input:focus {
+            outline:none; border-color:#e94560;
+            box-shadow:0 0 0 3px rgba(233,69,96,0.1);
         }
 
         .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #e94560;
-            color: white;
-            white-space: nowrap;
-            flex-shrink: 0;
+            padding:11px 22px; border:none; border-radius:8px;
+            font-size:0.95rem; font-weight:600; cursor:pointer;
+            transition:all 0.2s; white-space:nowrap; flex-shrink:0;
         }
+        .btn-primary { background:#e94560; color:#fff; }
+        .btn-primary:hover { background:#d63a54; transform:translateY(-1px); }
+        .btn-danger  { background:#dc3545; color:#fff; }
+        .btn-danger:hover  { background:#c82333; transform:translateY(-1px); }
 
-        .btn:hover {
-            background: #d63a54;
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .presets {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .presets h3 {
-            margin-bottom: 12px;
-            color: #333;
-            font-size: 1rem;
-        }
-
-        .preset-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .presets { margin-top:18px; padding-top:18px; border-top:1px solid #eee; }
+        .presets h3 { margin-bottom:10px; color:#333; font-size:0.9rem; }
+        .preset-list { display:flex; gap:8px; flex-wrap:wrap; }
         .preset-btn {
-            padding: 8px 16px;
-            background: #f7f7f7;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
+            padding:7px 14px; background:#f5f5f5;
+            border:1px solid #e0e0e0; border-radius:6px;
+            cursor:pointer; font-size:0.82rem; transition:all 0.2s;
         }
-
-        .preset-btn:hover {
-            background: #e94560;
-            color: white;
-            border-color: #e94560;
-        }
+        .preset-btn:hover { background:#e94560; color:#fff; border-color:#e94560; }
 
         .status {
-            margin-top: 20px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            background: #f7f7f7;
-            font-size: 0.85rem;
-            color: #666;
-            word-break: break-all;
-            transition: background 0.3s, color 0.3s;
+            margin-top:16px; padding:10px 14px;
+            border-radius:8px; font-size:0.83rem;
+            color:#666; background:#f7f7f7;
+            word-break:break-all; transition:background 0.3s, color 0.3s;
         }
+        .status.error   { background:#fed7d7; color:#c53030; }
+        .status.success { background:#c6f6d5; color:#276749; }
+        .status.loading { background:#ebf8ff; color:#2b6cb0; }
 
-        .status.error {
-            background: #fed7d7;
-            color: #c53030;
+        .info-box {
+            margin-top:16px; padding:14px;
+            background:#f8f8f8; border-radius:8px;
+            font-size:0.82rem; color:#444;
         }
+        .info-box h4 { color:#e94560; margin-bottom:7px; }
+        .info-box ul { margin-left:18px; }
+        .info-box li { margin:4px 0; }
 
-        .status.success {
-            background: #c6f6d5;
-            color: #276749;
-        }
-
-        .status.loading {
-            background: #ebf8ff;
-            color: #2b6cb0;
-        }
-
-        .info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: #2c3e50;
-        }
-
-        .info h4 {
-            margin-bottom: 8px;
-            color: #e94560;
-        }
-
-        .info ul {
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-
-        .info li {
-            margin: 5px 0;
-        }
-
-        .info code {
-            background: #ddd;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .header h1 { font-size: 1.8rem; }
-            .controls-card { padding: 15px; }
-            .url-input-wrapper { flex-direction: column; }
-            .btn { width: 100%; }
+        @media(max-width:640px){
+            body { padding:10px; }
+            .header h1 { font-size:1.5rem; }
+            .controls-card { padding:16px; }
+            .url-row { flex-direction:column; }
+            .btn { width:100%; }
         }
     </style>
-
-    <!-- Clappr Player -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-    <!-- Plugin de miniaturas -->
-    <script src="https://cdn.jsdelivr.net/npm/clappr-thumbnails-plugin@3/dist/clappr-thumbnails-plugin.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎬 Clappr Player</h1>
-            <p>Reproductor con Proxy CORS integrado — funciona en internet</p>
-        </div>
+<div class="container">
 
-        <div class="player-card">
-            <div id="player"></div>
-        </div>
+    <div class="header">
+        <h1>📺 Reproductor IPTV Pro</h1>
+        <p>HLS.js + Proxy CORS integrado — funciona en internet</p>
+    </div>
 
-        <div class="controls-card">
+    <div class="player-wrap">
+        <div class="video-shell" id="videoShell">
+            <video id="videoPlayer" playsinline></video>
 
-            <!-- Badge de proxy activo -->
-            <div class="proxy-badge">
-                <span class="dot"></span>
-                Proxy CORS activo — streams protegidos habilitados
+            <div class="live-badge" id="liveBadge">
+                <span class="live-dot"></span> EN VIVO
             </div>
 
-            <!-- Toggle proxy -->
-            <div class="proxy-toggle-row">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="proxyToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-                <span class="toggle-label">Usar Proxy CORS (recomendado para streams de ISP / Bitel / TV360)</span>
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <div class="loader-txt" id="loaderTxt">Cargando…</div>
             </div>
-            <div class="proxy-url-display" id="proxyUrlDisplay"></div>
 
-            <!-- Input URL -->
-            <div class="url-input-group">
-                <label>📡 URL del Stream / Video:</label>
-                <div class="url-input-wrapper">
-                    <input type="text" id="urlInput"
-                        placeholder="https://ejemplo.com/stream.m3u8 o .mp4">
-                    <button class="btn" id="loadBtn">▶ Reproducir</button>
-                    <button class="btn btn-danger" id="stopBtn">⏹ Detener</button>
+            <div class="controls" id="controls">
+                <button class="ctrl-btn" id="playBtn">▶</button>
+
+                <div class="progress-wrap" id="progressWrap">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Presets de prueba -->
-            <div class="presets">
-                <h3>🎯 URLs de prueba:</h3>
-                <div class="preset-buttons">
-                    <button class="preset-btn"
-                        data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">
-                        MP4 — Video muestra
-                    </button>
-                    <button class="preset-btn"
-                        data-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">
-                        MP4 — Video corto
-                    </button>
-                    <button class="preset-btn"
-                        data-url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8">
-                        HLS — Stream prueba
-                    </button>
+                <span class="time-tag" id="timeTag">–:–– / –:––</span>
+
+                <div class="vol-wrap">
+                    <button class="ctrl-btn" id="muteBtn">🔊</button>
+                    <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="1">
                 </div>
-            </div>
 
-            <div class="status success" id="status">
-                ✅ Reproductor listo. Ingresa una URL y pulsa Reproducir.
-            </div>
-
-            <div class="info">
-                <h4>📌 Cómo funciona el Proxy CORS</h4>
-                <ul>
-                    <li><strong>Proxy ON</strong> → La URL pasa por tu Cloudflare Worker antes de llegar al reproductor. Funciona en internet para streams de Bitel, Movistar, Claro, etc.</li>
-                    <li><strong>Proxy OFF</strong> → URL directa. Funciona solo en local o con streams que permiten CORS abierto (YouTube, CDNs públicos).</li>
-                    <li>Si el stream da error con Proxy ON → el token de la URL puede haber expirado. Obtén una URL fresca.</li>
-                </ul>
+                <button class="ctrl-btn" id="fsBtn">⛶</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // ============================================================
-        // CONFIGURACIÓN — Cambia solo esta línea si cambias de worker
-        // ============================================================
-        const PROXY_BASE = 'https://cors-proxy-zymargo.billsama1996.workers.dev/';
+    <div class="controls-card">
+        <div class="proxy-row">
+            <label class="toggle-switch">
+                <input type="checkbox" id="proxyToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Proxy CORS (recomendado para Bitel / TV360 / ISP)</span>
+            <span class="proxy-badge" id="proxyBadge">
+                <span class="dot"></span> PROXY ON
+            </span>
+        </div>
 
-        // ============================================================
-        // ESTADO
-        // ============================================================
-        let player = null;
+        <div class="url-group">
+            <label>📡 URL del Stream o Video:</label>
+            <div class="url-row">
+                <input type="text" id="urlInput"
+                    placeholder="https://ejemplo.com/stream.m3u8  o  .mp4  o  .mp3">
+                <button class="btn btn-primary" id="loadBtn">▶ Reproducir</button>
+                <button class="btn btn-danger"  id="stopBtn">⏹ Detener</button>
+            </div>
+        </div>
 
-        // Miniaturas de ejemplo para VOD
-        const thumbnailConfig = [
-            { time:  0,  url: "https://via.placeholder.com/160x90/1a1a2e/fff?text=Inicio" },
-            { time:  5,  url: "https://via.placeholder.com/160x90/16213e/fff?text=5s" },
-            { time: 10,  url: "https://via.placeholder.com/160x90/0f3460/fff?text=10s" },
-            { time: 15,  url: "https://via.placeholder.com/160x90/e94560/fff?text=15s" },
-            { time: 20,  url: "https://via.placeholder.com/160x90/533483/fff?text=20s" },
-            { time: 25,  url: "https://via.placeholder.com/160x90/e94560/fff?text=25s" },
-            { time: 30,  url: "https://via.placeholder.com/160x90/1a1a2e/fff?text=30s" }
-        ];
+        <div class="presets">
+            <h3>🎯 URLs de prueba:</h3>
+            <div class="preset-list">
+                <button class="preset-btn" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">MP4 — Video muestra</button>
+                <button class="preset-btn" data-url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4">MP4 — Video corto</button>
+                <button class="preset-btn" data-url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8">HLS — Stream prueba</button>
+            </div>
+        </div>
 
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        function showStatus(msg, type = 'info') {
-            const el = document.getElementById('status');
-            el.textContent = msg;
-            el.className = 'status';
-            if (type === 'error')   el.classList.add('error');
-            if (type === 'success') el.classList.add('success');
-            if (type === 'loading') el.classList.add('loading');
+        <div class="status success" id="status">
+            ✅ Listo. Ingresa una URL y pulsa Reproducir.
+        </div>
+
+        <div class="info-box">
+            <h4>📌 Cómo funciona</h4>
+            <ul>
+                <li><strong>Proxy ON</strong> → URL pasa por tu Cloudflare Worker. Funciona en internet con Bitel, Movistar, Claro, etc.</li>
+                <li><strong>Proxy OFF</strong> → URL directa. Solo en local o CDNs públicos con CORS abierto.</li>
+                <li>Si da error con Proxy ON → el token de la URL puede haber expirado.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- HLS.js desde jsDelivr con fallback a cdnjs -->
+<script>
+(function(){
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js';
+    s.onerror = function(){
+        var s2 = document.createElement('script');
+        s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js';
+        s2.onload = initApp;
+        document.head.appendChild(s2);
+    };
+    s.onload = initApp;
+    document.head.appendChild(s);
+})();
+</script>
+
+<script>
+// ================================================================
+// CONFIGURACIÓN
+// ================================================================
+const PROXY_BASE = 'https://cors-proxy-zymargo.billsama1996.workers.dev/';
+
+// ================================================================
+// APP
+// ================================================================
+function initApp() {
+    const video = document.getElementById('videoPlayer');
+    let hls = null;
+
+    // ── helpers ──────────────────────────────────────────────
+    const $ = id => document.getElementById(id);
+
+    function showStatus(msg, type) {
+        var el = $('status');
+        el.textContent = msg;
+        el.className = 'status';
+        if (type) el.classList.add(type);
+    }
+
+    function showLoader(on, txt) {
+        $('loader').classList.toggle('active', !!on);
+        if (txt) $('loaderTxt').textContent = txt;
+    }
+
+    function setLive(on) {
+        $('liveBadge').classList.toggle('active', !!on);
+        $('progressWrap').style.opacity = on ? '0.3' : '1';
+        $('progressWrap').style.pointerEvents = on ? 'none' : '';
+    }
+
+    function fmt(s) {
+        if (!isFinite(s) || s < 0) return '–:––';
+        var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=Math.floor(s%60);
+        if (h>0) return h+':'+String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+        return m+':'+String(ss).padStart(2,'0');
+    }
+
+    function updatePlay() { $('playBtn').textContent = video.paused ? '▶' : '⏸'; }
+    function updateMute() { $('muteBtn').textContent = video.muted  ? '🔇' : '🔊'; }
+
+    function isProxyOn() { return $('proxyToggle').checked; }
+
+    function buildUrl(raw) {
+        return isProxyOn()
+            ? PROXY_BASE + '?url=' + encodeURIComponent(raw)
+            : raw;
+    }
+
+    function isHLS(url) {
+        return /\.m3u8/i.test(url) ||
+               /playlist|chunks|manifest/i.test(url.split('?')[0]);
+    }
+
+    function isAudio(url) {
+        return /\.(mp3|aac|m4a|ogg)(\?|$)/i.test(url);
+    }
+
+    // ── destruir engine ──────────────────────────────────────
+    function destroyEngine() {
+        if (hls) { try { hls.destroy(); } catch(e){} hls = null; }
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        showLoader(false);
+        setLive(false);
+        $('progressFill').style.width = '0%';
+        $('timeTag').textContent = '–:–– / –:––';
+        updatePlay();
+    }
+
+    // ── cargar stream ────────────────────────────────────────
+    function loadStream(rawUrl) {
+        rawUrl = (rawUrl||'').trim();
+        if (!rawUrl) { showStatus('❌ Ingresa una URL válida','error'); return; }
+
+        destroyEngine();
+
+        var finalUrl = buildUrl(rawUrl);
+        var mode = isProxyOn() ? '🛡️ Proxy CORS' : '📡 Directo';
+
+        showLoader(true, 'Conectando…');
+        showStatus('🔄 Cargando ' + mode + '…', 'loading');
+
+        // Audio / radio
+        if (isAudio(rawUrl)) {
+            video.src = finalUrl;
+            video.load();
+            video.play().catch(function(){updatePlay();});
+            showLoader(false);
+            showStatus('📻 Radio ' + mode, 'success');
+            return;
         }
 
-        function isProxyEnabled() {
-            return document.getElementById('proxyToggle').checked;
-        }
-
-        /**
-         * Construye la URL final:
-         *  - Si proxy ON  → PROXY_BASE?url=<encoded>
-         *  - Si proxy OFF → URL tal cual
-         */
-        function buildFinalUrl(rawUrl) {
-            if (!isProxyEnabled()) return rawUrl;
-            return PROXY_BASE + '?url=' + encodeURIComponent(rawUrl);
-        }
-
-        function destroyPlayer() {
-            if (player) {
-                try { player.destroy(); } catch(e) {}
-                player = null;
-            }
-            // Limpiar el contenedor por si Clappr deja residuos
-            const el = document.getElementById('player');
-            if (el) el.innerHTML = '';
-        }
-
-        // ============================================================
-        // CARGA DEL STREAM
-        // ============================================================
-        function loadStream(rawUrl) {
-            rawUrl = (rawUrl || '').trim();
-            if (!rawUrl) {
-                showStatus('❌ Por favor, ingresa una URL válida', 'error');
-                return;
-            }
-
-            const useProxy  = isProxyEnabled();
-            const finalUrl  = buildFinalUrl(rawUrl);
-            const modeLabel = useProxy ? '🛡️ vía Proxy CORS' : '📡 Directo';
-
-            // Mostrar URL que se va a usar
-            const display = document.getElementById('proxyUrlDisplay');
-            display.textContent = '→ ' + finalUrl;
-            display.classList.add('visible');
-
-            showStatus(`🔄 Cargando ${modeLabel}…`, 'loading');
-            destroyPlayer();
-
-            try {
-                // Detectar si es stream live (m3u8) para ajustar config
-                const isHLS = /\.m3u8/i.test(rawUrl) ||
-                              rawUrl.includes('playlist') ||
-                              rawUrl.includes('chunks') ||
-                              rawUrl.includes('manifest');
-
-                const playerConfig = {
-                    source:    finalUrl,
-                    parentId:  '#player',
-                    autoPlay:  true,
-                    height:    '100%',
-                    width:     '100%',
-                    mute:      false,
-                    // Para streams live desactivar las miniaturas (no tienen VOD scrub)
-                    plugins: !isHLS ? { core: (typeof ClapprThumbnailsPlugin !== 'undefined' ? [ClapprThumbnailsPlugin] : []) } : {},
-                    scrubThumbnails: !isHLS ? {
-                        backdropHeight:  64,
-                        spotlightHeight: 84,
-                        thumbs: thumbnailConfig
-                    } : undefined,
-                    // Configuración HLS para streams con proxy
-                    hlsMinimumDvrSize: 0,
-                    hlsPlayback: {
-                        // Tolerar más latencia cuando usa proxy
-                        maxBufferLength:       useProxy ? 40 : 20,
-                        maxMaxBufferLength:    useProxy ? 90 : 45,
-                        fragLoadingMaxRetry:   useProxy ? 8  : 3,
-                        manifestLoadingMaxRetry: useProxy ? 5 : 3,
-                        fragLoadingTimeOut:    useProxy ? 25000 : 12000,
-                        manifestLoadingTimeOut: useProxy ? 18000 : 10000,
-                    },
-                };
-
-                player = new Clappr.Player(playerConfig);
-
-                // ── Eventos ──────────────────────────────────────
-                player.on(Clappr.Events.PLAYER_READY, () => {
-                    showStatus(`✅ Reproductor listo ${modeLabel}`, 'success');
-                });
-
-                player.on(Clappr.Events.PLAYER_PLAY, () => {
-                    showStatus(`▶️ Reproduciendo ${modeLabel}`, 'success');
-                });
-
-                player.on(Clappr.Events.PLAYER_PAUSE, () => {
-                    showStatus('⏸️ Pausado', 'info');
-                });
-
-                player.on(Clappr.Events.PLAYER_STOP, () => {
-                    showStatus('⏹️ Detenido', 'info');
-                });
-
-                player.on(Clappr.Events.PLAYER_ERROR, (err) => {
-                    console.error('[Clappr] Error:', err);
-                    // Si falla con proxy, sugerir verificar el token
-                    const hint = useProxy
-                        ? ' — Verifica que el token de la URL no haya expirado.'
-                        : ' — Intenta activar el Proxy CORS.';
-                    showStatus('❌ Error al reproducir' + hint, 'error');
-                });
-
-            } catch (err) {
-                console.error('[Clappr] Init error:', err);
-                showStatus('❌ Error al inicializar: ' + err.message, 'error');
-            }
-        }
-
-        function stopStream() {
-            if (player) {
-                try { player.stop(); } catch(e) { destroyPlayer(); }
-                showStatus('⏹️ Stream detenido', 'info');
-            } else {
-                showStatus('ℹ️ No hay stream activo', 'info');
-            }
-        }
-
-        // ============================================================
-        // EVENT LISTENERS
-        // ============================================================
-        document.getElementById('loadBtn').addEventListener('click', () => {
-            loadStream(document.getElementById('urlInput').value);
-        });
-
-        document.getElementById('stopBtn').addEventListener('click', stopStream);
-
-        document.getElementById('urlInput').addEventListener('keypress', e => {
-            if (e.key === 'Enter') loadStream(e.target.value);
-        });
-
-        document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const url = btn.getAttribute('data-url');
-                document.getElementById('urlInput').value = url;
-                loadStream(url);
+        // HLS.js
+        if (isHLS(rawUrl) && typeof Hls !== 'undefined' && Hls.isSupported()) {
+            hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: false,
+                maxBufferLength:         isProxyOn() ? 40    : 20,
+                maxMaxBufferLength:      isProxyOn() ? 90    : 45,
+                fragLoadingMaxRetry:     isProxyOn() ? 8     : 3,
+                manifestLoadingMaxRetry: isProxyOn() ? 5     : 3,
+                fragLoadingTimeOut:      isProxyOn() ? 25000 : 12000,
+                manifestLoadingTimeOut:  isProxyOn() ? 18000 : 10000,
+                xhrSetup: function(xhr){ xhr.withCredentials = false; }
             });
-        });
 
-        // Actualizar display cuando se cambia el toggle
-        document.getElementById('proxyToggle').addEventListener('change', () => {
-            const display = document.getElementById('proxyUrlDisplay');
-            const rawUrl  = document.getElementById('urlInput').value.trim();
-            if (rawUrl) {
-                display.textContent = '→ ' + buildFinalUrl(rawUrl);
-                display.classList.add('visible');
-            }
-            const on = isProxyEnabled();
-            showStatus(
-                on ? '🛡️ Proxy CORS activado — streams de ISP habilitados'
-                   : '📡 Proxy OFF — solo streams con CORS abierto funcionarán en internet',
-                on ? 'success' : 'info'
-            );
-        });
+            hls.loadSource(finalUrl);
+            hls.attachMedia(video);
 
-        // ============================================================
-        // INIT
-        // ============================================================
-        console.log('Clappr:', typeof Clappr !== 'undefined' ? '✅ cargado' : '❌ no cargado');
-        console.log('Proxy base:', PROXY_BASE);
-    </script>
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                showLoader(false);
+                var live = !!(hls.levels && hls.levels[0] && hls.levels[0].details && hls.levels[0].details.live);
+                setLive(live);
+                video.play().catch(function(){updatePlay();});
+                showStatus('✅ Reproduciendo ' + mode, 'success');
+            });
+
+            hls.on(Hls.Events.ERROR, function(_, d) {
+                if (!d.fatal) return;
+                if (d.type === Hls.ErrorTypes.MEDIA_ERROR) { hls.recoverMediaError(); return; }
+                showLoader(false);
+                var hint = isProxyOn()
+                    ? ' — El token puede haber expirado. Obtén una URL fresca.'
+                    : ' — Activa el Proxy CORS.';
+                showStatus('❌ Error al reproducir' + hint, 'error');
+            });
+            return;
+        }
+
+        // HLS nativo Safari/iOS
+        if (isHLS(rawUrl) && video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = finalUrl;
+            video.addEventListener('canplay', function(){
+                showLoader(false);
+                showStatus('✅ Reproduciendo ' + mode, 'success');
+            }, {once:true});
+            video.addEventListener('error', function(){
+                showLoader(false);
+                showStatus('❌ Error al reproducir. Verifica la URL.', 'error');
+            }, {once:true});
+            video.load();
+            video.play().catch(function(){updatePlay();});
+            return;
+        }
+
+        // MP4 / VOD
+        video.src = finalUrl;
+        video.addEventListener('canplay', function(){
+            showLoader(false);
+            showStatus('✅ Reproduciendo ' + mode, 'success');
+        }, {once:true});
+        video.addEventListener('error', function(){
+            showLoader(false);
+            var hint = isProxyOn() ? '' : ' — Prueba activar el Proxy CORS.';
+            showStatus('❌ Error al reproducir.' + hint, 'error');
+        }, {once:true});
+        video.load();
+        video.play().catch(function(){updatePlay();});
+    }
+
+    function stopStream() {
+        destroyEngine();
+        showStatus('⏹️ Detenido','info');
+    }
+
+    // ── eventos video ────────────────────────────────────────
+    video.addEventListener('play',    updatePlay);
+    video.addEventListener('pause',   updatePlay);
+    video.addEventListener('waiting', function(){ showLoader(true,'Buffering…'); });
+    video.addEventListener('playing', function(){ showLoader(false); });
+    video.addEventListener('canplay', function(){ showLoader(false); });
+
+    video.addEventListener('timeupdate', function(){
+        if (!video.duration || !isFinite(video.duration)) return;
+        var pct = (video.currentTime / video.duration) * 100;
+        $('progressFill').style.width = pct + '%';
+        $('timeTag').textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
+    });
+
+    // ── controles ────────────────────────────────────────────
+    $('playBtn').addEventListener('click', function(){
+        if (!video.src) return;
+        video.paused ? video.play().catch(function(){}) : video.pause();
+    });
+
+    $('videoShell').addEventListener('click', function(e){
+        if (e.target.closest('#controls')) return;
+        if (!video.src) return;
+        video.paused ? video.play().catch(function(){}) : video.pause();
+    });
+
+    $('videoShell').addEventListener('touchstart', function(){
+        $('videoShell').classList.add('show-ctrl');
+        clearTimeout($('videoShell')._t);
+        $('videoShell')._t = setTimeout(function(){
+            $('videoShell').classList.remove('show-ctrl');
+        }, 3500);
+    }, {passive:true});
+
+    $('progressWrap').addEventListener('click', function(e){
+        if (!video.duration) return;
+        var r = $('progressWrap').getBoundingClientRect();
+        video.currentTime = Math.max(0, Math.min(1,(e.clientX-r.left)/r.width)) * video.duration;
+    });
+
+    $('volSlider').addEventListener('input', function(e){
+        video.volume = parseFloat(e.target.value);
+        video.muted  = video.volume === 0;
+        updateMute();
+    });
+
+    $('muteBtn').addEventListener('click', function(){
+        video.muted = !video.muted;
+        $('volSlider').value = video.muted ? 0 : video.volume;
+        updateMute();
+    });
+
+    $('fsBtn').addEventListener('click', function(){
+        var shell = $('videoShell');
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(function(){});
+        } else {
+            var fn = shell.requestFullscreen || shell.webkitRequestFullscreen;
+            if (fn) fn.call(shell);
+        }
+    });
+
+    $('loadBtn').addEventListener('click', function(){ loadStream($('urlInput').value); });
+    $('stopBtn').addEventListener('click', stopStream);
+    $('urlInput').addEventListener('keypress', function(e){
+        if (e.key==='Enter') loadStream(e.target.value);
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var url = btn.getAttribute('data-url');
+            $('urlInput').value = url;
+            loadStream(url);
+        });
+    });
+
+    $('proxyToggle').addEventListener('change', function(){
+        var on = isProxyOn();
+        var badge = $('proxyBadge');
+        badge.innerHTML = '<span class="dot"></span> PROXY ' + (on ? 'ON' : 'OFF');
+        badge.className = 'proxy-badge' + (on ? '' : ' off');
+        showStatus(
+            on ? '🛡️ Proxy CORS activado'
+               : '📡 Proxy OFF — solo URLs con CORS abierto funcionarán',
+            on ? 'success' : 'info'
+        );
+    });
+
+    console.log('✅ HLS.js', (typeof Hls !== 'undefined' ? Hls.version : 'no cargó'));
+    console.log('🛡️ Proxy:', PROXY_BASE);
+}
+</script>
 </body>
 </html>
