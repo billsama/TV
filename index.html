@@ -16,6 +16,7 @@
     --border: #222;
     --text: #f0f0f0;
     --muted: #666;
+    --gold: #f5a623;
   }
 
   body {
@@ -40,10 +41,7 @@
     opacity: 0.4;
   }
 
-  .wrapper {
-    width: 100%;
-    max-width: 900px;
-  }
+  .wrapper { width: 100%; max-width: 900px; }
 
   header {
     display: flex;
@@ -58,7 +56,6 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2.4rem;
     letter-spacing: 3px;
-    color: var(--text);
   }
   .logo span { color: var(--red); }
 
@@ -96,7 +93,6 @@
     outline: none;
     transition: border-color 0.2s;
   }
-
   .url-box input::placeholder { color: var(--muted); }
   .url-box input:focus { border-color: var(--red); }
 
@@ -144,6 +140,14 @@
   }
   .proxy-btn:hover { border-color: var(--red); color: var(--text); }
   .proxy-btn.selected { border-color: var(--red); color: #fff; background: #200000; }
+
+  /* Destacar el proxy propio */
+  .proxy-btn.own {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .proxy-btn.own:hover { background: #1a1200; }
+  .proxy-btn.own.selected { background: #1a1200; color: var(--gold); border-color: var(--gold); }
 
   .player-shell {
     background: #000;
@@ -211,11 +215,12 @@
   <!-- Selector de proxy -->
   <div class="proxy-selector">
     <span>PROXY:</span>
-    <button class="proxy-btn selected" data-proxy="direct"      onclick="selectProxy(this)">Directo</button>
-    <button class="proxy-btn"          data-proxy="allorigins"  onclick="selectProxy(this)">AllOrigins</button>
-    <button class="proxy-btn"          data-proxy="corsproxy"   onclick="selectProxy(this)">CORSProxy.io</button>
-    <button class="proxy-btn"          data-proxy="thingproxy"  onclick="selectProxy(this)">ThingProxy</button>
-    <button class="proxy-btn"          data-proxy="auto"        onclick="selectProxy(this)">🔁 Auto</button>
+    <button class="proxy-btn selected"  data-proxy="direct"      onclick="selectProxy(this)">Directo</button>
+    <button class="proxy-btn own"       data-proxy="servilive"   onclick="selectProxy(this)">★ Mi Servidor</button>
+    <button class="proxy-btn"           data-proxy="allorigins"  onclick="selectProxy(this)">AllOrigins</button>
+    <button class="proxy-btn"           data-proxy="corsproxy"   onclick="selectProxy(this)">CORSProxy.io</button>
+    <button class="proxy-btn"           data-proxy="thingproxy"  onclick="selectProxy(this)">ThingProxy</button>
+    <button class="proxy-btn"           data-proxy="auto"        onclick="selectProxy(this)">🔁 Auto</button>
   </div>
 
   <!-- Player -->
@@ -233,7 +238,7 @@
     </div>
   </div>
 
-  <footer>Player JNTV — Proxy CORS integrado</footer>
+  <footer>Player JNTV — servilive.com:3028 proxy integrado</footer>
 </div>
 
 <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
@@ -242,11 +247,34 @@
   let player = null;
   let selectedProxy = 'direct';
 
+  // Tu servidor proxy propio primero en la lista de Auto
   const PROXY_LIST = [
-    { key: 'direct',     label: 'Directo',       wrap: url => url },
-    { key: 'allorigins', label: 'AllOrigins',     wrap: url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}` },
-    { key: 'corsproxy',  label: 'CORSProxy.io',   wrap: url => `https://corsproxy.io/?${encodeURIComponent(url)}` },
-    { key: 'thingproxy', label: 'ThingProxy',     wrap: url => `https://thingproxy.freeboard.io/fetch/${url}` },
+    {
+      key: 'direct',
+      label: 'Directo',
+      wrap: url => url
+    },
+    {
+      key: 'servilive',
+      label: '★ Mi Servidor (servilive)',
+      // Tu servidor actúa como proxy: reenvía la petición con CORS abierto
+      wrap: url => `https://servilive.com:3028/proxy?url=${encodeURIComponent(url)}`
+    },
+    {
+      key: 'allorigins',
+      label: 'AllOrigins',
+      wrap: url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+    },
+    {
+      key: 'corsproxy',
+      label: 'CORSProxy.io',
+      wrap: url => `https://corsproxy.io/?${encodeURIComponent(url)}`
+    },
+    {
+      key: 'thingproxy',
+      label: 'ThingProxy',
+      wrap: url => `https://thingproxy.freeboard.io/fetch/${url}`
+    },
   ];
 
   const dot        = document.getElementById('dot');
