@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JNTV Live Player</title>
+<title>player JNTV</title>
 <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -141,11 +141,7 @@
   .proxy-btn:hover { border-color: var(--red); color: var(--text); }
   .proxy-btn.selected { border-color: var(--red); color: #fff; background: #200000; }
 
-  /* Destacar el proxy propio */
-  .proxy-btn.own {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
+  .proxy-btn.own { border-color: var(--gold); color: var(--gold); }
   .proxy-btn.own:hover { background: #1a1200; }
   .proxy-btn.own.selected { background: #1a1200; color: var(--gold); border-color: var(--gold); }
 
@@ -208,19 +204,21 @@
 
   <!-- URL manual -->
   <div class="url-box">
-    <input type="text" id="urlInput" placeholder="Pega tu URL aquí: https://ejemplo.com/stream.m3u8" />
+    <input type="text" id="urlInput"
+      placeholder="Pega tu URL: https://ejemplo.com/stream.m3u8"
+      value="https://servilive.com:3028/live/jntv19live.m3u8" />
     <button onclick="playURL()">▶ PLAY</button>
   </div>
 
   <!-- Selector de proxy -->
   <div class="proxy-selector">
     <span>PROXY:</span>
-    <button class="proxy-btn selected"  data-proxy="direct"      onclick="selectProxy(this)">Directo</button>
-    <button class="proxy-btn own"       data-proxy="servilive"   onclick="selectProxy(this)">★ Mi Servidor</button>
-    <button class="proxy-btn"           data-proxy="allorigins"  onclick="selectProxy(this)">AllOrigins</button>
-    <button class="proxy-btn"           data-proxy="corsproxy"   onclick="selectProxy(this)">CORSProxy.io</button>
-    <button class="proxy-btn"           data-proxy="thingproxy"  onclick="selectProxy(this)">ThingProxy</button>
-    <button class="proxy-btn"           data-proxy="auto"        onclick="selectProxy(this)">🔁 Auto</button>
+    <button class="proxy-btn selected" data-proxy="direct"     onclick="selectProxy(this)">Directo</button>
+    <button class="proxy-btn own"      data-proxy="servilive"  onclick="selectProxy(this)">★ Mi Servidor</button>
+    <button class="proxy-btn"          data-proxy="allorigins" onclick="selectProxy(this)">AllOrigins</button>
+    <button class="proxy-btn"          data-proxy="corsproxy"  onclick="selectProxy(this)">CORSProxy.io</button>
+    <button class="proxy-btn"          data-proxy="thingproxy" onclick="selectProxy(this)">ThingProxy</button>
+    <button class="proxy-btn"          data-proxy="auto"       onclick="selectProxy(this)">🔁 Auto</button>
   </div>
 
   <!-- Player -->
@@ -232,13 +230,13 @@
     <div class="statusbar">
       <div class="status-left">
         <div class="dot" id="dot"></div>
-        <span id="statusText">Esperando URL...</span>
+        <span id="statusText">Esperando...</span>
       </div>
       <div class="proxy-info">Proxy activo: <b id="proxyLabel">—</b></div>
     </div>
   </div>
 
-  <footer>Player JNTV — servilive.com:3028 proxy integrado</footer>
+  <footer>Player JNTV — servilive.com:3028</footer>
 </div>
 
 <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
@@ -247,7 +245,6 @@
   let player = null;
   let selectedProxy = 'direct';
 
-  // Tu servidor proxy propio primero en la lista de Auto
   const PROXY_LIST = [
     {
       key: 'direct',
@@ -256,8 +253,7 @@
     },
     {
       key: 'servilive',
-      label: '★ Mi Servidor (servilive)',
-      // Tu servidor actúa como proxy: reenvía la petición con CORS abierto
+      label: '★ Mi Servidor',
       wrap: url => `https://servilive.com:3028/proxy?url=${encodeURIComponent(url)}`
     },
     {
@@ -342,6 +338,9 @@
       player.one('error',   () => { setStatus('err', `Error — ${label}`); if (onError) onError(); });
     }
   }
+
+  // Reproducir automáticamente al cargar la página
+  window.addEventListener('load', () => playURL());
 
   document.getElementById('urlInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') playURL();
