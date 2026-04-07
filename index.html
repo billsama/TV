@@ -1,1013 +1,1497 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
-    <meta name="description" content="Watch video content">
-    <meta name="keywords" content="video, player, streaming">
-    <meta property="og:type" content="video.other">
-    <meta property="og:title" content="Video Player">
-    <meta property="og:description" content="Watch video content">
-    <meta property="og:video" content="https://live-evg7.tv360.bitel.com.pe/bitel/global_abr/bitel/global_360p/chunks.m3u8">
-    <meta property="og:video:type" content="application/x-mpegURL">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPTV PRO+++</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+/* ============================================================
+   ESTILOS GLOBALES — Tema Netflix/Dark
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+:root {
+  --bg:        #0f0f13;
+  --bg2:       #1a1a24;
+  --bg3:       #24243a;
+  --accent:    #e50914;
+  --accent2:   #ff6b35;
+  --text:      #e8e8f0;
+  --text2:     #888899;
+  --border:    #2a2a40;
+  --green:     #00c853;
+  --yellow:    #ffd600;
+  --red:       #ff1744;
+  --blue:      #2979ff;
+  --radius:    10px;
+  --shadow:    0 8px 32px rgba(0,0,0,0.5);
+}
 
-    <style>
-        /* ══════════════════════════════════════════
-           ORIGINAL PLAYER STYLES — NO CHANGES
-        ══════════════════════════════════════════ */
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary: #3f37c9;
-            --accent: #f72585;
-            --dark: #222639;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-        }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #000;
-        }
+/* ── Auth Screen ─────────────────────────────────────────── */
+#auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #1a1a35 0%, #0f0f13 70%);
+}
 
-        #player-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            margin: 0; overflow: hidden;
-        }
+.auth-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
 
-        .aspect-ratio-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-        }
+.auth-box .logo {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
 
-        #my-player, video, .video-js, .plyr {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100% !important;
-            height: 100% !important;
-        }
+.auth-box .subtitle {
+  color: var(--text2);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
 
-        .player-logo {
-            position: absolute;
-            z-index: 99999;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            max-width: 100px;
-            top: 10px; right: 10px;
-        }
-        .player-logo:hover { opacity: 1; }
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
 
-        .video-js .vjs-control-bar {
-            background-color: var(--vjs-primary-bg-color, rgba(43,51,63,0.7));
-        }
-        .video-js .vjs-big-play-button {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            border-radius: 50%;
-            width: 80px; height: 80px; line-height: 80px;
-            top: 50%; left: 50%;
-            margin-top: -40px; margin-left: -40px;
-        }
-        .plyr__control--overlaid { background: var(--primary) !important; }
-        .plyr--full-ui input[type=range] { color: var(--primary) !important; }
-        .plyr__control.plyr__tab-focus,
-        .plyr__control:hover,
-        .plyr__control[aria-expanded=true] { background: var(--primary-dark) !important; }
-        .vjs-download-button,
-        .plyr__controls__item.plyr__control[data-plyr="download"],
-        .clp-download { display: none !important; }
-        .cc-controls[data-cc-controls] { display: block !important; }
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-        .unmute-button {
-            position: absolute; z-index: 20;
-            padding: 10px 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 5px;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            font-weight: bold; font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: none;
-            top: 20px; left: 20px;
-        }
-        .unmute-button:hover { background-color: rgba(255,255,255,0.9) !important; }
+.form-group input,
+.form-group select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
 
-        #ad-container {
-            position: absolute; bottom: 0;
-            width: 100%; text-align: center;
-            z-index: 100; pointer-events: none;
-            background: rgba(0,0,0,0.5);
-        }
-        #ad-container > * { pointer-events: auto; }
-        .media-control-hide { opacity: 0 !important; pointer-events: none !important; }
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+}
 
-        /* ══════════════════════════════════════════
-           PANEL UI — NEW, ISOLATED
-        ══════════════════════════════════════════ */
-        #urlpanel-overlay {
-            position: fixed; inset: 0;
-            z-index: 999998;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            font-family: 'Syne', sans-serif;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-        }
-        #urlpanel-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
 
-        #urlpanel {
-            background: #0c0c10;
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 18px;
-            width: min(580px, calc(100vw - 20px));
-            max-height: calc(100svh - 32px);
-            overflow-y: auto;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-            scrollbar-width: thin;
-            scrollbar-color: #222 transparent;
-        }
-        #urlpanel::-webkit-scrollbar { width: 3px; }
-        #urlpanel::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 3px; }
+.btn-primary { background: var(--accent); color: #fff; width: 100%; padding: 14px; font-size: 1rem; }
+.btn-primary:hover { background: #c4070f; }
+.btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; }
+.btn-danger  { background: var(--red);   color: #fff; }
+.btn-success { background: var(--green); color: #fff; }
+.btn-info    { background: var(--blue);  color: #fff; }
+.btn-warning { background: var(--yellow); color: #000; }
+.btn-ghost   { background: transparent; border: 1px solid var(--border); color: var(--text2); }
 
-        /* Header */
-        .up-header {
-            display: flex; align-items: flex-start;
-            justify-content: space-between;
-            padding: 22px 24px 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: sticky; top: 0;
-            background: #0c0c10;
-            z-index: 2;
-        }
-        .up-logo {
-            width: 28px; height: 28px; border-radius: 8px;
-            background: linear-gradient(135deg, #4361ee, #f72585);
-            margin-right: 12px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .up-logo svg { width: 14px; height: 14px; }
-        .up-title-wrap { flex: 1; }
-        .up-title {
-            font-size: 14px; font-weight: 700;
-            color: #fff; letter-spacing: 0.05em;
-            text-transform: uppercase; line-height: 1;
-        }
-        .up-subtitle {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #444;
-            margin-top: 4px; line-height: 1;
-        }
-        .up-close {
-            width: 28px; height: 28px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 8px; background: transparent;
-            color: #555; font-size: 14px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.15s; flex-shrink: 0;
-        }
-        .up-close:hover { background: rgba(255,255,255,0.06); color: #fff; }
+/* ── App Layout ──────────────────────────────────────────── */
+#app-screen { display: none; min-height: 100vh; }
 
-        /* CORS mode selector */
-        .up-cors-bar {
-            padding: 14px 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            background: rgba(255,255,255,0.015);
-        }
-        .up-cors-label {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 9px; color: #444;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-        .up-cors-pills {
-            display: flex; gap: 6px; flex-wrap: wrap;
-        }
-        .up-cors-pill {
-            padding: 5px 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #555;
-            background: transparent; cursor: pointer;
-            transition: all 0.15s; white-space: nowrap;
-        }
-        .up-cors-pill:hover { color: #aaa; border-color: rgba(255,255,255,0.15); }
-        .up-cors-pill.active {
-            color: #fff;
-            background: rgba(67,97,238,0.2);
-            border-color: rgba(67,97,238,0.5);
-        }
-        .up-cors-pill.active.mode-iframe  { background: rgba(56,211,159,0.15); border-color: rgba(56,211,159,0.4); color: #5de8c0; }
-        .up-cors-pill.active.mode-vercel  { background: rgba(67,97,238,0.2);   border-color: rgba(67,97,238,0.5);  color: #7b9ef8; }
-        .up-cors-pill.active.mode-cf      { background: rgba(247,113,56,0.2);  border-color: rgba(247,113,56,0.4); color: #f87b44; }
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15,15,19,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+}
 
-        .up-cors-info {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #444; margin-top: 8px; line-height: 1.5;
-        }
-        .up-cors-info b { font-weight: 500; }
-        .up-cors-info.c-green { color: #3db887; }
-        .up-cors-info.c-blue  { color: #5a7ef5; }
-        .up-cors-info.c-or    { color: #d4693a; }
+.app-header .logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent);
+}
 
-        /* Tabs */
-        .up-tabs {
-            display: flex; padding: 0 24px;
-            gap: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            overflow-x: auto; scrollbar-width: none;
-        }
-        .up-tabs::-webkit-scrollbar { display: none; }
-        .up-tab {
-            padding: 12px 14px;
-            font-family: 'Syne', sans-serif;
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            color: #444; background: transparent;
-            border: none; border-bottom: 2px solid transparent;
-            cursor: pointer; transition: all 0.15s;
-            margin-bottom: -1px; white-space: nowrap;
-        }
-        .up-tab:hover { color: #888; }
-        .up-tab.active { color: #fff; border-bottom-color: #4361ee; }
-        .badge {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 8px; padding: 1px 5px;
-            border-radius: 4px; margin-left: 4px;
-            vertical-align: middle;
-        }
-        .b-hls  { background: rgba(67,97,238,0.2);  color: #7b9ef8; }
-        .b-xt   { background: rgba(251,189,35,0.2); color: #f5c842; }
-        .b-dash { background: rgba(247,37,133,0.2); color: #f77ab5; }
-        .b-au   { background: rgba(56,211,159,0.2); color: #5de8c0; }
+.header-nav { display: flex; gap: 8px; }
 
-        /* Body */
-        .up-body { padding: 20px 24px 24px; }
-        .up-section { display: none; }
-        .up-section.active { display: block; }
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.nav-btn:hover, .nav-btn.active { background: var(--bg3); color: var(--text); }
 
-        .up-hint {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #555; line-height: 1.7;
-            margin-bottom: 14px; padding: 8px 12px;
-            background: rgba(255,255,255,0.02);
-            border-left: 2px solid #4361ee;
-            border-radius: 0 6px 6px 0;
-        }
+.header-right { display: flex; align-items: center; gap: 12px; }
 
-        .up-field { margin-bottom: 11px; }
-        .up-label {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 9px; color: #444;
-            letter-spacing: 0.08em; text-transform: uppercase;
-            display: block; margin-bottom: 5px;
-        }
-        .up-input, .up-select {
-            width: 100%; box-sizing: border-box;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 9px; color: #ddd;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px; padding: 9px 12px;
-            outline: none; transition: border-color 0.15s, background 0.15s;
-            appearance: none; -webkit-appearance: none;
-        }
-        .up-input:focus, .up-select:focus {
-            border-color: rgba(67,97,238,0.5);
-            background: rgba(67,97,238,0.05);
-        }
-        .up-input::placeholder { color: #2d2d3a; }
-        .up-select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-color: rgba(255,255,255,0.03);
-            padding-right: 32px; cursor: pointer;
-        }
-        .up-select option { background: #161620; color: #ddd; }
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
 
-        .up-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        @media (max-width: 400px) { .up-row { grid-template-columns: 1fr; } }
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
 
-        .up-divider { border: none; border-top: 1px solid rgba(255,255,255,0.04); margin: 14px 0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-        .up-btn {
-            width: 100%; padding: 11px;
-            border-radius: 10px;
-            font-family: 'Syne', sans-serif;
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 0.07em; text-transform: uppercase;
-            cursor: pointer; transition: all 0.15s;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: rgba(255,255,255,0.03);
-            color: #666; margin-bottom: 6px;
-        }
-        .up-btn:hover { background: rgba(255,255,255,0.07); color: #bbb; }
-        .up-btn.primary {
-            background: #4361ee; border-color: #4361ee; color: #fff;
-        }
-        .up-btn.primary:hover { background: #3a56d4; }
-        .up-btn.primary:active { transform: scale(0.98); }
+/* ── Vistas ──────────────────────────────────────────────── */
+.view { display: none; padding: 24px; }
+.view.active { display: block; }
 
-        .up-preview {
-            display: none;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px; padding: 10px 12px;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #6a8ef0;
-            word-break: break-all; line-height: 1.7;
-            white-space: pre-wrap; margin-bottom: 8px;
-        }
-        .up-preview.show { display: block; }
+/* ── Grid de Canales ─────────────────────────────────────── */
+.channels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 8px 0;
+}
 
-        /* ── Toggle button ── */
-        #urlpanel-toggle {
-            position: fixed; top: 12px; left: 12px;
-            z-index: 999997;
-            background: rgba(12,12,16,0.88);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px; color: #fff;
-            font-family: 'Syne', sans-serif;
-            font-size: 10px; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            padding: 8px 13px; cursor: pointer;
-            display: flex; align-items: center; gap: 7px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        #urlpanel-toggle:hover {
-            background: rgba(67,97,238,0.35);
-            border-color: rgba(67,97,238,0.6);
-        }
-        #urlpanel-toggle svg { width: 12px; height: 12px; flex-shrink: 0; }
+.channel-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
 
-        /* ── Source chip ── */
-        #source-chip {
-            position: fixed; bottom: 56px; left: 12px;
-            z-index: 999997;
-            background: rgba(12,12,16,0.8);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 7px; color: #666;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 9px; padding: 4px 10px;
-            max-width: calc(100vw - 24px);
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            display: none; pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        #source-chip.show { display: block; }
-        #source-chip em { color: #4361ee; font-style: normal; margin-right: 5px; }
+.channel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(229,9,20,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
 
-        /* ── Audio player fallback ── */
-        .audio-screen {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: #08080c; gap: 20px;
-        }
-        .audio-disc {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: conic-gradient(#4361ee 0deg, #f72585 180deg, #3f37c9 360deg);
-            display: flex; align-items: center; justify-content: center;
-            animation: spin 4s linear infinite;
-        }
-        .audio-disc.paused { animation-play-state: paused; }
-        .audio-disc-inner {
-            width: 28px; height: 28px; border-radius: 50%;
-            background: #08080c;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .audio-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 13px; font-weight: 600;
-            color: #888; letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-        .audio-fmt {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px; color: #333;
-        }
-        audio.up-audio {
-            width: min(360px, 85vw);
-            border-radius: 8px; outline: none;
-        }
-    </style>
+.channel-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(229,9,20,0.2);
+}
 
-    <!-- ══ ORIGINAL SCRIPTS — NO CHANGES ══ -->
-    <script src="https://anym3u8player.com/ultimate-player-generator/assets/js/clappr/clappr.min.js" type="74a705ec21be532284689994-text/javascript"></script>
-    <script src="https://anym3u8player.com/ultimate-player-generator/assets/js/clappr/level-selector.min.js" type="74a705ec21be532284689994-text/javascript"></script>
-    <script src="https://anym3u8player.com/ultimate-player-generator/assets/js/clappr/dash-shaka-playback.min.js" type="74a705ec21be532284689994-text/javascript"></script>
+.channel-card:hover::before { opacity: 1; }
+
+.channel-logo {
+  width: 60px; height: 60px;
+  border-radius: 12px;
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 12px;
+}
+
+.channel-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+
+.channel-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.channel-cat {
+  font-size: 0.75rem;
+  color: var(--text2);
+  text-align: center;
+}
+
+.channel-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 30px;
+  letter-spacing: 0.5px;
+}
+
+/* ── Player Overlay ──────────────────────────────────────── */
+#player-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  flex-direction: column;
+}
+
+#player-overlay.active { display: flex; }
+
+#player-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.player-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.9) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+#player-overlay:hover .player-ui { opacity: 1; pointer-events: all; }
+
+.player-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+}
+
+.player-title { font-size: 1.3rem; font-weight: 800; }
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse 1s infinite;
+}
+
+.player-bottom { padding: 16px 24px; }
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ctrl-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.ctrl-btn:hover { background: rgba(255,255,255,0.3); }
+
+.ctrl-btn.large { width: 64px; height: 64px; font-size: 1.6rem; background: var(--accent); }
+.ctrl-btn.large:hover { background: #c4070f; }
+
+.volume-slider {
+  -webkit-appearance: none;
+  width: 100px; height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.3);
+  outline: none;
+}
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.player-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 60px; height: 60px;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-msg {
+  background: rgba(255,23,68,0.15);
+  border: 1px solid var(--red);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  text-align: center;
+}
+
+/* ── Panel Admin ─────────────────────────────────────────── */
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  background: var(--bg2);
+  padding: 6px;
+  border-radius: var(--radius);
+  width: fit-content;
+}
+
+.admin-tab {
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.admin-tab.active { background: var(--accent); color: #fff; }
+
+.admin-section { display: none; }
+.admin-section.active { display: block; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title { font-size: 1.2rem; font-weight: 800; }
+
+/* ── Tabla ───────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  font-size: 0.88rem;
+}
+
+.data-table th {
+  background: var(--bg3);
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--text2);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.badge-green  { background: rgba(0,200,83,0.15);  color: var(--green); }
+.badge-red    { background: rgba(255,23,68,0.15);  color: var(--red); }
+.badge-yellow { background: rgba(255,214,0,0.15);  color: var(--yellow); }
+.badge-blue   { background: rgba(41,121,255,0.15); color: var(--blue); }
+
+/* ── Modal ───────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow);
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* ── Toast ───────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  min-width: 240px;
+  animation: slideIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error   { border-left: 3px solid var(--red); }
+.toast.info    { border-left: 3px solid var(--blue); }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── Búsqueda y Filtros ──────────────────────────────────── */
+.filters-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  outline: none;
+}
+.search-input:focus { border-color: var(--accent); }
+
+.category-filter {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Devices Panel ───────────────────────────────────────── */
+.device-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* ── Stats Cards ─────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.stat-card .value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.stat-card .label { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
+
+/* ── Audio Player ────────────────────────────────────────── */
+.audio-player {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.audio-waveform {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 60px;
+  margin: 16px 0;
+}
+
+.audio-waveform span {
+  display: block;
+  width: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: wave 0.8s infinite alternate;
+}
+
+@keyframes wave {
+  from { height: 4px; }
+  to   { height: 100%; }
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .app-header { padding: 0 16px; }
+  .view { padding: 16px; }
+  .data-table { font-size: 0.8rem; }
+  .data-table th, .data-table td { padding: 8px 10px; }
+}
+</style>
 </head>
 <body>
 
-    <!-- ══ ORIGINAL PLAYER MARKUP — NO CHANGES ══ -->
-    <div id="player-container">
-        <div class="aspect-ratio-container">
-            <div id="my-player"></div>
-        </div>
+<!-- ============================================================
+     AUTH SCREEN
+     ============================================================ -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="logo">▶ IPTV PRO</div>
+    <div class="subtitle">Plataforma de streaming segura</div>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="login-user" placeholder="usuario" value="admin">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="contraseña" value="admin1234">
+    </div>
+    <button class="btn btn-primary" onclick="login()">
+      Iniciar Sesión
+    </button>
+    <p id="login-error" style="color:var(--red);margin-top:12px;font-size:0.85rem;display:none;"></p>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SCREEN
+     ============================================================ -->
+<div id="app-screen">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="logo">▶ IPTV PRO</div>
+    <nav class="header-nav">
+      <button class="nav-btn active" onclick="showView('tv')">📺 TV en Vivo</button>
+      <button class="nav-btn" onclick="showView('devices')">📱 Mis Dispositivos</button>
+      <button class="nav-btn" id="admin-nav-btn" onclick="showView('admin')" style="display:none">⚙️ Admin</button>
+    </nav>
+    <div class="header-right">
+      <div class="user-badge">
+        <div class="status-dot"></div>
+        <span id="header-username">Usuario</span>
+      </div>
+      <button class="btn btn-sm btn-ghost" onclick="logout()">Salir</button>
+    </div>
+  </header>
+
+  <!-- Vista TV -->
+  <div class="view active" id="view-tv">
+    <div class="filters-bar">
+      <input class="search-input" type="text" placeholder="🔍 Buscar canal..." id="channel-search" oninput="filterChannels()">
+      <select class="category-filter" id="cat-filter" onchange="filterChannels()">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+    <div class="channels-grid" id="channels-grid">
+      <div style="color:var(--text2);text-align:center;padding:40px;grid-column:1/-1">
+        Cargando canales...
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista Dispositivos -->
+  <div class="view" id="view-devices">
+    <div class="section-header">
+      <div class="section-title">📱 Mis Dispositivos</div>
+    </div>
+    <div id="devices-list">Cargando...</div>
+  </div>
+
+  <!-- Vista Admin -->
+  <div class="view" id="view-admin">
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="adminTab('users')">👥 Usuarios</button>
+      <button class="admin-tab" onclick="adminTab('channels')">📺 Canales</button>
+      <button class="admin-tab" onclick="adminTab('proxies')">🌐 Proxies</button>
+      <button class="admin-tab" onclick="adminTab('sessions')">🔐 Sesiones</button>
     </div>
 
-    <!-- ══ NEW: Toggle button ══ -->
-    <button id="urlpanel-toggle" title="Cambiar fuente de reproducción">
-        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.5 3.5h11M1.5 7h7M1.5 10.5h4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-        Fuente
-    </button>
+    <!-- Admin: Usuarios -->
+    <div class="admin-section active" id="admin-users">
+      <div class="section-header">
+        <div class="section-title">Gestión de Usuarios</div>
+        <button class="btn btn-success btn-sm" onclick="openModal('modal-create-user')">+ Nuevo Usuario</button>
+      </div>
+      <table class="data-table" id="users-table">
+        <thead><tr>
+          <th>Usuario</th><th>Email</th><th>Plan</th>
+          <th>Max Dispositivos</th><th>Estado</th><th>Acciones</th>
+        </tr></thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
 
-    <!-- ══ NEW: Source chip ══ -->
-    <div id="source-chip"><em>▶</em><span id="chip-url"></span></div>
+    <!-- Admin: Canales -->
+    <div class="admin-section" id="admin-channels">
+      <div class="section-header">
+        <div class="section-title">Gestión de Canales</div>
+        <button class="btn btn-success btn-sm" onclick="openModal('modal-create-channel')">+ Nuevo Canal</button>
+      </div>
+      <table class="data-table" id="channels-table">
+        <thead><tr>
+          <th>Nombre</th><th>Tipo</th><th>Categoría</th><th>Estado</th><th>Acciones</th>
+        </tr></thead>
+        <tbody id="channels-tbody"></tbody>
+      </table>
+    </div>
 
-    <!-- ══ NEW: Panel overlay ══ -->
-    <div id="urlpanel-overlay">
-        <div id="urlpanel">
+    <!-- Admin: Proxies -->
+    <div class="admin-section" id="admin-proxies">
+      <div class="section-header">
+        <div class="section-title">Gestión de Proxies CORS</div>
+        <button class="btn btn-success btn-sm" onclick="openModal('modal-create-proxy')">+ Nuevo Proxy</button>
+      </div>
+      <table class="data-table" id="proxies-table">
+        <thead><tr>
+          <th>URL</th><th>Estado</th><th>Prioridad</th>
+          <th>Fallos</th><th>Latencia</th><th>Último Check</th><th>Acciones</th>
+        </tr></thead>
+        <tbody id="proxies-tbody"></tbody>
+      </table>
+    </div>
 
-            <!-- Header -->
-            <div class="up-header">
-                <div class="up-logo">
-                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 2l8 5-8 5V2z" fill="#fff"/>
-                    </svg>
-                </div>
-                <div class="up-title-wrap">
-                    <div class="up-title">Configurar fuente</div>
-                    <div class="up-subtitle">M3U8 · Xtream · DASH · Radio · Audio</div>
-                </div>
-                <button class="up-close" id="urlpanel-close">✕</button>
-            </div>
+    <!-- Admin: Sesiones -->
+    <div class="admin-section" id="admin-sessions">
+      <div class="section-header">
+        <div class="section-title">Sesiones Activas</div>
+        <button class="btn btn-sm btn-ghost" onclick="loadAdminSessions()">↺ Refrescar</button>
+      </div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Session ID</th><th>Usuario</th><th>Dispositivo</th>
+          <th>IP</th><th>Inicio</th><th>Acciones</th>
+        </tr></thead>
+        <tbody id="sessions-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 
-            <!-- CORS mode selector -->
-            <div class="up-cors-bar">
-                <div class="up-cors-label">Modo de reproducción / solución CORS</div>
-                <div class="up-cors-pills">
-                    <button class="up-cors-pill active mode-iframe" data-mode="iframe">
-                        Iframe embed
-                    </button>
-                    <button class="up-cors-pill mode-vercel" data-mode="vercel">
-                        Vercel proxy <span class="badge b-hls">recomendado</span>
-                    </button>
-                    <button class="up-cors-pill mode-cf" data-mode="cf">
-                        Cloudflare Worker
-                    </button>
-                </div>
-                <div class="up-cors-info c-green" id="cors-info">
-                    <b>Iframe:</b> embeds el player de anym3u8player.com — sin CORS, funciona siempre, sin config extra.
-                </div>
-            </div>
+</div><!-- /app-screen -->
 
-            <!-- Tabs -->
-            <div class="up-tabs">
-                <button class="up-tab active" data-tab="m3u8">HLS/M3U8 <span class="badge b-hls">HLS</span></button>
-                <button class="up-tab" data-tab="xtream">Xtream <span class="badge b-xt">IPTV</span></button>
-                <button class="up-tab" data-tab="dash">DASH <span class="badge b-dash">MPD</span></button>
-                <button class="up-tab" data-tab="radio">Audio <span class="badge b-au">AUDIO</span></button>
-            </div>
+<!-- ============================================================
+     PLAYER OVERLAY
+     ============================================================ -->
+<div id="player-overlay">
+  <video id="player-video" playsinline></video>
 
-            <!-- Body -->
-            <div class="up-body">
+  <div class="player-ui">
+    <div class="player-top">
+      <div>
+        <div class="player-title" id="player-channel-name">Canal</div>
+        <div id="live-badge" class="live-badge"><div class="live-dot"></div>EN VIVO</div>
+      </div>
+      <button class="ctrl-btn" onclick="closePlayer()" title="Cerrar">✕</button>
+    </div>
 
-                <!-- ── M3U8 ── -->
-                <div class="up-section active" id="tab-m3u8">
-                    <div class="up-field">
-                        <label class="up-label">URL del stream M3U8 / HLS</label>
-                        <input class="up-input" type="url" id="m3u8-url"
-                            placeholder="https://ejemplo.com/stream/chunks.m3u8"
-                            value="https://live-evg7.tv360.bitel.com.pe/bitel/global_abr/bitel/global_360p/chunks.m3u8" />
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">Calidad inicial</label>
-                            <select class="up-select" id="m3u8-quality">
-                                <option value="-1">Auto</option>
-                                <option value="0">Nivel 0 (bajo)</option>
-                                <option value="1" selected>Nivel 1</option>
-                                <option value="2">Nivel 2 (alto)</option>
-                            </select>
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">Buffer máx. (seg)</label>
-                            <input class="up-input" type="number" id="m3u8-buffer" value="30" min="5" max="120" />
-                        </div>
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">Modo</label>
-                            <select class="up-select" id="m3u8-mode">
-                                <option value="live">En vivo (live)</option>
-                                <option value="vod">Video bajo demanda</option>
-                            </select>
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">Cross-Origin</label>
-                            <select class="up-select" id="m3u8-cors">
-                                <option value="anonymous">anonymous</option>
-                                <option value="use-credentials">use-credentials</option>
-                                <option value="">ninguno</option>
-                            </select>
-                        </div>
-                    </div>
-                    <hr class="up-divider">
-                    <button class="up-btn primary" onclick="UP.play('m3u8')">▶ Reproducir</button>
-                </div>
+    <div class="player-status" id="player-status">
+      <div class="spinner" id="loading-spinner"></div>
+    </div>
 
-                <!-- ── Xtream ── -->
-                <div class="up-section" id="tab-xtream">
-                    <div class="up-hint">Xtream Codes construye la URL automáticamente desde tus credenciales.</div>
-                    <div class="up-field">
-                        <label class="up-label">Servidor (sin barra final)</label>
-                        <input class="up-input" type="url" id="xt-server" placeholder="http://miservidor.com:8080" />
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">Usuario</label>
-                            <input class="up-input" type="text" id="xt-user" placeholder="usuario" />
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">Contraseña</label>
-                            <input class="up-input" type="password" id="xt-pass" placeholder="••••••••" />
-                        </div>
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">Tipo</label>
-                            <select class="up-select" id="xt-type">
-                                <option value="live">Canal en vivo</option>
-                                <option value="movie">Película (VOD)</option>
-                                <option value="series">Serie</option>
-                            </select>
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">ID del stream</label>
-                            <input class="up-input" type="text" id="xt-id" placeholder="12345" />
-                        </div>
-                    </div>
-                    <div class="up-field">
-                        <label class="up-label">Extensión</label>
-                        <select class="up-select" id="xt-ext">
-                            <option value="m3u8">m3u8 (recomendado)</option>
-                            <option value="ts">ts</option>
-                            <option value="mp4">mp4</option>
-                        </select>
-                    </div>
-                    <hr class="up-divider">
-                    <button class="up-btn" onclick="UP.previewXt()">Previsualizar URL</button>
-                    <div class="up-preview" id="xt-preview"></div>
-                    <button class="up-btn primary" onclick="UP.play('xtream')">▶ Reproducir</button>
-                </div>
+    <div class="player-bottom">
+      <div class="player-controls">
+        <button class="ctrl-btn large" id="play-pause-btn" onclick="togglePlayPause()">⏸</button>
+        <button class="ctrl-btn" onclick="toggleMute()" id="mute-btn">🔊</button>
+        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
+        <span style="flex:1"></span>
+        <button class="ctrl-btn" onclick="toggleFullscreen()" title="Pantalla completa">⛶</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-                <!-- ── DASH ── -->
-                <div class="up-section" id="tab-dash">
-                    <div class="up-hint">Usa dash-shaka-playback (ya cargado). Soporta DRM Widevine y PlayReady.</div>
-                    <div class="up-field">
-                        <label class="up-label">URL del manifiesto DASH (.mpd)</label>
-                        <input class="up-input" type="url" id="dash-url" placeholder="https://ejemplo.com/manifest.mpd" />
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">DRM</label>
-                            <select class="up-select" id="dash-drm">
-                                <option value="none">Sin DRM</option>
-                                <option value="widevine">Widevine</option>
-                                <option value="playready">PlayReady</option>
-                            </select>
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">License server URL</label>
-                            <input class="up-input" type="url" id="dash-lic" placeholder="https://license.ejemplo.com" />
-                        </div>
-                    </div>
-                    <hr class="up-divider">
-                    <button class="up-btn primary" onclick="UP.play('dash')">▶ Reproducir</button>
-                </div>
+<!-- ============================================================
+     MODALES
+     ============================================================ -->
 
-                <!-- ── Radio / Audio ── -->
-                <div class="up-section" id="tab-radio">
-                    <div class="up-hint">Icecast, Shoutcast, MP3, AAC, OGG, FLAC, WAV y radio HLS.</div>
-                    <div class="up-field">
-                        <label class="up-label">URL del stream o archivo</label>
-                        <input class="up-input" type="url" id="radio-url"
-                            placeholder="https://stream.ejemplo.com:8000/radio" />
-                    </div>
-                    <div class="up-row">
-                        <div class="up-field">
-                            <label class="up-label">Formato</label>
-                            <select class="up-select" id="radio-fmt">
-                                <option value="mp3">MP3</option>
-                                <option value="aac">AAC</option>
-                                <option value="ogg">OGG / Vorbis</option>
-                                <option value="m3u8">M3U8 (radio HLS)</option>
-                                <option value="flac">FLAC</option>
-                                <option value="wav">WAV</option>
-                            </select>
-                        </div>
-                        <div class="up-field">
-                            <label class="up-label">Nombre emisora</label>
-                            <input class="up-input" type="text" id="radio-name" placeholder="Radio Ejemplo" />
-                        </div>
-                    </div>
-                    <div class="up-field">
-                        <label class="up-label">Auto-play</label>
-                        <select class="up-select" id="radio-auto">
-                            <option value="false">No</option>
-                            <option value="true">Sí</option>
-                        </select>
-                    </div>
-                    <hr class="up-divider">
-                    <button class="up-btn primary" onclick="UP.play('radio')">▶ Reproducir</button>
-                </div>
+<!-- Modal: Crear Usuario -->
+<div class="modal-overlay" id="modal-create-user">
+  <div class="modal">
+    <div class="modal-title">Crear Usuario</div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="nu-username" placeholder="username"></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="nu-password" placeholder="contraseña"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="nu-email" placeholder="email@ejemplo.com"></div>
+    <div class="form-group">
+      <label>Plan</label>
+      <select id="nu-plan">
+        <option value="basic">Basic</option>
+        <option value="premium">Premium</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Máx. Dispositivos</label><input type="number" id="nu-maxdev" value="2" min="1" max="10"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-create-user')">Cancelar</button>
+      <button class="btn btn-success" onclick="createUser()">Crear</button>
+    </div>
+  </div>
+</div>
 
-            </div><!-- /up-body -->
-        </div><!-- /urlpanel -->
-    </div><!-- /overlay -->
+<!-- Modal: Crear Canal -->
+<div class="modal-overlay" id="modal-create-channel">
+  <div class="modal">
+    <div class="modal-title">Agregar Canal</div>
+    <div class="form-group"><label>Nombre</label><input type="text" id="nc-name" placeholder="Nombre del canal"></div>
+    <div class="form-group"><label>URL Stream</label><input type="text" id="nc-url" placeholder="https://...m3u8 o stream URL"></div>
+    <div class="form-group">
+      <label>Tipo</label>
+      <select id="nc-type">
+        <option value="hls">HLS (.m3u8)</option>
+        <option value="mp4">MP4</option>
+        <option value="xtream">Xtream</option>
+        <option value="audio">Audio (AAC/MP3/OGG)</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Categoría</label><input type="text" id="nc-category" placeholder="Deportes, Noticias, etc."></div>
+    <div class="form-group"><label>Logo URL (opcional)</label><input type="text" id="nc-logo" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-create-channel')">Cancelar</button>
+      <button class="btn btn-success" onclick="createChannel()">Agregar</button>
+    </div>
+  </div>
+</div>
 
-    <!-- ══ ORIGINAL PLAYER SCRIPT — NO CHANGES ══ -->
-    <script type="74a705ec21be532284689994-text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var player = new Clappr.Player({
-            source: 'https://live-evg7.tv360.bitel.com.pe/bitel/global_abr/bitel/global_360p/chunks.m3u8',
-            parentId: '#my-player',
-            width: '100%',
-            height: '100%',
-            autoPlay: false,
-            mute: false,
-            loop: false,
-            hideMediaControl: true,
-            mediacontrol: { buttons: 'fade' },
-            hlsjsConfig: {
-                enableWorker: true,
-                startLevel: -1,
-                maxBufferLength: 30,
-                lowLatencyMode: true
-            },
-            plugins: [
-                window.ClapprLevelSelectorPlugin,
-            ],
-            levelSelectorConfig: {
-                title: 'Quality',
-                labels: { auto: 'AUTO' },
-                labelCallback: function(level, resolution) {
-                    if (level && level.height) return level.height + 'p';
-                    else if (resolution) return resolution + 'p';
-                    else return 'HD';
-                }
-            },
-            disableVideoTagContextMenu: true,
-            playback: {
-                playInline: true,
-                recycleVideo: true,
-                crossOrigin: 'anonymous',
-                hlsjsConfig: { enableWorker: true }
-            }
-        });
+<!-- Modal: Crear Proxy -->
+<div class="modal-overlay" id="modal-create-proxy">
+  <div class="modal">
+    <div class="modal-title">Agregar Proxy CORS</div>
+    <div class="form-group"><label>URL del Worker</label><input type="text" id="np-url" placeholder="https://mi-worker.workers.dev"></div>
+    <div class="form-group"><label>Prioridad (1 = mejor)</label><input type="number" id="np-priority" value="1" min="1" max="99"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-create-proxy')">Cancelar</button>
+      <button class="btn btn-success" onclick="createProxy()">Agregar</button>
+    </div>
+  </div>
+</div>
 
-        player.on(Clappr.Events.PLAYER_PLAY, function() {
-            var c = document.getElementById('my-player');
-            if (c) c.style.backgroundColor = '#000';
-        });
+<!-- Toast Container -->
+<div id="toast-container"></div>
 
-        window._clapprPlayer = player;
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ── Configuración ─────────────────────────────────────────────
+const BACKEND = "https://script.google.com/macros/s/AKfycbybovEnWbfre_M01lgWrs3p2lIg2qw2_3u4Fbkt37BiEMaFVopVFSHhYtQGOhcszKpYeg/exec"; // ← Cambiar
+
+// ── Estado Global ─────────────────────────────────────────────
+const STATE = {
+  userId:   null,
+  deviceId: null,
+  username: null,
+  plan:     null,
+  token:    null,
+  channels: [],
+  hls:      null,
+  tokenRefreshTimer: null,
+};
+
+// ── Device ID persistente ─────────────────────────────────────
+function getDeviceId() {
+  let id = localStorage.getItem("iptv_device_id");
+  if (!id) {
+    id = "dev_" + Math.random().toString(36).substr(2,12) + "_" + Date.now();
+    localStorage.setItem("iptv_device_id", id);
+  }
+  return id;
+}
+
+function getDeviceName() {
+  const ua = navigator.userAgent;
+  if (/Android/i.test(ua))  return "Android";
+  if (/iPhone|iPad/i.test(ua)) return "iOS";
+  if (/Windows/i.test(ua))  return "Windows PC";
+  if (/Mac/i.test(ua))      return "Mac";
+  return "Navegador";
+}
+
+async function getIP() {
+  try {
+    const r = await fetch("https://api.ipify.org?format=json");
+    const d = await r.json();
+    return d.ip;
+  } catch (_) { return "0.0.0.0"; }
+}
+
+// ── Llamadas al backend ───────────────────────────────────────
+async function api(action, body = {}) {
+  const url = BACKEND + "?action=" + action;
+  try {
+    const resp = await fetch(url, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(body),
     });
-    </script>
+    return await resp.json();
+  } catch (err) {
+    return { error: "Error de red: " + err.message };
+  }
+}
 
-    <!-- ══ NEW: Panel JS — completely isolated ══ -->
-    <script>
-    (function () {
-        /* ── CONFIG: proxies ────────────────────────────────────────
-           Vercel proxy: create /api/proxy.js in your Vercel project (see comment below)
-           CF Worker: deploy the worker from the CF tab (see comment below)
+// ── Auth ──────────────────────────────────────────────────────
+async function login() {
+  const username = document.getElementById("login-user").value.trim();
+  const password = document.getElementById("login-pass").value.trim();
+  const errEl    = document.getElementById("login-error");
 
-           VERCEL /api/proxy.js content:
-           ──────────────────────────────
-           export const config = { runtime: 'edge' };
-           export default async function handler(req) {
-             const url = new URL(req.url).searchParams.get('url');
-             if (!url) return new Response('missing url', { status: 400 });
-             const res = await fetch(decodeURIComponent(url), {
-               headers: { 'User-Agent': 'Mozilla/5.0' }
-             });
-             const body = await res.arrayBuffer();
-             return new Response(body, {
-               headers: {
-                 'Content-Type': res.headers.get('content-type') || 'application/octet-stream',
-                 'Access-Control-Allow-Origin': '*',
-                 'Cache-Control': 'no-store',
-               }
-             });
-           }
+  errEl.style.display = "none";
 
-           CLOUDFLARE WORKER content:
-           ──────────────────────────
-           addEventListener('fetch', event => {
-             event.respondWith(handleRequest(event.request));
-           });
-           async function handleRequest(request) {
-             const url = new URL(request.url).searchParams.get('url');
-             if (!url) return new Response('missing url', { status: 400 });
-             const res = await fetch(decodeURIComponent(url), {
-               headers: { 'User-Agent': 'Mozilla/5.0' }
-             });
-             return new Response(res.body, {
-               headers: {
-                 'Content-Type': res.headers.get('content-type') || 'application/octet-stream',
-                 'Access-Control-Allow-Origin': '*',
-                 'Cache-Control': 'no-store',
-               }
-             });
-           }
-        ─────────────────────────────────────────────────────────── */
-        var VERCEL_PROXY = '/api/proxy'; // change if your endpoint is different
-        var CF_WORKER    = 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev'; // replace with your CF Worker URL
+  if (!username || !password) {
+    errEl.textContent = "Completa todos los campos";
+    errEl.style.display = "block";
+    return;
+  }
 
-        /* ── State ─────────────────────────────────────────────── */
-        var corsMode = 'iframe'; // 'iframe' | 'vercel' | 'cf'
-        var overlay  = document.getElementById('urlpanel-overlay');
+  const ip     = await getIP();
+  const result = await api("loginUser", {
+    username,
+    password,
+    deviceId:   getDeviceId(),
+    deviceName: getDeviceName(),
+    ip
+  });
 
-        /* ── Panel open / close ─────────────────────────────────── */
-        document.getElementById('urlpanel-toggle').addEventListener('click', function () {
-            overlay.classList.toggle('hidden');
-        });
-        document.getElementById('urlpanel-close').addEventListener('click', function () {
-            overlay.classList.add('hidden');
-        });
-        overlay.addEventListener('click', function (e) {
-            if (e.target === overlay) overlay.classList.add('hidden');
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') overlay.classList.add('hidden');
-        });
+  if (result.error) {
+    errEl.textContent = result.error;
+    errEl.style.display = "block";
+    return;
+  }
 
-        /* ── Tab switching ──────────────────────────────────────── */
-        document.querySelectorAll('.up-tab').forEach(function (tab) {
-            tab.addEventListener('click', function () {
-                document.querySelectorAll('.up-tab').forEach(function (b) { b.classList.remove('active'); });
-                document.querySelectorAll('.up-section').forEach(function (s) { s.classList.remove('active'); });
-                tab.classList.add('active');
-                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-            });
-        });
+  STATE.userId   = result.userId;
+  STATE.username = username;
+  STATE.plan     = result.plan;
+  STATE.deviceId = getDeviceId();
 
-        /* ── CORS mode pills ────────────────────────────────────── */
-        var corsInfoEl = document.getElementById('cors-info');
-        var corsInfoMap = {
-            iframe:  { cls: 'c-green', text: '<b>Iframe:</b> embeds el player de anym3u8player.com — sin CORS, sin configuración extra. Funciona siempre.' },
-            vercel:  { cls: 'c-blue',  text: '<b>Vercel Edge Proxy:</b> requiere /api/proxy.js en tu proyecto Vercel (código en comentario del JS). Resuelve CORS para cualquier URL.' },
-            cf:      { cls: 'c-or',    text: '<b>Cloudflare Worker:</b> requiere desplegar el Worker con tu cuenta CF (código en comentario del JS). Reemplaza CF_WORKER en el código.' }
-        };
-        document.querySelectorAll('.up-cors-pill').forEach(function (pill) {
-            pill.addEventListener('click', function () {
-                corsMode = pill.dataset.mode;
-                document.querySelectorAll('.up-cors-pill').forEach(function (p) {
-                    p.classList.remove('active');
-                });
-                pill.classList.add('active');
-                var info = corsInfoMap[corsMode];
-                corsInfoEl.className = 'up-cors-info ' + info.cls;
-                corsInfoEl.innerHTML = info.text;
-            });
-        });
+  localStorage.setItem("iptv_session", JSON.stringify({ userId: result.userId, username, plan: result.plan }));
 
-        /* ── Source chip ────────────────────────────────────────── */
-        function showChip(url) {
-            var el = document.getElementById('source-chip');
-            document.getElementById('chip-url').textContent = url.length > 60 ? url.slice(0, 57) + '…' : url;
-            el.classList.add('show');
+  document.getElementById("header-username").textContent = username;
+  document.getElementById("auth-screen").style.display  = "none";
+  document.getElementById("app-screen").style.display   = "block";
+
+  if (result.plan === "admin") {
+    document.getElementById("admin-nav-btn").style.display = "block";
+  }
+
+  loadChannels();
+  toast("¡Bienvenido, " + username + "!", "success");
+}
+
+function logout() {
+  localStorage.removeItem("iptv_session");
+  STATE.userId = null;
+  document.getElementById("app-screen").style.display  = "none";
+  document.getElementById("auth-screen").style.display = "flex";
+}
+
+// Auto-login si hay sesión guardada
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("iptv_session");
+  if (saved) {
+    try {
+      const sess = JSON.parse(saved);
+      STATE.userId   = sess.userId;
+      STATE.username = sess.username;
+      STATE.plan     = sess.plan;
+      STATE.deviceId = getDeviceId();
+      document.getElementById("header-username").textContent = sess.username;
+      document.getElementById("auth-screen").style.display  = "none";
+      document.getElementById("app-screen").style.display   = "block";
+      if (sess.plan === "admin") document.getElementById("admin-nav-btn").style.display = "block";
+      loadChannels();
+    } catch (_) {}
+  }
+});
+
+// ── Vistas ────────────────────────────────────────────────────
+function showView(name) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("view-" + name).classList.add("active");
+
+  if (name === "devices") loadMyDevices();
+  if (name === "admin")   loadAdminUsers();
+
+  event.target.classList.add("active");
+}
+
+// ── Canales ───────────────────────────────────────────────────
+async function loadChannels() {
+  const result = await api("getChannels");
+  if (result.error || !Array.isArray(result)) {
+    document.getElementById("channels-grid").innerHTML =
+      '<div style="color:var(--red);grid-column:1/-1;text-align:center;padding:40px">Error cargando canales</div>';
+    return;
+  }
+
+  STATE.channels = result.filter(c => c.activo === "TRUE");
+  populateCategoryFilter();
+  renderChannels(STATE.channels);
+}
+
+function populateCategoryFilter() {
+  const cats = [...new Set(STATE.channels.map(c => c.category).filter(Boolean))];
+  const sel  = document.getElementById("cat-filter");
+  sel.innerHTML = '<option value="">Todas las categorías</option>' +
+    cats.map(c => `<option value="${c}">${c}</option>`).join("");
+}
+
+function renderChannels(channels) {
+  const grid = document.getElementById("channels-grid");
+  if (!channels.length) {
+    grid.innerHTML = '<div style="color:var(--text2);text-align:center;padding:40px;grid-column:1/-1">Sin canales disponibles</div>';
+    return;
+  }
+  grid.innerHTML = channels.map(ch => `
+    <div class="channel-card" onclick="playChannel('${ch.canalId}', '${ch.name}', '${ch.type}')">
+      <div class="channel-logo">
+        ${ch.logo ? `<img src="${ch.logo}" onerror="this.parentNode.innerHTML='📺'">` : '📺'}
+      </div>
+      <div class="channel-name">${escHtml(ch.name)}</div>
+      <div class="channel-cat">${escHtml(ch.category || '')}</div>
+      <div class="channel-badge">${(ch.type || 'HLS').toUpperCase()}</div>
+    </div>
+  `).join("");
+}
+
+function filterChannels() {
+  const q   = document.getElementById("channel-search").value.toLowerCase();
+  const cat = document.getElementById("cat-filter").value;
+  const filtered = STATE.channels.filter(c => {
+    const matchQ   = !q   || c.name.toLowerCase().includes(q) || (c.category||"").toLowerCase().includes(q);
+    const matchCat = !cat || c.category === cat;
+    return matchQ && matchCat;
+  });
+  renderChannels(filtered);
+}
+
+// ── Reproducir Canal ──────────────────────────────────────────
+async function playChannel(canalId, name, type) {
+  openPlayer(name, type);
+
+  const ip = await getIP();
+
+  // Generar token
+  const tokenResult = await api("generateToken", {
+    userId:   STATE.userId,
+    canalId,
+    deviceId: STATE.deviceId,
+    ip
+  });
+
+  if (tokenResult.error) {
+    showPlayerError(tokenResult.error);
+    return;
+  }
+
+  STATE.token = tokenResult.token;
+
+  // Obtener URL segura
+  const urlResult = await api("getSecureUrl", { token: STATE.token });
+
+  if (urlResult.error) {
+    showPlayerError(urlResult.error);
+    return;
+  }
+
+  loadStream(urlResult.url, type || urlResult.type);
+
+  // Renovar token antes de que expire
+  if (STATE.tokenRefreshTimer) clearTimeout(STATE.tokenRefreshTimer);
+  STATE.tokenRefreshTimer = setTimeout(() => {
+    playChannel(canalId, name, type);
+  }, (tokenResult.expiresAt - Date.now()) - 15000); // 15 segundos antes de expirar
+}
+
+function openPlayer(name, type) {
+  document.getElementById("player-overlay").classList.add("active");
+  document.getElementById("player-channel-name").textContent = name;
+
+  const liveBadge = document.getElementById("live-badge");
+  liveBadge.style.display = type === "audio" ? "none" : "inline-flex";
+
+  document.getElementById("loading-spinner").style.display = "block";
+  document.getElementById("play-pause-btn").textContent = "⏸";
+}
+
+function closePlayer() {
+  if (STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+  if (STATE.tokenRefreshTimer) clearTimeout(STATE.tokenRefreshTimer);
+  const video = document.getElementById("player-video");
+  video.pause();
+  video.src = "";
+  document.getElementById("player-overlay").classList.remove("active");
+  document.getElementById("player-status").innerHTML = '<div class="spinner" id="loading-spinner"></div>';
+}
+
+function loadStream(url, type) {
+  const video = document.getElementById("player-video");
+
+  if (STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
+
+  if (type === "audio") {
+    video.style.display = "none";
+    // Mostrar visualizador de audio
+    document.getElementById("player-status").innerHTML = `
+      <div class="audio-player">
+        <div style="font-size:2rem;margin-bottom:8px">🎵</div>
+        <div class="audio-waveform">
+          ${Array(20).fill(0).map((_, i) =>
+            `<span style="animation-delay:${i*0.05}s;animation-duration:${0.4+Math.random()*0.4}s"></span>`
+          ).join("")}
+        </div>
+        <div id="audio-title" style="color:var(--text2);font-size:0.85rem">EN VIVO • AUDIO</div>
+      </div>
+    `;
+    const audio = new Audio(url);
+    audio.play().catch(e => showPlayerError("No se pudo reproducir el audio"));
+    return;
+  }
+
+  video.style.display = "block";
+
+  // HLS.js para HLS, nativo para MP4
+  if ((type === "hls" || url.includes(".m3u8")) && Hls.isSupported()) {
+    STATE.hls = new Hls({
+      enableWorker:     true,
+      lowLatencyMode:   true,
+      maxBufferLength:  30,
+    });
+    STATE.hls.loadSource(url);
+    STATE.hls.attachMedia(video);
+    STATE.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.play();
+      hideSpinner();
+    });
+    STATE.hls.on(Hls.Events.ERROR, (_, data) => {
+      if (data.fatal) showPlayerError("Error en el stream HLS");
+    });
+  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    // Safari nativo
+    video.src = url;
+    video.play().then(hideSpinner).catch(e => showPlayerError("No se pudo reproducir"));
+  } else {
+    video.src = url;
+    video.play().then(hideSpinner).catch(e => showPlayerError("Error reproduciendo stream"));
+  }
+
+  video.addEventListener("waiting", () => document.getElementById("loading-spinner") && (document.getElementById("loading-spinner").style.display = "block"));
+  video.addEventListener("playing", hideSpinner);
+}
+
+function hideSpinner() {
+  const s = document.getElementById("loading-spinner");
+  if (s) s.style.display = "none";
+}
+
+function showPlayerError(msg) {
+  document.getElementById("player-status").innerHTML = `
+    <div class="error-msg">
+      <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
+      <div style="font-weight:700;margin-bottom:4px">Error de reproducción</div>
+      <div style="font-size:0.85rem;color:var(--text2)">${escHtml(msg)}</div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="closePlayer()">Cerrar</button>
+    </div>
+  `;
+}
+
+// ── Controles del Player ──────────────────────────────────────
+function togglePlayPause() {
+  const video = document.getElementById("player-video");
+  const btn   = document.getElementById("play-pause-btn");
+  if (video.paused) { video.play(); btn.textContent = "⏸"; }
+  else              { video.pause(); btn.textContent = "▶"; }
+}
+
+function toggleMute() {
+  const video = document.getElementById("player-video");
+  const btn   = document.getElementById("mute-btn");
+  video.muted = !video.muted;
+  btn.textContent = video.muted ? "🔇" : "🔊";
+}
+
+function setVolume(val) {
+  const video = document.getElementById("player-video");
+  video.volume = val;
+  document.getElementById("mute-btn").textContent = val == 0 ? "🔇" : "🔊";
+}
+
+function toggleFullscreen() {
+  const overlay = document.getElementById("player-overlay");
+  if (!document.fullscreenElement) {
+    overlay.requestFullscreen().catch(e => console.log(e));
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// Cerrar player con ESC
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closePlayer();
+});
+
+// ── Dispositivos del usuario ───────────────────────────────────
+async function loadMyDevices() {
+  const result = await api("getUserDevices", { userId: STATE.userId });
+  const list   = document.getElementById("devices-list");
+
+  if (!Array.isArray(result) || !result.length) {
+    list.innerHTML = '<div style="color:var(--text2);padding:20px">No hay dispositivos activos</div>';
+    return;
+  }
+
+  list.innerHTML = result.map(d => `
+    <div class="device-card">
+      <div>
+        <div style="font-weight:700">${escHtml(d.device_name || "Dispositivo")}</div>
+        <div style="font-size:0.8rem;color:var(--text2)">
+          ID: ${escHtml(String(d.device_id).substr(0,20))}... • IP: ${escHtml(d.ip)} •
+          Inicio: ${escHtml(String(d.fecha_inicio).substr(0,10))}
+        </div>
+      </div>
+      <div>
+        ${d.device_id === STATE.deviceId
+          ? '<span class="badge badge-green">Este dispositivo</span>'
+          : `<button class="btn btn-danger btn-sm" onclick="revokeSession('${d.sessionId}')">Cerrar sesión</button>`
         }
+      </div>
+    </div>
+  `).join("");
+}
 
-        /* ── Build proxy URL ────────────────────────────────────── */
-        function proxyUrl(rawUrl) {
-            if (corsMode === 'iframe') return null; // handled differently
-            if (corsMode === 'vercel') return VERCEL_PROXY + '?url=' + encodeURIComponent(rawUrl);
-            if (corsMode === 'cf')    return CF_WORKER    + '?url=' + encodeURIComponent(rawUrl);
-            return rawUrl;
-        }
+async function revokeSession(sessionId) {
+  const result = await api("revokeDevice", { sessionId });
+  if (result.ok) { toast("Sesión cerrada", "success"); loadMyDevices(); }
+  else toast(result.error || "Error", "error");
+}
 
-        /* ── Destroy & reload Clappr ────────────────────────────── */
-        function reloadClappr(cfg) {
-            var p = window._clapprPlayer;
-            if (p) { try { p.destroy(); } catch (e) {} window._clapprPlayer = null; }
-            var playerDiv = document.getElementById('my-player');
-            playerDiv.innerHTML = '';
-            setTimeout(function () {
-                var np = new Clappr.Player(cfg);
-                np.on(Clappr.Events.PLAYER_PLAY, function () {
-                    var c = document.getElementById('my-player');
-                    if (c) c.style.backgroundColor = '#000';
-                });
-                window._clapprPlayer = np;
-                showChip(cfg.source);
-                overlay.classList.add('hidden');
-            }, 120);
-        }
+// ── Admin: Usuarios ───────────────────────────────────────────
+async function loadAdminUsers() {
+  const result = await api("getUsers");
+  if (!Array.isArray(result)) return;
+  document.getElementById("users-tbody").innerHTML = result.map(u => `
+    <tr>
+      <td><strong>${escHtml(u.username)}</strong></td>
+      <td>${escHtml(u.email)}</td>
+      <td><span class="badge ${u.plan==='admin'?'badge-red':'badge-blue'}">${u.plan}</span></td>
+      <td>
+        <input type="number" value="${u.maxDevices}" min="1" max="20" style="width:60px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px"
+          onchange="setMaxDevices('${u.userId}', this.value)">
+      </td>
+      <td><span class="badge ${u.activo==='TRUE'?'badge-green':'badge-red'}">${u.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-warning btn-sm" onclick="toggleUserStatus('${u.userId}','${u.activo}')">
+          ${u.activo==='TRUE'?'Desactivar':'Activar'}
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.userId}')">Eliminar</button>
+      </td>
+    </tr>
+  `).join("");
+}
 
-        /* ── Render iframe ──────────────────────────────────────── */
-        function loadIframe(rawUrl) {
-            var p = window._clapprPlayer;
-            if (p) { try { p.destroy(); } catch (e) {} window._clapprPlayer = null; }
-            var playerDiv = document.getElementById('my-player');
-            playerDiv.innerHTML = '';
+async function createUser() {
+  const result = await api("createUser", {
+    username:   document.getElementById("nu-username").value,
+    password:   document.getElementById("nu-password").value,
+    email:      document.getElementById("nu-email").value,
+    plan:       document.getElementById("nu-plan").value,
+    maxDevices: document.getElementById("nu-maxdev").value,
+  });
+  if (result.ok) { toast("Usuario creado", "success"); closeModal("modal-create-user"); loadAdminUsers(); }
+  else toast(result.error || "Error", "error");
+}
 
-            var iframeUrl = 'https://anym3u8player.com/ultimate-player-generator/player.php'
-                + '?player=clappr'
-                + '&url=' + encodeURIComponent(rawUrl)
-                + '&controls=auto&theme=default&buffer=30&quality=1'
-                + '&fullscreen=1&no_download=1&width=responsive&aspect=16:9';
+async function deleteUser(userId) {
+  if (!confirm("¿Eliminar usuario?")) return;
+  const result = await api("deleteUser", { userId });
+  if (result.ok) { toast("Eliminado", "success"); loadAdminUsers(); }
+  else toast(result.error || "Error", "error");
+}
 
-            var iframe = document.createElement('iframe');
-            iframe.src = iframeUrl;
-            iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
-            iframe.allowFullscreen = true;
-            iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-            playerDiv.appendChild(iframe);
-            showChip(rawUrl);
-            overlay.classList.add('hidden');
-        }
+async function setMaxDevices(userId, max) {
+  await api("setMaxDevices", { userId, max });
+  toast("Límite actualizado", "success");
+}
 
-        /* ── Render native audio ────────────────────────────────── */
-        function loadNativeAudio(url, fmt, name, autoplay) {
-            var p = window._clapprPlayer;
-            if (p) { try { p.destroy(); } catch (e) {} window._clapprPlayer = null; }
-            var playerDiv = document.getElementById('my-player');
-            playerDiv.innerHTML = '';
+async function toggleUserStatus(userId, current) {
+  await api("updateUser", { userId, activo: current !== "TRUE" });
+  loadAdminUsers();
+}
 
-            var mimeMap = { mp3:'audio/mpeg', aac:'audio/aac', ogg:'audio/ogg', flac:'audio/flac', wav:'audio/wav' };
-            var screen = document.createElement('div');
-            screen.className = 'audio-screen';
-            screen.innerHTML =
-                '<div class="audio-disc" id="disc"><div class="audio-disc-inner"></div></div>'
-                + '<div class="audio-name">' + (name || 'Stream') + '</div>'
-                + '<div class="audio-fmt">' + fmt.toUpperCase() + '</div>'
-                + '<audio class="up-audio" controls ' + (autoplay ? 'autoplay' : '') + '>'
-                + '<source src="' + url + '" type="' + (mimeMap[fmt] || 'audio/mpeg') + '" />'
-                + '</audio>';
-            playerDiv.appendChild(screen);
+// ── Admin: Canales ────────────────────────────────────────────
+function adminTab(tab) {
+  document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
+  document.getElementById("admin-" + tab).classList.add("active");
+  event.target.classList.add("active");
 
-            var disc  = screen.querySelector('#disc');
-            var audio = screen.querySelector('audio');
-            audio.addEventListener('play',  function () { disc.classList.remove('paused'); });
-            audio.addEventListener('pause', function () { disc.classList.add('paused');    });
-            disc.classList.add('paused');
+  if (tab === "channels")  loadAdminChannels();
+  if (tab === "proxies")   loadAdminProxies();
+  if (tab === "sessions")  loadAdminSessions();
+}
 
-            showChip(url);
-            overlay.classList.add('hidden');
-        }
+async function loadAdminChannels() {
+  const result = await api("getChannels");
+  if (!Array.isArray(result)) return;
+  document.getElementById("channels-tbody").innerHTML = result.map(c => `
+    <tr>
+      <td><strong>${escHtml(c.name)}</strong></td>
+      <td><span class="badge badge-blue">${c.type || 'hls'}</span></td>
+      <td>${escHtml(c.category || '')}</td>
+      <td><span class="badge ${c.activo==='TRUE'?'badge-green':'badge-red'}">${c.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-warning btn-sm" onclick="toggleChannel('${c.canalId}','${c.activo}')">
+          ${c.activo==='TRUE'?'Desactivar':'Activar'}
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deleteChannel('${c.canalId}')">Eliminar</button>
+      </td>
+    </tr>
+  `).join("");
+}
 
-        /* ── Build Clappr base config ───────────────────────────── */
-        function baseClapprCfg(source) {
-            return {
-                source: source,
-                parentId: '#my-player',
-                width: '100%', height: '100%',
-                autoPlay: true, mute: false, loop: false,
-                hideMediaControl: true,
-                mediacontrol: { buttons: 'fade' },
-                disableVideoTagContextMenu: true,
-                playback: { playInline: true, recycleVideo: true, crossOrigin: 'anonymous', hlsjsConfig: { enableWorker: true } }
-            };
-        }
+async function createChannel() {
+  const result = await api("addChannel", {
+    name:     document.getElementById("nc-name").value,
+    url:      document.getElementById("nc-url").value,
+    type:     document.getElementById("nc-type").value,
+    category: document.getElementById("nc-category").value,
+    logo:     document.getElementById("nc-logo").value,
+  });
+  if (result.ok) { toast("Canal agregado", "success"); closeModal("modal-create-channel"); loadAdminChannels(); loadChannels(); }
+  else toast(result.error || "Error", "error");
+}
 
-        /* ── Xtream URL builder ─────────────────────────────────── */
-        function buildXtUrl() {
-            var s    = (document.getElementById('xt-server').value || '').trim().replace(/\/$/, '');
-            var u    = (document.getElementById('xt-user').value   || '').trim();
-            var p    = (document.getElementById('xt-pass').value   || '').trim();
-            var type = document.getElementById('xt-type').value;
-            var id   = (document.getElementById('xt-id').value     || '').trim();
-            var ext  = document.getElementById('xt-ext').value;
-            if (!s || !u || !p || !id) return null;
-            if (type === 'live')  return s + '/' + u + '/' + p + '/' + id + '.' + ext;
-            if (type === 'movie') return s + '/movie/' + u + '/' + p + '/' + id + '.' + ext;
-            return s + '/series/' + u + '/' + p + '/' + id + '.' + ext;
-        }
+async function deleteChannel(canalId) {
+  if (!confirm("¿Eliminar canal?")) return;
+  const result = await api("deleteChannel", { canalId });
+  if (result.ok) { toast("Canal eliminado", "success"); loadAdminChannels(); loadChannels(); }
+  else toast(result.error || "Error", "error");
+}
 
-        /* ══ PUBLIC API ══════════════════════════════════════════════ */
-        window.UP = {
+async function toggleChannel(canalId, current) {
+  await api("updateChannel", { canalId, activo: current !== "TRUE" });
+  loadAdminChannels(); loadChannels();
+}
 
-            previewXt: function () {
-                var url = buildXtUrl();
-                if (!url) { alert('Completa servidor, usuario, contraseña e ID.'); return; }
-                var el = document.getElementById('xt-preview');
-                el.textContent = url; el.classList.add('show');
-            },
+// ── Admin: Proxies ────────────────────────────────────────────
+async function loadAdminProxies() {
+  const result = await api("getAllProxies");
+  if (!Array.isArray(result)) return;
+  document.getElementById("proxies-tbody").innerHTML = result.map(p => `
+    <tr>
+      <td style="font-size:0.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis">${escHtml(p.url_worker)}</td>
+      <td><span class="badge ${p.activo==='TRUE'?'badge-green':'badge-red'}">${p.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td>${p.prioridad}</td>
+      <td><span class="badge ${parseInt(p.fail_count)>=5?'badge-red':'badge-green'}">${p.fail_count || 0}</span></td>
+      <td>${p.latency ? p.latency + 'ms' : '-'}</td>
+      <td style="font-size:0.75rem;color:var(--text2)">${String(p.last_check||'').substr(0,10)}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-warning btn-sm" onclick="toggleProxy('${p.proxy_id}')">
+          ${p.activo==='TRUE'?'Pausar':'Activar'}
+        </button>
+        <button class="btn btn-info btn-sm" onclick="testProxy('${p.proxy_id}')">Test</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProxy('${p.proxy_id}')">Eliminar</button>
+      </td>
+    </tr>
+  `).join("");
+}
 
-            play: function (type) {
-                var rawUrl, cfg, isLive, quality, buffer, cors, drm, lic;
+async function createProxy() {
+  const result = await api("addProxy", {
+    url:      document.getElementById("np-url").value,
+    prioridad: document.getElementById("np-priority").value,
+  });
+  if (result.ok) { toast("Proxy agregado", "success"); closeModal("modal-create-proxy"); loadAdminProxies(); }
+  else toast(result.error || "Error", "error");
+}
 
-                /* ─ collect URL ─ */
-                if (type === 'm3u8') {
-                    rawUrl  = (document.getElementById('m3u8-url').value || '').trim();
-                    quality = parseInt(document.getElementById('m3u8-quality').value);
-                    buffer  = parseInt(document.getElementById('m3u8-buffer').value) || 30;
-                    isLive  = document.getElementById('m3u8-mode').value === 'live';
-                    cors    = document.getElementById('m3u8-cors').value;
-                } else if (type === 'xtream') {
-                    rawUrl = buildXtUrl();
-                    isLive = document.getElementById('xt-type').value === 'live';
-                    quality = -1; buffer = 30;
-                } else if (type === 'dash') {
-                    rawUrl = (document.getElementById('dash-url').value || '').trim();
-                    drm    = document.getElementById('dash-drm').value;
-                    lic    = (document.getElementById('dash-lic').value || '').trim();
-                } else if (type === 'radio') {
-                    rawUrl = (document.getElementById('radio-url').value || '').trim();
-                }
+async function deleteProxy(proxyId) {
+  if (!confirm("¿Eliminar proxy?")) return;
+  const result = await api("deleteProxy", { proxyId });
+  if (result.ok) { toast("Proxy eliminado", "success"); loadAdminProxies(); }
+  else toast(result.error || "Error", "error");
+}
 
-                if (!rawUrl) { alert('Ingresa una URL válida.'); return; }
+async function toggleProxy(proxyId) {
+  await api("toggleProxy", { proxyId });
+  loadAdminProxies();
+}
 
-                /* ─ iframe mode ─ */
-                if (corsMode === 'iframe') {
-                    if (type === 'radio') {
-                        /* native audio — iframe mode ignores proxy */
-                        var fmt     = document.getElementById('radio-fmt').value;
-                        var rname   = (document.getElementById('radio-name').value || '').trim();
-                        var rauto   = document.getElementById('radio-auto').value === 'true';
-                        if (fmt === 'm3u8') {
-                            loadIframe(rawUrl);
-                        } else {
-                            loadNativeAudio(rawUrl, fmt, rname, rauto);
-                        }
-                    } else {
-                        loadIframe(rawUrl);
-                    }
-                    return;
-                }
+async function testProxy(proxyId) {
+  toast("Probando proxy...", "info");
+  const result = await api("testProxy", { proxyId });
+  if (result.ok) toast(`Proxy OK • ${result.latency}ms`, "success");
+  else toast("Proxy con error", "error");
+  loadAdminProxies();
+}
 
-                /* ─ proxy mode (vercel / cf) ─ */
-                var src = proxyUrl(rawUrl);
+// ── Admin: Sesiones ───────────────────────────────────────────
+async function loadAdminSessions() {
+  // Cargar sesiones de todos los usuarios
+  const users   = await api("getUsers");
+  if (!Array.isArray(users)) return;
 
-                if (type === 'm3u8' || type === 'xtream') {
-                    cfg = baseClapprCfg(src);
-                    cfg.hlsjsConfig = {
-                        enableWorker: true,
-                        startLevel:   (quality !== undefined ? quality : -1),
-                        maxBufferLength: buffer || 30,
-                        lowLatencyMode: !!isLive
-                    };
-                    cfg.plugins = [window.ClapprLevelSelectorPlugin];
-                    cfg.levelSelectorConfig = {
-                        title: 'Quality', labels: { auto: 'AUTO' },
-                        labelCallback: function (l, r) {
-                            return l && l.height ? l.height + 'p' : (r ? r + 'p' : 'HD');
-                        }
-                    };
-                    if (cors) cfg.playback.crossOrigin = cors;
-                    reloadClappr(cfg);
+  let allSessions = [];
+  for (const user of users) {
+    const devs = await api("getUserDevices", { userId: user.userId });
+    if (Array.isArray(devs)) {
+      allSessions = allSessions.concat(devs.map(d => ({ ...d, username: user.username })));
+    }
+  }
 
-                } else if (type === 'dash') {
-                    cfg = baseClapprCfg(src);
-                    if (typeof DashShakaPlayback !== 'undefined') cfg.plugins = [DashShakaPlayback];
-                    if (drm !== 'none' && lic) {
-                        var drmKey = drm === 'widevine' ? 'com.widevine.alpha' : 'com.microsoft.playready';
-                        cfg.shakaConfiguration = { drm: { servers: {} } };
-                        cfg.shakaConfiguration.drm.servers[drmKey] = lic;
-                    }
-                    reloadClappr(cfg);
+  document.getElementById("sessions-tbody").innerHTML = allSessions.map(s => `
+    <tr>
+      <td style="font-size:0.75rem">${String(s.sessionId).substr(0,16)}...</td>
+      <td><strong>${escHtml(s.username || s.userId)}</strong></td>
+      <td>${escHtml(s.device_name || 'Desconocido')}</td>
+      <td>${escHtml(s.ip || '-')}</td>
+      <td style="font-size:0.8rem">${String(s.fecha_inicio||'').substr(0,10)}</td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="revokeSession('${s.sessionId}');loadAdminSessions()">Revocar</button>
+      </td>
+    </tr>
+  `).join("");
+}
 
-                } else if (type === 'radio') {
-                    var fmt2   = document.getElementById('radio-fmt').value;
-                    var rname2 = (document.getElementById('radio-name').value || '').trim();
-                    var rauto2 = document.getElementById('radio-auto').value === 'true';
-                    if (fmt2 === 'm3u8') {
-                        cfg = baseClapprCfg(src);
-                        cfg.hlsjsConfig = { enableWorker: true, startLevel: -1, maxBufferLength: 60, lowLatencyMode: true };
-                        cfg.autoPlay = rauto2;
-                        reloadClappr(cfg);
-                    } else {
-                        loadNativeAudio(src, fmt2, rname2, rauto2);
-                    }
-                }
-            }
-        };
+// ── UI Helpers ────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add("active"); }
+function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
-    })();
-    </script>
+// Cerrar modales con click fuera
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) overlay.classList.remove("active");
+  });
+});
 
-    <!-- ══ ORIGINAL TRACKING — NO CHANGES ══ -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-28WCLL1J6B" type="74a705ec21be532284689994-text/javascript"></script>
-    <script type="74a705ec21be532284689994-text/javascript">
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-28WCLL1J6B');
-    </script>
-    <script src="https://anym3u8player.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="74a705ec21be532284689994-|49" defer></script>
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"c74760c40c584b4780be35099c875a44","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+function toast(msg, type = "info") {
+  const el = document.createElement("div");
+  el.className = "toast " + type;
+  el.innerHTML = `${type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️"} ${escHtml(msg)}`;
+  document.getElementById("toast-container").appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function escHtml(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+</script>
 </body>
 </html>
