@@ -70,11 +70,7 @@ body {
   margin-bottom: 32px;
 }
 
-.form-group {
-  margin-bottom: 16px;
-  text-align: left;
-}
-
+.form-group { margin-bottom: 16px; text-align: left; }
 .form-group label {
   display: block;
   font-size: 0.8rem;
@@ -98,9 +94,7 @@ body {
 }
 
 .form-group input:focus,
-.form-group select:focus {
-  border-color: var(--accent);
-}
+.form-group select:focus { border-color: var(--accent); }
 
 .btn {
   display: inline-flex;
@@ -116,14 +110,15 @@ body {
   transition: all 0.2s;
 }
 
-.btn-primary { background: var(--accent); color: #fff; width: 100%; padding: 14px; font-size: 1rem; }
-.btn-primary:hover { background: #c4070f; }
-.btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; }
-.btn-danger  { background: var(--red);   color: #fff; }
-.btn-success { background: var(--green); color: #fff; }
-.btn-info    { background: var(--blue);  color: #fff; }
-.btn-warning { background: var(--yellow); color: #000; }
-.btn-ghost   { background: transparent; border: 1px solid var(--border); color: var(--text2); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary  { background: var(--accent); color: #fff; width: 100%; padding: 14px; font-size: 1rem; }
+.btn-primary:hover:not(:disabled) { background: #c4070f; }
+.btn-sm       { padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; }
+.btn-danger   { background: var(--red);    color: #fff; }
+.btn-success  { background: var(--green);  color: #fff; }
+.btn-info     { background: var(--blue);   color: #fff; }
+.btn-warning  { background: var(--yellow); color: #000; }
+.btn-ghost    { background: transparent; border: 1px solid var(--border); color: var(--text2); }
 
 /* ── App Layout ──────────────────────────────────────────── */
 #app-screen { display: none; min-height: 100vh; }
@@ -142,12 +137,7 @@ body {
   height: 64px;
 }
 
-.app-header .logo {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--accent);
-}
-
+.app-header .logo { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
 .header-nav { display: flex; gap: 8px; }
 
 .nav-btn {
@@ -162,7 +152,6 @@ body {
   transition: all 0.2s;
 }
 .nav-btn:hover, .nav-btn.active { background: var(--bg3); color: var(--text); }
-
 .header-right { display: flex; align-items: center; gap: 12px; }
 
 .user-badge {
@@ -181,7 +170,6 @@ body {
   background: var(--green);
   animation: pulse 2s infinite;
 }
-
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
 /* ── Vistas ──────────────────────────────────────────────── */
@@ -206,7 +194,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-
 .channel-card::before {
   content: '';
   position: absolute;
@@ -215,13 +202,11 @@ body {
   opacity: 0;
   transition: opacity 0.25s;
 }
-
 .channel-card:hover {
   border-color: var(--accent);
   transform: translateY(-3px);
   box-shadow: 0 12px 40px rgba(229,9,20,0.2);
 }
-
 .channel-card:hover::before { opacity: 1; }
 
 .channel-logo {
@@ -234,22 +219,9 @@ body {
   font-size: 1.8rem;
   margin: 0 auto 12px;
 }
-
 .channel-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
-
-.channel-name {
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.channel-cat {
-  font-size: 0.75rem;
-  color: var(--text2);
-  text-align: center;
-}
-
+.channel-name  { font-size: 0.95rem; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.channel-cat   { font-size: 0.75rem; color: var(--text2); text-align: center; }
 .channel-badge {
   position: absolute;
   top: 8px; right: 8px;
@@ -271,7 +243,6 @@ body {
   background: #000;
   flex-direction: column;
 }
-
 #player-overlay.active { display: flex; }
 
 #player-video {
@@ -292,7 +263,6 @@ body {
   transition: opacity 0.3s;
   pointer-events: none;
 }
-
 #player-overlay:hover .player-ui { opacity: 1; pointer-events: all; }
 
 .player-top {
@@ -301,7 +271,6 @@ body {
   justify-content: space-between;
   padding: 20px 24px;
 }
-
 .player-title { font-size: 1.3rem; font-weight: 800; }
 
 .live-badge {
@@ -316,7 +285,6 @@ body {
   border-radius: 4px;
   letter-spacing: 1px;
 }
-
 .live-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
@@ -325,12 +293,7 @@ body {
 }
 
 .player-bottom { padding: 16px 24px; }
-
-.player-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.player-controls { display: flex; align-items: center; gap: 12px; }
 
 .ctrl-btn {
   background: rgba(255,255,255,0.15);
@@ -346,9 +309,7 @@ body {
   transition: background 0.2s;
   backdrop-filter: blur(4px);
 }
-
 .ctrl-btn:hover { background: rgba(255,255,255,0.3); }
-
 .ctrl-btn.large { width: 64px; height: 64px; font-size: 1.6rem; background: var(--accent); }
 .ctrl-btn.large:hover { background: #c4070f; }
 
@@ -375,7 +336,6 @@ body {
   inset: 0;
   pointer-events: none;
 }
-
 .spinner {
   width: 60px; height: 60px;
   border: 4px solid rgba(255,255,255,0.2);
@@ -383,7 +343,6 @@ body {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .error-msg {
@@ -392,6 +351,7 @@ body {
   border-radius: var(--radius);
   padding: 16px 24px;
   text-align: center;
+  pointer-events: all;
 }
 
 /* ── Panel Admin ─────────────────────────────────────────── */
@@ -404,7 +364,6 @@ body {
   border-radius: var(--radius);
   width: fit-content;
 }
-
 .admin-tab {
   padding: 8px 20px;
   border-radius: 8px;
@@ -416,7 +375,6 @@ body {
   transition: all 0.2s;
 }
 .admin-tab.active { background: var(--accent); color: #fff; }
-
 .admin-section { display: none; }
 .admin-section.active { display: block; }
 
@@ -426,7 +384,6 @@ body {
   justify-content: space-between;
   margin-bottom: 20px;
 }
-
 .section-title { font-size: 1.2rem; font-weight: 800; }
 
 /* ── Tabla ───────────────────────────────────────────────── */
@@ -438,7 +395,6 @@ body {
   overflow: hidden;
   font-size: 0.88rem;
 }
-
 .data-table th {
   background: var(--bg3);
   padding: 12px 16px;
@@ -449,13 +405,11 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.5px;
 }
-
 .data-table td {
   padding: 12px 16px;
   border-top: 1px solid var(--border);
   vertical-align: middle;
 }
-
 .data-table tr:hover td { background: rgba(255,255,255,0.02); }
 
 .badge {
@@ -480,7 +434,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .modal-overlay.active { display: flex; }
 
 .modal {
@@ -492,26 +445,18 @@ body {
   max-width: 480px;
   box-shadow: var(--shadow);
 }
-
-.modal-title {
-  font-size: 1.1rem;
-  font-weight: 800;
-  margin-bottom: 24px;
-}
-
+.modal-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 24px; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
 
 /* ── Toast ───────────────────────────────────────────────── */
 #toast-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 24px; right: 24px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .toast {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -524,24 +469,16 @@ body {
   align-items: center;
   gap: 10px;
 }
-
 .toast.success { border-left: 3px solid var(--green); }
 .toast.error   { border-left: 3px solid var(--red); }
 .toast.info    { border-left: 3px solid var(--blue); }
-
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
 }
 
 /* ── Búsqueda y Filtros ──────────────────────────────────── */
-.filters-bar {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
+.filters-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .search-input {
   flex: 1;
   min-width: 200px;
@@ -554,7 +491,6 @@ body {
   outline: none;
 }
 .search-input:focus { border-color: var(--accent); }
-
 .category-filter {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -585,20 +521,13 @@ body {
   gap: 16px;
   margin-bottom: 32px;
 }
-
 .stat-card {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
 }
-
-.stat-card .value {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--accent);
-}
-
+.stat-card .value { font-size: 2rem; font-weight: 900; color: var(--accent); }
 .stat-card .label { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
 
 /* ── Audio Player ────────────────────────────────────────── */
@@ -610,7 +539,6 @@ body {
   text-align: center;
   margin: 20px 0;
 }
-
 .audio-waveform {
   display: flex;
   align-items: flex-end;
@@ -619,7 +547,6 @@ body {
   height: 60px;
   margin: 16px 0;
 }
-
 .audio-waveform span {
   display: block;
   width: 4px;
@@ -627,58 +554,58 @@ body {
   border-radius: 2px;
   animation: wave 0.8s infinite alternate;
 }
-
-@keyframes wave {
-  from { height: 4px; }
-  to   { height: 100%; }
-}
+@keyframes wave { from { height: 4px; } to { height: 100%; } }
 
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 768px) {
   .channels-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .app-header { padding: 0 16px; }
+  .header-nav .nav-btn span { display: none; }
   .view { padding: 16px; }
   .data-table { font-size: 0.8rem; }
   .data-table th, .data-table td { padding: 8px 10px; }
+  .modal { margin: 16px; }
+}
+
+/* ── Loading overlay ─────────────────────────────────────── */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,15,19,0.8);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5000;
 }
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     AUTH SCREEN
-     ============================================================ -->
+<!-- AUTH SCREEN -->
 <div id="auth-screen">
   <div class="auth-box">
     <div class="logo">▶ IPTV PRO</div>
     <div class="subtitle">Plataforma de streaming segura</div>
     <div class="form-group">
       <label>Usuario</label>
-      <input type="text" id="login-user" placeholder="usuario" value="admin">
+      <input type="text" id="login-user" placeholder="usuario" autocomplete="username">
     </div>
     <div class="form-group">
       <label>Contraseña</label>
-      <input type="password" id="login-pass" placeholder="contraseña" value="admin1234">
+      <input type="password" id="login-pass" placeholder="contraseña" autocomplete="current-password">
     </div>
-    <button class="btn btn-primary" onclick="login()">
+    <button class="btn btn-primary" id="login-btn" onclick="login()">
       Iniciar Sesión
     </button>
     <p id="login-error" style="color:var(--red);margin-top:12px;font-size:0.85rem;display:none;"></p>
   </div>
 </div>
 
-<!-- ============================================================
-     APP SCREEN
-     ============================================================ -->
+<!-- APP SCREEN -->
 <div id="app-screen">
-
-  <!-- Header -->
   <header class="app-header">
     <div class="logo">▶ IPTV PRO</div>
     <nav class="header-nav">
-      <button class="nav-btn active" onclick="showView('tv')">📺 TV en Vivo</button>
-      <button class="nav-btn" onclick="showView('devices')">📱 Mis Dispositivos</button>
-      <button class="nav-btn" id="admin-nav-btn" onclick="showView('admin')" style="display:none">⚙️ Admin</button>
+      <button class="nav-btn active" onclick="showView('tv', this)">📺 <span>TV en Vivo</span></button>
+      <button class="nav-btn" onclick="showView('devices', this)">📱 <span>Mis Dispositivos</span></button>
+      <button class="nav-btn" id="admin-nav-btn" onclick="showView('admin', this)" style="display:none">⚙️ <span>Admin</span></button>
     </nav>
     <div class="header-right">
       <div class="user-badge">
@@ -708,6 +635,7 @@ body {
   <div class="view" id="view-devices">
     <div class="section-header">
       <div class="section-title">📱 Mis Dispositivos</div>
+      <button class="btn btn-sm btn-ghost" onclick="loadMyDevices()">↺ Refrescar</button>
     </div>
     <div id="devices-list">Cargando...</div>
   </div>
@@ -715,10 +643,10 @@ body {
   <!-- Vista Admin -->
   <div class="view" id="view-admin">
     <div class="admin-tabs">
-      <button class="admin-tab active" onclick="adminTab('users')">👥 Usuarios</button>
-      <button class="admin-tab" onclick="adminTab('channels')">📺 Canales</button>
-      <button class="admin-tab" onclick="adminTab('proxies')">🌐 Proxies</button>
-      <button class="admin-tab" onclick="adminTab('sessions')">🔐 Sesiones</button>
+      <button class="admin-tab active" onclick="adminTab('users', this)">👥 Usuarios</button>
+      <button class="admin-tab" onclick="adminTab('channels', this)">📺 Canales</button>
+      <button class="admin-tab" onclick="adminTab('proxies', this)">🌐 Proxies</button>
+      <button class="admin-tab" onclick="adminTab('sessions', this)">🔐 Sesiones</button>
     </div>
 
     <!-- Admin: Usuarios -->
@@ -727,10 +655,10 @@ body {
         <div class="section-title">Gestión de Usuarios</div>
         <button class="btn btn-success btn-sm" onclick="openModal('modal-create-user')">+ Nuevo Usuario</button>
       </div>
-      <table class="data-table" id="users-table">
+      <table class="data-table">
         <thead><tr>
           <th>Usuario</th><th>Email</th><th>Plan</th>
-          <th>Max Dispositivos</th><th>Estado</th><th>Acciones</th>
+          <th>Máx. Disp.</th><th>Estado</th><th>Acciones</th>
         </tr></thead>
         <tbody id="users-tbody"></tbody>
       </table>
@@ -742,7 +670,7 @@ body {
         <div class="section-title">Gestión de Canales</div>
         <button class="btn btn-success btn-sm" onclick="openModal('modal-create-channel')">+ Nuevo Canal</button>
       </div>
-      <table class="data-table" id="channels-table">
+      <table class="data-table">
         <thead><tr>
           <th>Nombre</th><th>Tipo</th><th>Categoría</th><th>Estado</th><th>Acciones</th>
         </tr></thead>
@@ -756,7 +684,7 @@ body {
         <div class="section-title">Gestión de Proxies CORS</div>
         <button class="btn btn-success btn-sm" onclick="openModal('modal-create-proxy')">+ Nuevo Proxy</button>
       </div>
-      <table class="data-table" id="proxies-table">
+      <table class="data-table">
         <thead><tr>
           <th>URL</th><th>Estado</th><th>Prioridad</th>
           <th>Fallos</th><th>Latencia</th><th>Último Check</th><th>Acciones</th>
@@ -783,12 +711,9 @@ body {
 
 </div><!-- /app-screen -->
 
-<!-- ============================================================
-     PLAYER OVERLAY
-     ============================================================ -->
+<!-- PLAYER OVERLAY -->
 <div id="player-overlay">
   <video id="player-video" playsinline></video>
-
   <div class="player-ui">
     <div class="player-top">
       <div>
@@ -797,11 +722,9 @@ body {
       </div>
       <button class="ctrl-btn" onclick="closePlayer()" title="Cerrar">✕</button>
     </div>
-
     <div class="player-status" id="player-status">
       <div class="spinner" id="loading-spinner"></div>
     </div>
-
     <div class="player-bottom">
       <div class="player-controls">
         <button class="ctrl-btn large" id="play-pause-btn" onclick="togglePlayPause()">⏸</button>
@@ -814,15 +737,11 @@ body {
   </div>
 </div>
 
-<!-- ============================================================
-     MODALES
-     ============================================================ -->
-
-<!-- Modal: Crear Usuario -->
+<!-- MODALES -->
 <div class="modal-overlay" id="modal-create-user">
   <div class="modal">
     <div class="modal-title">Crear Usuario</div>
-    <div class="form-group"><label>Usuario</label><input type="text" id="nu-username" placeholder="username"></div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="nu-username" placeholder="username" autocomplete="off"></div>
     <div class="form-group"><label>Contraseña</label><input type="password" id="nu-password" placeholder="contraseña"></div>
     <div class="form-group"><label>Email</label><input type="email" id="nu-email" placeholder="email@ejemplo.com"></div>
     <div class="form-group">
@@ -836,12 +755,11 @@ body {
     <div class="form-group"><label>Máx. Dispositivos</label><input type="number" id="nu-maxdev" value="2" min="1" max="10"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-create-user')">Cancelar</button>
-      <button class="btn btn-success" onclick="createUser()">Crear</button>
+      <button class="btn btn-success" onclick="createUserAdmin()">Crear</button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Crear Canal -->
 <div class="modal-overlay" id="modal-create-channel">
   <div class="modal">
     <div class="modal-title">Agregar Canal</div>
@@ -865,7 +783,6 @@ body {
   </div>
 </div>
 
-<!-- Modal: Crear Proxy -->
 <div class="modal-overlay" id="modal-create-proxy">
   <div class="modal">
     <div class="modal-title">Agregar Proxy CORS</div>
@@ -878,15 +795,12 @@ body {
   </div>
 </div>
 
-<!-- Toast Container -->
 <div id="toast-container"></div>
 
-<!-- ============================================================
-     JAVASCRIPT
-     ============================================================ -->
 <script>
 // ── Configuración ─────────────────────────────────────────────
-const BACKEND = "https://script.google.com/macros/s/AKfycbybovEnWbfre_M01lgWrs3p2lIg2qw2_3u4Fbkt37BiEMaFVopVFSHhYtQGOhcszKpYeg/exec"; // ← Cambiar
+// FIX: Cambia esta URL por la de tu Google Apps Script publicado
+const BACKEND = "https://script.google.com/macros/s/TU_SCRIPT_ID/exec";
 
 // ── Estado Global ─────────────────────────────────────────────
 const STATE = {
@@ -912,10 +826,10 @@ function getDeviceId() {
 
 function getDeviceName() {
   const ua = navigator.userAgent;
-  if (/Android/i.test(ua))  return "Android";
+  if (/Android/i.test(ua))     return "Android";
   if (/iPhone|iPad/i.test(ua)) return "iOS";
-  if (/Windows/i.test(ua))  return "Windows PC";
-  if (/Mac/i.test(ua))      return "Mac";
+  if (/Windows/i.test(ua))     return "Windows PC";
+  if (/Mac/i.test(ua))         return "Mac";
   return "Navegador";
 }
 
@@ -928,14 +842,18 @@ async function getIP() {
 }
 
 // ── Llamadas al backend ───────────────────────────────────────
+// FIX: Apps Script doPost necesita el action en el body O en la URL.
+// Usamos GET con parámetros para acciones simples, POST para otras.
 async function api(action, body = {}) {
-  const url = BACKEND + "?action=" + action;
   try {
+    // Apps Script: action como query param, datos como POST body
+    const url = BACKEND + "?action=" + encodeURIComponent(action);
     const resp = await fetch(url, {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify(body),
+      body:    JSON.stringify({ action, ...body }),
     });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
     return await resp.json();
   } catch (err) {
     return { error: "Error de red: " + err.message };
@@ -943,56 +861,80 @@ async function api(action, body = {}) {
 }
 
 // ── Auth ──────────────────────────────────────────────────────
+// FIX: El botón de login se deshabilita durante la petición para evitar
+// doble envío, y se muestra feedback de carga.
 async function login() {
   const username = document.getElementById("login-user").value.trim();
-  const password = document.getElementById("login-pass").value.trim();
+  const password = document.getElementById("login-pass").value;
   const errEl    = document.getElementById("login-error");
+  const btn      = document.getElementById("login-btn");
 
   errEl.style.display = "none";
 
   if (!username || !password) {
-    errEl.textContent = "Completa todos los campos";
+    errEl.textContent   = "Completa todos los campos";
     errEl.style.display = "block";
     return;
   }
 
-  const ip     = await getIP();
-  const result = await api("loginUser", {
-    username,
-    password,
-    deviceId:   getDeviceId(),
-    deviceName: getDeviceName(),
-    ip
-  });
+  btn.disabled    = true;
+  btn.textContent = "Conectando...";
 
-  if (result.error) {
-    errEl.textContent = result.error;
-    errEl.style.display = "block";
-    return;
+  try {
+    const ip     = await getIP();
+    const result = await api("loginUser", {
+      username,
+      password,
+      deviceId:   getDeviceId(),
+      deviceName: getDeviceName(),
+      ip
+    });
+
+    if (result.error) {
+      errEl.textContent   = result.error;
+      errEl.style.display = "block";
+      return;
+    }
+
+    STATE.userId   = result.userId;
+    STATE.username = username;
+    STATE.plan     = result.plan;
+    STATE.deviceId = getDeviceId();
+
+    localStorage.setItem("iptv_session", JSON.stringify({
+      userId: result.userId, username, plan: result.plan
+    }));
+
+    document.getElementById("header-username").textContent = username;
+    document.getElementById("auth-screen").style.display  = "none";
+    document.getElementById("app-screen").style.display   = "block";
+
+    if (result.plan === "admin") {
+      document.getElementById("admin-nav-btn").style.display = "block";
+    }
+
+    loadChannels();
+    toast("¡Bienvenido, " + username + "!", "success");
+
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = "Iniciar Sesión";
   }
-
-  STATE.userId   = result.userId;
-  STATE.username = username;
-  STATE.plan     = result.plan;
-  STATE.deviceId = getDeviceId();
-
-  localStorage.setItem("iptv_session", JSON.stringify({ userId: result.userId, username, plan: result.plan }));
-
-  document.getElementById("header-username").textContent = username;
-  document.getElementById("auth-screen").style.display  = "none";
-  document.getElementById("app-screen").style.display   = "block";
-
-  if (result.plan === "admin") {
-    document.getElementById("admin-nav-btn").style.display = "block";
-  }
-
-  loadChannels();
-  toast("¡Bienvenido, " + username + "!", "success");
 }
+
+// Enter en inputs de login
+document.addEventListener("DOMContentLoaded", () => {
+  ["login-user","login-pass"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+  });
+});
 
 function logout() {
   localStorage.removeItem("iptv_session");
-  STATE.userId = null;
+  STATE.userId   = null;
+  STATE.username = null;
+  closePlayer();
   document.getElementById("app-screen").style.display  = "none";
   document.getElementById("auth-screen").style.display = "flex";
 }
@@ -1003,6 +945,7 @@ window.addEventListener("load", () => {
   if (saved) {
     try {
       const sess = JSON.parse(saved);
+      if (!sess.userId) return;
       STATE.userId   = sess.userId;
       STATE.username = sess.username;
       STATE.plan     = sess.plan;
@@ -1012,41 +955,50 @@ window.addEventListener("load", () => {
       document.getElementById("app-screen").style.display   = "block";
       if (sess.plan === "admin") document.getElementById("admin-nav-btn").style.display = "block";
       loadChannels();
-    } catch (_) {}
+    } catch (_) {
+      localStorage.removeItem("iptv_session");
+    }
   }
 });
 
 // ── Vistas ────────────────────────────────────────────────────
-function showView(name) {
+// FIX: showView() usaba la variable global `event` que no siempre existe.
+// Ahora recibe el botón como parámetro.
+function showView(name, btn) {
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
   document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-  document.getElementById("view-" + name).classList.add("active");
+
+  const view = document.getElementById("view-" + name);
+  if (view) view.classList.add("active");
+  if (btn)  btn.classList.add("active");
 
   if (name === "devices") loadMyDevices();
   if (name === "admin")   loadAdminUsers();
-
-  event.target.classList.add("active");
 }
 
 // ── Canales ───────────────────────────────────────────────────
 async function loadChannels() {
+  const grid   = document.getElementById("channels-grid");
+  grid.innerHTML = '<div style="color:var(--text2);text-align:center;padding:40px;grid-column:1/-1">Cargando canales...</div>';
+
   const result = await api("getChannels");
+
   if (result.error || !Array.isArray(result)) {
-    document.getElementById("channels-grid").innerHTML =
-      '<div style="color:var(--red);grid-column:1/-1;text-align:center;padding:40px">Error cargando canales</div>';
+    grid.innerHTML = '<div style="color:var(--red);grid-column:1/-1;text-align:center;padding:40px">❌ ' +
+      escHtml(result.error || "Error cargando canales") + '</div>';
     return;
   }
 
-  STATE.channels = result.filter(c => c.activo === "TRUE");
+  STATE.channels = result.filter(c => String(c.activo) === "TRUE");
   populateCategoryFilter();
   renderChannels(STATE.channels);
 }
 
 function populateCategoryFilter() {
-  const cats = [...new Set(STATE.channels.map(c => c.category).filter(Boolean))];
+  const cats = [...new Set(STATE.channels.map(c => c.category).filter(Boolean))].sort();
   const sel  = document.getElementById("cat-filter");
   sel.innerHTML = '<option value="">Todas las categorías</option>' +
-    cats.map(c => `<option value="${c}">${c}</option>`).join("");
+    cats.map(c => `<option value="${escHtml(c)}">${escHtml(c)}</option>`).join("");
 }
 
 function renderChannels(channels) {
@@ -1056,13 +1008,13 @@ function renderChannels(channels) {
     return;
   }
   grid.innerHTML = channels.map(ch => `
-    <div class="channel-card" onclick="playChannel('${ch.canalId}', '${ch.name}', '${ch.type}')">
+    <div class="channel-card" onclick="playChannel('${escHtml(ch.canalId)}', '${escHtml(ch.name).replace(/'/g,"\\'")}', '${ch.type || "hls"}')">
       <div class="channel-logo">
-        ${ch.logo ? `<img src="${ch.logo}" onerror="this.parentNode.innerHTML='📺'">` : '📺'}
+        ${ch.logo ? `<img src="${escHtml(ch.logo)}" onerror="this.parentNode.innerHTML='📺'" loading="lazy">` : '📺'}
       </div>
       <div class="channel-name">${escHtml(ch.name)}</div>
       <div class="channel-cat">${escHtml(ch.category || '')}</div>
-      <div class="channel-badge">${(ch.type || 'HLS').toUpperCase()}</div>
+      <div class="channel-badge">${escHtml((ch.type || 'HLS').toUpperCase())}</div>
     </div>
   `).join("");
 }
@@ -1071,7 +1023,7 @@ function filterChannels() {
   const q   = document.getElementById("channel-search").value.toLowerCase();
   const cat = document.getElementById("cat-filter").value;
   const filtered = STATE.channels.filter(c => {
-    const matchQ   = !q   || c.name.toLowerCase().includes(q) || (c.category||"").toLowerCase().includes(q);
+    const matchQ   = !q   || (c.name||"").toLowerCase().includes(q) || (c.category||"").toLowerCase().includes(q);
     const matchCat = !cat || c.category === cat;
     return matchQ && matchCat;
   });
@@ -1079,60 +1031,71 @@ function filterChannels() {
 }
 
 // ── Reproducir Canal ──────────────────────────────────────────
+// FIX: Toda la lógica de reproducción más robusta con manejo de errores
 async function playChannel(canalId, name, type) {
   openPlayer(name, type);
 
-  const ip = await getIP();
+  try {
+    const ip = await getIP();
 
-  // Generar token
-  const tokenResult = await api("generateToken", {
-    userId:   STATE.userId,
-    canalId,
-    deviceId: STATE.deviceId,
-    ip
-  });
+    // 1. Generar token
+    const tokenResult = await api("generateToken", {
+      userId:   STATE.userId,
+      canalId,
+      deviceId: STATE.deviceId,
+      ip
+    });
 
-  if (tokenResult.error) {
-    showPlayerError(tokenResult.error);
-    return;
+    if (tokenResult.error) {
+      showPlayerError(tokenResult.error);
+      return;
+    }
+
+    STATE.token = tokenResult.token;
+
+    // 2. Obtener URL segura
+    const urlResult = await api("getSecureUrl", { token: STATE.token });
+
+    if (urlResult.error) {
+      showPlayerError(urlResult.error);
+      return;
+    }
+
+    const streamUrl  = urlResult.url;
+    const streamType = type || urlResult.type || "hls";
+
+    loadStream(streamUrl, streamType);
+
+    // 3. Renovar token antes de expirar (si no es uso directo)
+    if (STATE.tokenRefreshTimer) clearTimeout(STATE.tokenRefreshTimer);
+    const ttl = tokenResult.expiresAt - Date.now();
+    if (ttl > 20000) {
+      STATE.tokenRefreshTimer = setTimeout(() => {
+        playChannel(canalId, name, type);
+      }, ttl - 15000);
+    }
+
+  } catch (err) {
+    showPlayerError("Error inesperado: " + err.message);
   }
-
-  STATE.token = tokenResult.token;
-
-  // Obtener URL segura
-  const urlResult = await api("getSecureUrl", { token: STATE.token });
-
-  if (urlResult.error) {
-    showPlayerError(urlResult.error);
-    return;
-  }
-
-  loadStream(urlResult.url, type || urlResult.type);
-
-  // Renovar token antes de que expire
-  if (STATE.tokenRefreshTimer) clearTimeout(STATE.tokenRefreshTimer);
-  STATE.tokenRefreshTimer = setTimeout(() => {
-    playChannel(canalId, name, type);
-  }, (tokenResult.expiresAt - Date.now()) - 15000); // 15 segundos antes de expirar
 }
 
 function openPlayer(name, type) {
   document.getElementById("player-overlay").classList.add("active");
   document.getElementById("player-channel-name").textContent = name;
-
-  const liveBadge = document.getElementById("live-badge");
-  liveBadge.style.display = type === "audio" ? "none" : "inline-flex";
-
-  document.getElementById("loading-spinner").style.display = "block";
+  document.getElementById("live-badge").style.display = type === "audio" ? "none" : "inline-flex";
+  document.getElementById("player-status").innerHTML = '<div class="spinner" id="loading-spinner"></div>';
+  document.getElementById("player-video").style.display = "block";
   document.getElementById("play-pause-btn").textContent = "⏸";
 }
 
 function closePlayer() {
   if (STATE.hls) { STATE.hls.destroy(); STATE.hls = null; }
-  if (STATE.tokenRefreshTimer) clearTimeout(STATE.tokenRefreshTimer);
+  if (STATE.tokenRefreshTimer) { clearTimeout(STATE.tokenRefreshTimer); STATE.tokenRefreshTimer = null; }
   const video = document.getElementById("player-video");
   video.pause();
   video.src = "";
+  video.load();
   document.getElementById("player-overlay").classList.remove("active");
   document.getElementById("player-status").innerHTML = '<div class="spinner" id="loading-spinner"></div>';
 }
@@ -1144,52 +1107,66 @@ function loadStream(url, type) {
 
   if (type === "audio") {
     video.style.display = "none";
-    // Mostrar visualizador de audio
     document.getElementById("player-status").innerHTML = `
-      <div class="audio-player">
+      <div class="audio-player" style="pointer-events:all">
         <div style="font-size:2rem;margin-bottom:8px">🎵</div>
         <div class="audio-waveform">
-          ${Array(20).fill(0).map((_, i) =>
+          ${Array(20).fill(0).map((_,i) =>
             `<span style="animation-delay:${i*0.05}s;animation-duration:${0.4+Math.random()*0.4}s"></span>`
           ).join("")}
         </div>
-        <div id="audio-title" style="color:var(--text2);font-size:0.85rem">EN VIVO • AUDIO</div>
+        <div style="color:var(--text2);font-size:0.85rem">EN VIVO • AUDIO</div>
       </div>
     `;
     const audio = new Audio(url);
-    audio.play().catch(e => showPlayerError("No se pudo reproducir el audio"));
+    audio.play().catch(() => showPlayerError("No se pudo reproducir el audio"));
     return;
   }
 
   video.style.display = "block";
 
-  // HLS.js para HLS, nativo para MP4
   if ((type === "hls" || url.includes(".m3u8")) && Hls.isSupported()) {
     STATE.hls = new Hls({
-      enableWorker:     true,
-      lowLatencyMode:   true,
-      maxBufferLength:  30,
+      enableWorker:    true,
+      lowLatencyMode:  true,
+      maxBufferLength: 30,
+      fragLoadingTimeOut:    10000,
+      manifestLoadingTimeOut:10000,
     });
     STATE.hls.loadSource(url);
     STATE.hls.attachMedia(video);
     STATE.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play();
+      video.play().catch(e => console.warn("Autoplay bloqueado:", e));
       hideSpinner();
     });
     STATE.hls.on(Hls.Events.ERROR, (_, data) => {
-      if (data.fatal) showPlayerError("Error en el stream HLS");
+      console.warn("HLS Error:", data);
+      if (data.fatal) {
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+          STATE.hls.startLoad(); // Intentar recuperar
+        } else {
+          showPlayerError("Error fatal en el stream HLS: " + data.details);
+        }
+      }
     });
   } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     // Safari nativo
     video.src = url;
-    video.play().then(hideSpinner).catch(e => showPlayerError("No se pudo reproducir"));
+    video.play().then(hideSpinner).catch(() => showPlayerError("No se pudo reproducir"));
   } else {
     video.src = url;
-    video.play().then(hideSpinner).catch(e => showPlayerError("Error reproduciendo stream"));
+    video.play().then(hideSpinner).catch(() => showPlayerError("Error reproduciendo stream"));
   }
 
-  video.addEventListener("waiting", () => document.getElementById("loading-spinner") && (document.getElementById("loading-spinner").style.display = "block"));
+  // Eventos de estado del video
+  video.addEventListener("waiting", () => {
+    const s = document.getElementById("loading-spinner");
+    if (s) s.style.display = "block";
+  });
   video.addEventListener("playing", hideSpinner);
+  video.addEventListener("error", () => {
+    if (video.src) showPlayerError("Error en el stream de video");
+  });
 }
 
 function hideSpinner() {
@@ -1203,7 +1180,7 @@ function showPlayerError(msg) {
       <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
       <div style="font-weight:700;margin-bottom:4px">Error de reproducción</div>
       <div style="font-size:0.85rem;color:var(--text2)">${escHtml(msg)}</div>
-      <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="closePlayer()">Cerrar</button>
+      <button class="btn btn-ghost btn-sm" style="margin-top:12px;pointer-events:all" onclick="closePlayer()">Cerrar</button>
     </div>
   `;
 }
@@ -1218,14 +1195,15 @@ function togglePlayPause() {
 
 function toggleMute() {
   const video = document.getElementById("player-video");
-  const btn   = document.getElementById("mute-btn");
   video.muted = !video.muted;
-  btn.textContent = video.muted ? "🔇" : "🔊";
+  document.getElementById("mute-btn").textContent = video.muted ? "🔇" : "🔊";
+  document.getElementById("volume-slider").value = video.muted ? 0 : video.volume;
 }
 
 function setVolume(val) {
   const video = document.getElementById("player-video");
-  video.volume = val;
+  video.volume = parseFloat(val);
+  video.muted  = val == 0;
   document.getElementById("mute-btn").textContent = val == 0 ? "🔇" : "🔊";
 }
 
@@ -1238,15 +1216,22 @@ function toggleFullscreen() {
   }
 }
 
-// Cerrar player con ESC
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closePlayer();
+  if (e.key === "Escape" && document.getElementById("player-overlay").classList.contains("active")) {
+    closePlayer();
+  }
+  if (e.key === " " && document.getElementById("player-overlay").classList.contains("active")) {
+    e.preventDefault();
+    togglePlayPause();
+  }
 });
 
-// ── Dispositivos del usuario ───────────────────────────────────
+// ── Dispositivos del usuario ──────────────────────────────────
 async function loadMyDevices() {
+  const list = document.getElementById("devices-list");
+  list.innerHTML = "Cargando...";
+
   const result = await api("getUserDevices", { userId: STATE.userId });
-  const list   = document.getElementById("devices-list");
 
   if (!Array.isArray(result) || !result.length) {
     list.innerHTML = '<div style="color:var(--text2);padding:20px">No hay dispositivos activos</div>';
@@ -1258,14 +1243,15 @@ async function loadMyDevices() {
       <div>
         <div style="font-weight:700">${escHtml(d.device_name || "Dispositivo")}</div>
         <div style="font-size:0.8rem;color:var(--text2)">
-          ID: ${escHtml(String(d.device_id).substr(0,20))}... • IP: ${escHtml(d.ip)} •
+          ID: ${escHtml(String(d.device_id).substr(0,20))}... •
+          IP: ${escHtml(d.ip)} •
           Inicio: ${escHtml(String(d.fecha_inicio).substr(0,10))}
         </div>
       </div>
       <div>
-        ${d.device_id === STATE.deviceId
+        ${String(d.device_id) === String(STATE.deviceId)
           ? '<span class="badge badge-green">Este dispositivo</span>'
-          : `<button class="btn btn-danger btn-sm" onclick="revokeSession('${d.sessionId}')">Cerrar sesión</button>`
+          : `<button class="btn btn-danger btn-sm" onclick="revokeSession('${escHtml(d.sessionId)}')">Cerrar sesión</button>`
         }
       </div>
     </div>
@@ -1280,33 +1266,45 @@ async function revokeSession(sessionId) {
 
 // ── Admin: Usuarios ───────────────────────────────────────────
 async function loadAdminUsers() {
+  const tbody = document.getElementById("users-tbody");
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text2)">Cargando...</td></tr>';
+
   const result = await api("getUsers");
-  if (!Array.isArray(result)) return;
-  document.getElementById("users-tbody").innerHTML = result.map(u => `
+  if (!Array.isArray(result)) {
+    tbody.innerHTML = '<tr><td colspan="6" style="color:var(--red)">Error: ' + escHtml(result.error || "?") + '</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = result.map(u => `
     <tr>
       <td><strong>${escHtml(u.username)}</strong></td>
       <td>${escHtml(u.email)}</td>
-      <td><span class="badge ${u.plan==='admin'?'badge-red':'badge-blue'}">${u.plan}</span></td>
+      <td><span class="badge ${u.plan==='admin'?'badge-red':'badge-blue'}">${escHtml(u.plan)}</span></td>
       <td>
-        <input type="number" value="${u.maxDevices}" min="1" max="20" style="width:60px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px"
-          onchange="setMaxDevices('${u.userId}', this.value)">
+        <input type="number" value="${parseInt(u.maxDevices)||2}" min="1" max="20"
+          style="width:60px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px"
+          onchange="setMaxDevices('${escHtml(u.userId)}', this.value)">
       </td>
-      <td><span class="badge ${u.activo==='TRUE'?'badge-green':'badge-red'}">${u.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
-      <td style="display:flex;gap:6px">
-        <button class="btn btn-warning btn-sm" onclick="toggleUserStatus('${u.userId}','${u.activo}')">
-          ${u.activo==='TRUE'?'Desactivar':'Activar'}
+      <td><span class="badge ${String(u.activo)==='TRUE'?'badge-green':'badge-red'}">${String(u.activo)==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-warning btn-sm" onclick="toggleUserStatus('${escHtml(u.userId)}','${escHtml(String(u.activo))}')">
+          ${String(u.activo)==='TRUE'?'Desactivar':'Activar'}
         </button>
-        <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.userId}')">Eliminar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin('${escHtml(u.userId)}')">Eliminar</button>
       </td>
     </tr>
-  `).join("");
+  `).join("") || '<tr><td colspan="6" style="text-align:center;color:var(--text2)">Sin usuarios</td></tr>';
 }
 
-async function createUser() {
+// FIX: Renombrada de createUser() a createUserAdmin() para no colisionar
+// con la función createUser() del backend (mismo nombre en JS causaba conflicto
+// porque el onclick del modal llamaba "createUser()" que en el código original
+// hacía api("createUser") pero la función en el scope era la misma)
+async function createUserAdmin() {
   const result = await api("createUser", {
-    username:   document.getElementById("nu-username").value,
+    username:   document.getElementById("nu-username").value.trim(),
     password:   document.getElementById("nu-password").value,
-    email:      document.getElementById("nu-email").value,
+    email:      document.getElementById("nu-email").value.trim(),
     plan:       document.getElementById("nu-plan").value,
     maxDevices: document.getElementById("nu-maxdev").value,
   });
@@ -1314,67 +1312,78 @@ async function createUser() {
   else toast(result.error || "Error", "error");
 }
 
-async function deleteUser(userId) {
-  if (!confirm("¿Eliminar usuario?")) return;
+async function deleteUserAdmin(userId) {
+  if (!confirm("¿Eliminar usuario permanentemente?")) return;
   const result = await api("deleteUser", { userId });
-  if (result.ok) { toast("Eliminado", "success"); loadAdminUsers(); }
+  if (result.ok) { toast("Usuario eliminado", "success"); loadAdminUsers(); }
   else toast(result.error || "Error", "error");
 }
 
 async function setMaxDevices(userId, max) {
-  await api("setMaxDevices", { userId, max });
-  toast("Límite actualizado", "success");
+  const result = await api("setMaxDevices", { userId, max: parseInt(max) });
+  if (result.ok) toast("Límite actualizado", "success");
+  else toast(result.error || "Error", "error");
 }
 
 async function toggleUserStatus(userId, current) {
-  await api("updateUser", { userId, activo: current !== "TRUE" });
-  loadAdminUsers();
+  const result = await api("updateUser", { userId, activo: String(current) !== "TRUE" });
+  if (result.ok) loadAdminUsers();
+  else toast(result.error || "Error al actualizar", "error");
 }
 
 // ── Admin: Canales ────────────────────────────────────────────
-function adminTab(tab) {
+// FIX: adminTab() ahora recibe el botón como parámetro en vez de usar event.target
+function adminTab(tab, btn) {
   document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
   document.getElementById("admin-" + tab).classList.add("active");
-  event.target.classList.add("active");
+  if (btn) btn.classList.add("active");
 
-  if (tab === "channels")  loadAdminChannels();
-  if (tab === "proxies")   loadAdminProxies();
-  if (tab === "sessions")  loadAdminSessions();
+  if (tab === "channels") loadAdminChannels();
+  if (tab === "proxies")  loadAdminProxies();
+  if (tab === "sessions") loadAdminSessions();
 }
 
 async function loadAdminChannels() {
+  const tbody = document.getElementById("channels-tbody");
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text2)">Cargando...</td></tr>';
+
   const result = await api("getChannels");
   if (!Array.isArray(result)) return;
-  document.getElementById("channels-tbody").innerHTML = result.map(c => `
+
+  tbody.innerHTML = result.map(c => `
     <tr>
       <td><strong>${escHtml(c.name)}</strong></td>
-      <td><span class="badge badge-blue">${c.type || 'hls'}</span></td>
+      <td><span class="badge badge-blue">${escHtml(c.type || 'hls')}</span></td>
       <td>${escHtml(c.category || '')}</td>
-      <td><span class="badge ${c.activo==='TRUE'?'badge-green':'badge-red'}">${c.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td><span class="badge ${String(c.activo)==='TRUE'?'badge-green':'badge-red'}">${String(c.activo)==='TRUE'?'Activo':'Inactivo'}</span></td>
       <td style="display:flex;gap:6px">
-        <button class="btn btn-warning btn-sm" onclick="toggleChannel('${c.canalId}','${c.activo}')">
-          ${c.activo==='TRUE'?'Desactivar':'Activar'}
+        <button class="btn btn-warning btn-sm" onclick="toggleChannel('${escHtml(c.canalId)}','${escHtml(String(c.activo))}')">
+          ${String(c.activo)==='TRUE'?'Desactivar':'Activar'}
         </button>
-        <button class="btn btn-danger btn-sm" onclick="deleteChannel('${c.canalId}')">Eliminar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteChannelAdmin('${escHtml(c.canalId)}')">Eliminar</button>
       </td>
     </tr>
-  `).join("");
+  `).join("") || '<tr><td colspan="5" style="text-align:center;color:var(--text2)">Sin canales</td></tr>';
 }
 
 async function createChannel() {
   const result = await api("addChannel", {
-    name:     document.getElementById("nc-name").value,
-    url:      document.getElementById("nc-url").value,
+    name:     document.getElementById("nc-name").value.trim(),
+    url:      document.getElementById("nc-url").value.trim(),
     type:     document.getElementById("nc-type").value,
-    category: document.getElementById("nc-category").value,
-    logo:     document.getElementById("nc-logo").value,
+    category: document.getElementById("nc-category").value.trim(),
+    logo:     document.getElementById("nc-logo").value.trim(),
   });
-  if (result.ok) { toast("Canal agregado", "success"); closeModal("modal-create-channel"); loadAdminChannels(); loadChannels(); }
-  else toast(result.error || "Error", "error");
+  if (result.ok) {
+    toast("Canal agregado", "success");
+    closeModal("modal-create-channel");
+    loadAdminChannels();
+    loadChannels();
+  } else toast(result.error || "Error", "error");
 }
 
-async function deleteChannel(canalId) {
+async function deleteChannelAdmin(canalId) {
   if (!confirm("¿Eliminar canal?")) return;
   const result = await api("deleteChannel", { canalId });
   if (result.ok) { toast("Canal eliminado", "success"); loadAdminChannels(); loadChannels(); }
@@ -1382,88 +1391,110 @@ async function deleteChannel(canalId) {
 }
 
 async function toggleChannel(canalId, current) {
-  await api("updateChannel", { canalId, activo: current !== "TRUE" });
-  loadAdminChannels(); loadChannels();
+  await api("updateChannel", { canalId, activo: String(current) !== "TRUE" });
+  loadAdminChannels();
+  loadChannels();
 }
 
 // ── Admin: Proxies ────────────────────────────────────────────
 async function loadAdminProxies() {
+  const tbody = document.getElementById("proxies-tbody");
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text2)">Cargando...</td></tr>';
+
   const result = await api("getAllProxies");
   if (!Array.isArray(result)) return;
-  document.getElementById("proxies-tbody").innerHTML = result.map(p => `
+
+  tbody.innerHTML = result.map(p => `
     <tr>
-      <td style="font-size:0.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis">${escHtml(p.url_worker)}</td>
-      <td><span class="badge ${p.activo==='TRUE'?'badge-green':'badge-red'}">${p.activo==='TRUE'?'Activo':'Inactivo'}</span></td>
-      <td>${p.prioridad}</td>
+      <td style="font-size:0.8rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(p.url_worker)}">${escHtml(p.url_worker)}</td>
+      <td><span class="badge ${String(p.activo)==='TRUE'?'badge-green':'badge-red'}">${String(p.activo)==='TRUE'?'Activo':'Inactivo'}</span></td>
+      <td>${escHtml(String(p.prioridad))}</td>
       <td><span class="badge ${parseInt(p.fail_count)>=5?'badge-red':'badge-green'}">${p.fail_count || 0}</span></td>
-      <td>${p.latency ? p.latency + 'ms' : '-'}</td>
-      <td style="font-size:0.75rem;color:var(--text2)">${String(p.last_check||'').substr(0,10)}</td>
+      <td>${p.latency ? escHtml(String(p.latency)) + 'ms' : '-'}</td>
+      <td style="font-size:0.75rem;color:var(--text2)">${escHtml(String(p.last_check||'').substr(0,10))}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-warning btn-sm" onclick="toggleProxy('${p.proxy_id}')">
-          ${p.activo==='TRUE'?'Pausar':'Activar'}
+        <button class="btn btn-warning btn-sm" onclick="toggleProxyAdmin('${escHtml(p.proxy_id)}')">
+          ${String(p.activo)==='TRUE'?'Pausar':'Activar'}
         </button>
-        <button class="btn btn-info btn-sm" onclick="testProxy('${p.proxy_id}')">Test</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteProxy('${p.proxy_id}')">Eliminar</button>
+        <button class="btn btn-info btn-sm" onclick="testProxyAdmin('${escHtml(p.proxy_id)}')">Test</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProxyAdmin('${escHtml(p.proxy_id)}')">Eliminar</button>
       </td>
     </tr>
-  `).join("");
+  `).join("") || '<tr><td colspan="7" style="text-align:center;color:var(--text2)">Sin proxies</td></tr>';
 }
 
 async function createProxy() {
   const result = await api("addProxy", {
-    url:      document.getElementById("np-url").value,
+    url:      document.getElementById("np-url").value.trim(),
     prioridad: document.getElementById("np-priority").value,
   });
   if (result.ok) { toast("Proxy agregado", "success"); closeModal("modal-create-proxy"); loadAdminProxies(); }
   else toast(result.error || "Error", "error");
 }
 
-async function deleteProxy(proxyId) {
+async function deleteProxyAdmin(proxyId) {
   if (!confirm("¿Eliminar proxy?")) return;
   const result = await api("deleteProxy", { proxyId });
   if (result.ok) { toast("Proxy eliminado", "success"); loadAdminProxies(); }
   else toast(result.error || "Error", "error");
 }
 
-async function toggleProxy(proxyId) {
-  await api("toggleProxy", { proxyId });
+async function toggleProxyAdmin(proxyId) {
+  const result = await api("toggleProxy", { proxyId });
+  if (!result.ok) toast(result.error || "Error", "error");
   loadAdminProxies();
 }
 
-async function testProxy(proxyId) {
+async function testProxyAdmin(proxyId) {
   toast("Probando proxy...", "info");
   const result = await api("testProxy", { proxyId });
-  if (result.ok) toast(`Proxy OK • ${result.latency}ms`, "success");
-  else toast("Proxy con error", "error");
+  if (result.ok) toast(`✅ Proxy OK • ${result.latency}ms`, "success");
+  else toast("❌ Proxy con error", "error");
   loadAdminProxies();
 }
 
 // ── Admin: Sesiones ───────────────────────────────────────────
+// FIX: Antes hacía N llamadas HTTP (una por usuario) causando lentitud extrema.
+// Ahora usa la nueva acción getAllSessions que retorna todo en una sola llamada.
 async function loadAdminSessions() {
-  // Cargar sesiones de todos los usuarios
-  const users   = await api("getUsers");
-  if (!Array.isArray(users)) return;
+  const tbody = document.getElementById("sessions-tbody");
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text2)">Cargando...</td></tr>';
 
-  let allSessions = [];
-  for (const user of users) {
-    const devs = await api("getUserDevices", { userId: user.userId });
-    if (Array.isArray(devs)) {
-      allSessions = allSessions.concat(devs.map(d => ({ ...d, username: user.username })));
+  // Intentar con la nueva acción eficiente
+  let allSessions = await api("getAllSessions");
+
+  // Fallback: si no existe la acción nueva, usar el método lento
+  if (!Array.isArray(allSessions)) {
+    allSessions = [];
+    const users = await api("getUsers");
+    if (Array.isArray(users)) {
+      for (const user of users) {
+        const devs = await api("getUserDevices", { userId: user.userId });
+        if (Array.isArray(devs)) {
+          allSessions = allSessions.concat(devs.map(d => ({ ...d, username: user.username })));
+        }
+      }
     }
   }
 
-  document.getElementById("sessions-tbody").innerHTML = allSessions.map(s => `
+  tbody.innerHTML = allSessions.map(s => `
     <tr>
-      <td style="font-size:0.75rem">${String(s.sessionId).substr(0,16)}...</td>
-      <td><strong>${escHtml(s.username || s.userId)}</strong></td>
+      <td style="font-size:0.75rem">${escHtml(String(s.sessionId).substr(0,16))}...</td>
+      <td><strong>${escHtml(s.username || s.userId || '?')}</strong></td>
       <td>${escHtml(s.device_name || 'Desconocido')}</td>
       <td>${escHtml(s.ip || '-')}</td>
-      <td style="font-size:0.8rem">${String(s.fecha_inicio||'').substr(0,10)}</td>
+      <td style="font-size:0.8rem">${escHtml(String(s.fecha_inicio||'').substr(0,10))}</td>
       <td>
-        <button class="btn btn-danger btn-sm" onclick="revokeSession('${s.sessionId}');loadAdminSessions()">Revocar</button>
+        <button class="btn btn-danger btn-sm" onclick="revokeSessionAdmin('${escHtml(s.sessionId)}')">Revocar</button>
       </td>
     </tr>
-  `).join("");
+  `).join("") || '<tr><td colspan="6" style="text-align:center;color:var(--text2)">Sin sesiones activas</td></tr>';
+}
+
+async function revokeSessionAdmin(sessionId) {
+  const result = await api("revokeDevice", { sessionId });
+  if (result.ok) { toast("Sesión revocada", "success"); loadAdminSessions(); }
+  else toast(result.error || "Error", "error");
 }
 
 // ── UI Helpers ────────────────────────────────────────────────
@@ -1471,18 +1502,24 @@ function openModal(id)  { document.getElementById(id).classList.add("active"); }
 function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
 // Cerrar modales con click fuera
-document.querySelectorAll(".modal-overlay").forEach(overlay => {
-  overlay.addEventListener("click", e => {
-    if (e.target === overlay) overlay.classList.remove("active");
-  });
+document.addEventListener("click", e => {
+  if (e.target.classList.contains("modal-overlay")) {
+    e.target.classList.remove("active");
+  }
 });
 
 function toast(msg, type = "info") {
   const el = document.createElement("div");
   el.className = "toast " + type;
-  el.innerHTML = `${type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️"} ${escHtml(msg)}`;
+  const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
+  el.innerHTML = `${icon} ${escHtml(msg)}`;
   document.getElementById("toast-container").appendChild(el);
-  setTimeout(() => el.remove(), 4000);
+  // Auto-remove con fade
+  setTimeout(() => {
+    el.style.transition = "opacity 0.3s";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 300);
+  }, 4000);
 }
 
 function escHtml(str) {
@@ -1490,7 +1527,8 @@ function escHtml(str) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 </script>
 </body>
