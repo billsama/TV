@@ -29,7 +29,7 @@ video {
     object-fit: cover;
 }
 
-/* 🔥 BOTÓN WHATSAPP */
+/* 💬 BOTÓN WHATSAPP */
 .btn-whatsapp {
     position: fixed;
     top: 20px;
@@ -44,7 +44,6 @@ video {
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     transition: all 0.3s ease;
     z-index: 999;
-    cursor: pointer;
 }
 
 .btn-whatsapp:hover {
@@ -63,9 +62,12 @@ video {
 
 <body>
 
-<!-- 💬 BOTÓN WHATSAPP NUEVO -->
-<a class="btn-whatsapp" onclick="openWhatsApp()">
-💬 WhatsApp
+<!-- 💬 BOTÓN WHATSAPP (SIN BLOQUEO) -->
+<a class="btn-whatsapp" 
+   href="https://wa.link/zpx26z" 
+   target="_blank" 
+   rel="noopener noreferrer">
+   💬 WhatsApp
 </a>
 
 <!-- 🎬 PLAYER -->
@@ -135,7 +137,7 @@ video.addEventListener("waiting", () => {
 /* 🚀 START */
 playVideo();
 
-/* 🔊 AUDIO A 1 SEGUNDO */
+/* 🔊 ACTIVAR AUDIO A 1 SEGUNDO */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -143,21 +145,11 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* 🔧 CLICK BACKUP */
+/* 🔧 BACKUP CLICK (por políticas del navegador) */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
 }, { once: true });
-
-/* 💬 WHATSAPP NUEVO LINK */
-function openWhatsApp() {
-    const url = "https://wa.link/zpx26z";
-    const win = window.open(url, "_blank");
-
-    if (!win) {
-        window.location.href = url;
-    }
-}
 </script>
 
 </body>
