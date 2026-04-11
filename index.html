@@ -29,46 +29,29 @@ video {
     object-fit: cover;
 }
 
-/* 💬 BOTÓN WHATSAPP */
-.btn-whatsapp {
+/* 📢 MENSAJE SUPERIOR */
+.banner {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #25D366, #1ebe5d);
+    top: 0;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.6);
     color: #fff;
-    padding: 12px 18px;
-    border-radius: 50px;
+    padding: 12px;
     font-size: 14px;
     font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    transition: all 0.3s ease;
     z-index: 999;
-}
-
-.btn-whatsapp:hover {
-    transform: scale(1.1);
-}
-
-/* 📱 móvil */
-@media (max-width: 600px) {
-    .btn-whatsapp {
-        font-size: 12px;
-        padding: 10px 14px;
-    }
+    backdrop-filter: blur(6px);
 }
 </style>
 </head>
 
 <body>
 
-<!-- 💬 BOTÓN WHATSAPP (SIN BLOQUEO) -->
-<a class="btn-whatsapp" 
-   href="https://wa.link/zpx26z" 
-   target="_blank" 
-   rel="noopener noreferrer">
-   💬 WhatsApp
-</a>
+<!-- 📢 MENSAJE -->
+<div class="banner">
+Adquiere tu paquete premium y evita la publicidad
+</div>
 
 <!-- 🎬 PLAYER -->
 <div class="player-container">
@@ -88,7 +71,7 @@ const playlist = [
 let retry = 0;
 let lastIndex = -1;
 
-/* 🎲 RANDOM SIN REPETIR */
+/* 🎲 RANDOM */
 function getRandomIndex() {
     let newIndex;
     do {
@@ -137,7 +120,7 @@ video.addEventListener("waiting", () => {
 /* 🚀 START */
 playVideo();
 
-/* 🔊 ACTIVAR AUDIO A 1 SEGUNDO */
+/* 🔊 AUDIO A 1 SEGUNDO */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -145,7 +128,7 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* 🔧 BACKUP CLICK (por políticas del navegador) */
+/* 🔧 BACKUP CLICK */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
