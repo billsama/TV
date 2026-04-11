@@ -63,7 +63,7 @@ video {
 
 <body>
 
-<!-- 💬 BOTÓN WHATSAPP PRO -->
+<!-- 💬 BOTÓN WHATSAPP -->
 <a class="btn-whatsapp" onclick="openWhatsApp()">
 💬 WhatsApp
 </a>
@@ -149,21 +149,14 @@ document.addEventListener("click", () => {
     video.play();
 }, { once: true });
 
-/* 📲 WHATSAPP ULTRA FIX */
+/* 💬 WHATSAPP → NUEVA PESTAÑA */
 function openWhatsApp() {
-    const phone = "51927027986";
+    const url = "https://wa.me/51927027986";
+    const win = window.open(url, "_blank");
 
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        window.location.href = "whatsapp://send?phone=" + phone;
-
-        setTimeout(() => {
-            window.location.href = "https://wa.me/" + phone;
-        }, 1500);
-
-    } else {
-        window.open("https://web.whatsapp.com/send?phone=" + phone, "_blank");
+    // fallback si bloquea popup
+    if (!win) {
+        window.location.href = url;
     }
 }
 </script>
