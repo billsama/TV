@@ -17,6 +17,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* 🎬 PLAYER */
 .player-container {
     width: 100%;
     height: 100dvh;
@@ -28,11 +29,48 @@ video {
     height: 100%;
     object-fit: cover;
 }
+
+/* 🔥 BOTÓN FLOTANTE PRO */
+.btn-whatsapp {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #25D366, #1ebe5d);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+/* hover */
+.btn-whatsapp:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* móvil */
+@media (max-width: 600px) {
+    .btn-whatsapp {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+}
 </style>
 </head>
 
 <body>
 
+<!-- 🔥 BOTÓN -->
+<a href="https://wa.link/z7knaq" target="_blank" class="btn-whatsapp">
+💬 WhatsApp
+</a>
+
+<!-- 🎬 PLAYER -->
 <div class="player-container">
     <video id="video" autoplay muted playsinline></video>
 </div>
@@ -40,7 +78,7 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST (CON TU VIDEO AGREGADO) */
+/* 🎬 PLAYLIST */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
@@ -50,7 +88,7 @@ const playlist = [
 let retry = 0;
 let lastIndex = -1;
 
-/* 🎲 RANDOM SIN REPETIR SEGUIDO */
+/* 🎲 RANDOM SIN REPETIR */
 function getRandomIndex() {
     let newIndex;
     do {
@@ -61,7 +99,7 @@ function getRandomIndex() {
     return newIndex;
 }
 
-/* ▶ REPRODUCIR */
+/* ▶ PLAY */
 function playVideo() {
     const index = getRandomIndex();
     video.src = playlist[index];
@@ -72,7 +110,7 @@ function playVideo() {
     .catch(() => retryPlay());
 }
 
-/* 🔄 REINTENTO */
+/* 🔄 RETRY */
 function retryPlay() {
     retry++;
     if (retry < 3) {
@@ -96,10 +134,10 @@ video.addEventListener("waiting", () => {
     }, 4000);
 });
 
-/* 🚀 INICIAR */
+/* START */
 playVideo();
 
-/* 🔊 AUDIO A 1 SEGUNDO */
+/* 🔊 AUDIO A 1s */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -107,7 +145,7 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* 🔧 RESPALDO */
+/* CLICK BACKUP */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
