@@ -49,13 +49,11 @@ video {
     animation: fadeIn 1s ease;
 }
 
-/* ✨ TEXTO DESTACADO */
 .banner span {
     color: #00ffae;
     font-weight: bold;
 }
 
-/* 🎬 ANIMACIÓN */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -67,7 +65,6 @@ video {
     }
 }
 
-/* 📱 RESPONSIVE */
 @media (max-width: 600px) {
     .banner {
         font-size: 12px;
@@ -79,7 +76,7 @@ video {
 
 <body>
 
-<!-- 🌟 MENSAJE PRO -->
+<!-- 🌟 MENSAJE -->
 <div class="banner">
     🚀 Adquiere tu <span>Paquete Premium</span> y disfruta sin interrupciones ni publicidad
 </div>
@@ -92,11 +89,15 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST */
+/* 🎬 PLAYLIST COMPLETA */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
-"https://dl.dropboxusercontent.com/scl/fi/1tgi7i2xjdfuoin8b9aw1/gag.mp4?rlkey=sqzfdxe5cphqt5a2z4pz5fjn6"
+"https://dl.dropboxusercontent.com/scl/fi/1tgi7i2xjdfuoin8b9aw1/gag.mp4?rlkey=sqzfdxe5cphqt5a2z4pz5fjn6",
+
+/* 🔥 NUEVOS VIDEOS AGREGADOS */
+"https://dl.dropboxusercontent.com/scl/fi/6v7230f6drvhrxaxc8282/scdddg.mp4?rlkey=4uf552fthex3e93i28br4t7cd",
+"https://dl.dropboxusercontent.com/scl/fi/c4rifovakuhmbvds9ybq2/scdvdv.mp4?rlkey=erq3a307ywolnyev6qd8wpkjk"
 ];
 
 let retry = 0;
