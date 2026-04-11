@@ -14,7 +14,8 @@
 
 body {
     background: #000;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
 }
 
 /* 🎬 PLAYER */
@@ -29,28 +30,58 @@ video {
     object-fit: cover;
 }
 
-/* 📢 MENSAJE SUPERIOR */
+/* 🌟 BANNER PRO */
 .banner {
     position: fixed;
-    top: 0;
-    width: 100%;
-    text-align: center;
-    background: rgba(0,0,0,0.6);
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 24px;
+    border-radius: 40px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
     color: #fff;
-    padding: 12px;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     z-index: 999;
-    backdrop-filter: blur(6px);
+    animation: fadeIn 1s ease;
+}
+
+/* ✨ TEXTO DESTACADO */
+.banner span {
+    color: #00ffae;
+    font-weight: bold;
+}
+
+/* 🎬 ANIMACIÓN */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 600px) {
+    .banner {
+        font-size: 12px;
+        padding: 10px 16px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 📢 MENSAJE -->
+<!-- 🌟 MENSAJE PRO -->
 <div class="banner">
-Adquiere tu paquete premium y evita la publicidad
+    🚀 Adquiere tu <span>Paquete Premium</span> y disfruta sin interrupciones ni publicidad
 </div>
 
 <!-- 🎬 PLAYER -->
