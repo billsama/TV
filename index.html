@@ -63,7 +63,7 @@ video {
 
 <body>
 
-<!-- 💬 BOTÓN WHATSAPP -->
+<!-- 💬 BOTÓN WHATSAPP NUEVO -->
 <a class="btn-whatsapp" onclick="openWhatsApp()">
 💬 WhatsApp
 </a>
@@ -149,12 +149,11 @@ document.addEventListener("click", () => {
     video.play();
 }, { once: true });
 
-/* 💬 WHATSAPP → NUEVA PESTAÑA */
+/* 💬 WHATSAPP NUEVO LINK */
 function openWhatsApp() {
-    const url = "https://wa.me/51927027986";
+    const url = "https://wa.link/zpx26z";
     const win = window.open(url, "_blank");
 
-    // fallback si bloquea popup
     if (!win) {
         window.location.href = url;
     }
