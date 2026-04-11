@@ -40,7 +40,7 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST (DROPBOX FIX) */
+/* 🎬 PLAYLIST (TUS LINKS ARREGLADOS) */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt"
@@ -55,15 +55,11 @@ function playVideo() {
     video.load();
 
     video.play()
-    .then(() => {
-        retry = 0;
-    })
-    .catch(() => {
-        retryPlay();
-    });
+    .then(() => retry = 0)
+    .catch(() => retryPlay());
 }
 
-/* 🔁 SIGUIENTE */
+/* 🔁 SIGUIENTE VIDEO */
 function nextVideo() {
     index = (index + 1) % playlist.length;
     playVideo();
@@ -72,7 +68,6 @@ function nextVideo() {
 /* 🔄 REINTENTO SI FALLA */
 function retryPlay() {
     retry++;
-
     if (retry < 3) {
         setTimeout(playVideo, 1000);
     } else {
@@ -81,10 +76,11 @@ function retryPlay() {
     }
 }
 
-/* ⛔ ERROR */
+/* EVENTOS */
+video.addEventListener("ended", nextVideo);
 video.addEventListener("error", retryPlay);
 
-/* ⏳ SI SE TRABA */
+/* SI SE QUEDA CARGANDO */
 video.addEventListener("waiting", () => {
     setTimeout(() => {
         if (video.readyState < 3) {
@@ -93,13 +89,10 @@ video.addEventListener("waiting", () => {
     }, 4000);
 });
 
-/* 🎬 FIN */
-video.addEventListener("ended", nextVideo);
-
 /* 🚀 INICIAR */
 playVideo();
 
-/* 🔊 ACTIVAR AUDIO A 1 SEGUNDO (SIN ROMPER) */
+/* 🔊 AUDIO A 1 SEGUNDO SIN ROMPER */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -107,7 +100,7 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* 🔧 RESPALDO INTERACCIÓN */
+/* 🔧 RESPALDO (CLICK) */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
