@@ -44,13 +44,14 @@ video {
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     transition: all 0.3s ease;
     z-index: 999;
+    cursor: pointer;
 }
 
 .btn-whatsapp:hover {
     transform: scale(1.1);
 }
 
-/* móvil */
+/* 📱 móvil */
 @media (max-width: 600px) {
     .btn-whatsapp {
         font-size: 12px;
@@ -62,8 +63,8 @@ video {
 
 <body>
 
-<!-- 💬 BOTÓN WHATSAPP (DIRECTO SIN BLOQUEO) -->
-<a href="https://wa.me/51927027986" target="_blank" class="btn-whatsapp">
+<!-- 💬 BOTÓN WHATSAPP PRO -->
+<a class="btn-whatsapp" onclick="openWhatsApp()">
 💬 WhatsApp
 </a>
 
@@ -122,7 +123,7 @@ function retryPlay() {
 video.addEventListener("ended", playVideo);
 video.addEventListener("error", retryPlay);
 
-/* SI SE TRABA */
+/* ⏳ SI SE TRABA */
 video.addEventListener("waiting", () => {
     setTimeout(() => {
         if (video.readyState < 3) {
@@ -148,6 +149,23 @@ document.addEventListener("click", () => {
     video.play();
 }, { once: true });
 
+/* 📲 WHATSAPP ULTRA FIX */
+function openWhatsApp() {
+    const phone = "51927027986";
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        window.location.href = "whatsapp://send?phone=" + phone;
+
+        setTimeout(() => {
+            window.location.href = "https://wa.me/" + phone;
+        }, 1500);
+
+    } else {
+        window.open("https://web.whatsapp.com/send?phone=" + phone, "_blank");
+    }
+}
 </script>
 
 </body>
