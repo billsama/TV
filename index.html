@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Player PRO</title>
+<title>Player PRO Random</title>
 
 <style>
 * {
@@ -40,18 +40,23 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST (TUS LINKS ARREGLADOS) */
+/* 🎬 PLAYLIST */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt"
 ];
 
-let index = 0;
 let retry = 0;
+
+/* 🎲 ELEGIR VIDEO RANDOM */
+function getRandomIndex() {
+    return Math.floor(Math.random() * playlist.length);
+}
 
 /* ▶ REPRODUCIR */
 function playVideo() {
-    video.src = playlist[index];
+    const randomIndex = getRandomIndex();
+    video.src = playlist[randomIndex];
     video.load();
 
     video.play()
@@ -59,32 +64,26 @@ function playVideo() {
     .catch(() => retryPlay());
 }
 
-/* 🔁 SIGUIENTE VIDEO */
-function nextVideo() {
-    index = (index + 1) % playlist.length;
-    playVideo();
-}
-
-/* 🔄 REINTENTO SI FALLA */
+/* 🔄 REINTENTO */
 function retryPlay() {
     retry++;
     if (retry < 3) {
         setTimeout(playVideo, 1000);
     } else {
         retry = 0;
-        nextVideo();
+        playVideo();
     }
 }
 
 /* EVENTOS */
-video.addEventListener("ended", nextVideo);
+video.addEventListener("ended", playVideo);
 video.addEventListener("error", retryPlay);
 
-/* SI SE QUEDA CARGANDO */
+/* SI SE TRABA */
 video.addEventListener("waiting", () => {
     setTimeout(() => {
         if (video.readyState < 3) {
-            nextVideo();
+            playVideo();
         }
     }, 4000);
 });
@@ -92,7 +91,7 @@ video.addEventListener("waiting", () => {
 /* 🚀 INICIAR */
 playVideo();
 
-/* 🔊 AUDIO A 1 SEGUNDO SIN ROMPER */
+/* 🔊 AUDIO A 1 SEGUNDO */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -100,7 +99,7 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* 🔧 RESPALDO (CLICK) */
+/* 🔧 RESPALDO */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
