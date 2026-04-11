@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Player PRO Random</title>
+<title>Player PRO</title>
 
 <style>
 * {
@@ -21,7 +21,6 @@ body {
 .player-container {
     width: 100%;
     height: 100dvh;
-    background: #000;
 }
 
 video {
@@ -30,7 +29,7 @@ video {
     object-fit: cover;
 }
 
-/* 🔥 BOTÓN FLOTANTE PRO */
+/* 🔥 BOTÓN WHATSAPP */
 .btn-whatsapp {
     position: fixed;
     top: 20px;
@@ -47,17 +46,15 @@ video {
     z-index: 999;
 }
 
-/* hover */
 .btn-whatsapp:hover {
     transform: scale(1.1);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
 
 /* móvil */
 @media (max-width: 600px) {
     .btn-whatsapp {
-        padding: 10px 14px;
         font-size: 12px;
+        padding: 10px 14px;
     }
 }
 </style>
@@ -65,8 +62,8 @@ video {
 
 <body>
 
-<!-- 🔥 BOTÓN -->
-<a href="https://wa.link/z7knaq" target="_blank" class="btn-whatsapp">
+<!-- 💬 BOTÓN WHATSAPP (DIRECTO SIN BLOQUEO) -->
+<a href="https://wa.me/51927027986" target="_blank" class="btn-whatsapp">
 💬 WhatsApp
 </a>
 
@@ -134,10 +131,10 @@ video.addEventListener("waiting", () => {
     }, 4000);
 });
 
-/* START */
+/* 🚀 START */
 playVideo();
 
-/* 🔊 AUDIO A 1s */
+/* 🔊 AUDIO A 1 SEGUNDO */
 setTimeout(() => {
     if (!video.paused) {
         video.muted = false;
@@ -145,7 +142,7 @@ setTimeout(() => {
     }
 }, 1000);
 
-/* CLICK BACKUP */
+/* 🔧 CLICK BACKUP */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
