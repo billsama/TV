@@ -40,23 +40,31 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST */
+/* 🎬 PLAYLIST (CON TU VIDEO AGREGADO) */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
-"https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt"
+"https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
+"https://dl.dropboxusercontent.com/scl/fi/1tgi7i2xjdfuoin8b9aw1/gag.mp4?rlkey=sqzfdxe5cphqt5a2z4pz5fjn6"
 ];
 
 let retry = 0;
+let lastIndex = -1;
 
-/* 🎲 ELEGIR VIDEO RANDOM */
+/* 🎲 RANDOM SIN REPETIR SEGUIDO */
 function getRandomIndex() {
-    return Math.floor(Math.random() * playlist.length);
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * playlist.length);
+    } while (newIndex === lastIndex && playlist.length > 1);
+
+    lastIndex = newIndex;
+    return newIndex;
 }
 
 /* ▶ REPRODUCIR */
 function playVideo() {
-    const randomIndex = getRandomIndex();
-    video.src = playlist[randomIndex];
+    const index = getRandomIndex();
+    video.src = playlist[index];
     video.load();
 
     video.play()
