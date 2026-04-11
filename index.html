@@ -97,8 +97,8 @@ const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/6v7230f6drvhrxaxc8282/scdddg.mp4?rlkey=4uf552fthex3e93i28br4t7cd",
 "https://dl.dropboxusercontent.com/scl/fi/c4rifovakuhmbvds9ybq2/scdvdv.mp4?rlkey=erq3a307ywolnyev6qd8wpkjk",
 
-/* 🔥 NUEVO VIDEO */
-"https://dl.dropboxusercontent.com/scl/fi/23h75d6eb5uh540npfysf/TikVid.io_7624632577709575444.mp4?rlkey=c2e9ljd01l7bim5ku4jw64nkm"
+/* 🔥 VIDEO ACTUALIZADO */
+"https://www.dropbox.com/scl/fi/c10q0u7wx3zyjgb7dub50/TikVid.io_7624632577709575444.mp4?rlkey=fa0q2z97t77vml11j1evn25pw&st=fxzvk8eg&raw=1"
 ];
 
 let retry = 0;
@@ -141,7 +141,6 @@ function retryPlay() {
 video.addEventListener("ended", playVideo);
 video.addEventListener("error", retryPlay);
 
-/* ⏳ SI SE TRABA */
 video.addEventListener("waiting", () => {
     setTimeout(() => {
         if (video.readyState < 3) {
@@ -153,19 +152,18 @@ video.addEventListener("waiting", () => {
 /* 🚀 START */
 playVideo();
 
-/* 🔊 AUDIO A 1 SEGUNDO */
+/* 🔊 UNMUTE AUTOMÁTICO */
 setTimeout(() => {
-    if (!video.paused) {
-        video.muted = false;
-        video.play().catch(()=>{});
-    }
+    video.muted = false;
+    video.play().catch(()=>{});
 }, 1000);
 
-/* 🔧 BACKUP CLICK */
+/* 🔧 CLICK FALLBACK */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
 }, { once: true });
+
 </script>
 
 </body>
