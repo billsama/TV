@@ -32,23 +32,24 @@ video {
     object-fit: cover;
 }
 
-/* 📢 ANUNCIO DERECHA */
+/* 📢 ANUNCIO IZQUIERDA CENTRADO */
 .banner {
     position: fixed;
-    top: 20px;
-    right: 15px;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 
-    width: 220px;
-    padding: 12px 14px;
-    border-radius: 14px;
+    width: 240px;
+    padding: 14px 16px;
+    border-radius: 16px;
 
     background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
 
     color: #fff;
     font-size: 12px;
     font-weight: 600;
-    text-align: left;
+    line-height: 1.4;
 
     box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     z-index: 999;
@@ -60,13 +61,14 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MOBILE: se adapta abajo */
+/* 📱 MOBILE: se vuelve abajo centrado */
 @media (max-width: 600px) {
     .banner {
         top: auto;
         bottom: 15px;
-        right: 50%;
-        transform: translateX(50%);
+        left: 50%;
+        transform: translateX(-50%);
+
         width: 90%;
         text-align: center;
         font-size: 11px;
@@ -77,10 +79,10 @@ video {
 
 <body>
 
-<!-- 📢 ANUNCIO LADO DERECHO -->
+<!-- 📢 ANUNCIO IZQUIERDA CENTRADO -->
 <div class="banner">
     🚀 <span>Streaming Premium HD</span><br>
-    sin anuncios • sin cortes<br><br>
+    sin anuncios • sin cortes • acceso ilimitado<br><br>
     WhatsApp y Telegram: 935-719-978
 </div>
 
