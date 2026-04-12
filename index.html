@@ -32,19 +32,19 @@ video {
     object-fit: cover;
 }
 
-/* 📢 ANUNCIO IZQUIERDA CENTRADO */
+/* 📢 BANNER ARRIBA IZQUIERDA */
 .banner {
     position: fixed;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: calc(12px + env(safe-area-inset-top));
+    left: 12px;
 
-    width: 240px;
-    padding: 14px 16px;
-    border-radius: 16px;
+    width: 260px;
+    padding: 12px 14px;
+    border-radius: 14px;
 
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     color: #fff;
     font-size: 12px;
@@ -61,17 +61,14 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MOBILE: se vuelve abajo centrado */
+/* 📱 MOBILE */
 @media (max-width: 600px) {
     .banner {
-        top: auto;
-        bottom: 15px;
+        width: 90%;
         left: 50%;
         transform: translateX(-50%);
-
-        width: 90%;
-        text-align: center;
         font-size: 11px;
+        text-align: center;
     }
 }
 </style>
@@ -79,7 +76,7 @@ video {
 
 <body>
 
-<!-- 📢 ANUNCIO IZQUIERDA CENTRADO -->
+<!-- 📢 BANNER -->
 <div class="banner">
     🚀 <span>Streaming Premium HD</span><br>
     sin anuncios • sin cortes • acceso ilimitado<br><br>
