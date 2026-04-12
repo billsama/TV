@@ -32,26 +32,25 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER ARRIBA IZQUIERDA */
+/* 📢 BANNER OPTIMIZADO (PEQUEÑO + ARRIBA) */
 .banner {
     position: fixed;
-    top: calc(12px + env(safe-area-inset-top));
-    left: 12px;
+    top: calc(8px + env(safe-area-inset-top));
+    left: 10px;
 
-    width: 260px;
-    padding: 12px 14px;
-    border-radius: 14px;
+    max-width: 240px;
+    padding: 8px 10px;
+    border-radius: 12px;
 
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     color: #fff;
-    font-size: 12px;
+    font-size: 10px; /* 🔥 más pequeño */
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.3;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     z-index: 999;
 }
 
@@ -61,14 +60,18 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MOBILE */
+/* 📱 MOBILE EXTRA OPTIMIZADO */
 @media (max-width: 600px) {
     .banner {
-        width: 90%;
+        top: calc(6px + env(safe-area-inset-top));
         left: 50%;
         transform: translateX(-50%);
-        font-size: 11px;
+
+        max-width: 90%;
+        font-size: 9px; /* 🔥 aún más pequeño */
         text-align: center;
+        padding: 6px 8px;
+        border-radius: 10px;
     }
 }
 </style>
@@ -76,10 +79,10 @@ video {
 
 <body>
 
-<!-- 📢 BANNER -->
+<!-- 📢 BANNER PEQUEÑO -->
 <div class="banner">
     🚀 <span>Streaming Premium HD</span><br>
-    sin anuncios • sin cortes • acceso ilimitado<br><br>
+    sin anuncios • sin cortes • acceso ilimitado<br>
     WhatsApp y Telegram: 935-719-978
 </div>
 
