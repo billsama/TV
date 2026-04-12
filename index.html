@@ -32,50 +32,49 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER MÓVIL PRO (COMPACTO + ORDENADO) */
+/* 📢 BANNER ARRIBA PEQUEÑO */
 .banner {
     position: fixed;
-    top: 6px;
+    top: calc(6px + env(safe-area-inset-top));
     left: 6px;
 
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
-    align-items: center;
+    gap: 3px;
 
-    max-width: 170px;   /* 🔥 pequeño */
-    padding: 6px 8px;
+    max-width: 200px;
 
-    border-radius: 10px;
+    padding: 5px 7px;
+    border-radius: 8px;
 
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(10px);
 
     color: #fff;
-    font-size: 8px;     /* 🔥 pequeño real */
+    font-size: 8px;
     font-weight: 600;
     line-height: 1.2;
 
     z-index: 999;
 }
 
-/* texto destacado */
+/* highlight */
 .banner span {
     color: #00ffae;
     font-weight: 800;
 }
 
-/* cada bloque limpio */
+/* items sin párrafos */
 .banner-item {
     white-space: normal;
 }
 
-/* 🔥 mejor aún en pantallas muy pequeñas */
+/* 📱 MÁS PEQUEÑO EN CELULAR */
 @media (max-width: 400px) {
     .banner {
         max-width: 150px;
-        font-size: 7.5px;
-        padding: 5px 6px;
+        font-size: 7px;
+        padding: 4px 6px;
     }
 }
 </style>
@@ -83,10 +82,11 @@ video {
 
 <body>
 
-<!-- 📢 BANNER COMPACTO -->
+<!-- 📢 BANNER PEQUEÑO ARRIBA -->
 <div class="banner">
-    <div class="banner-item">🚀 <span>HD Premium</span> sin anuncios</div>
-    <div class="banner-item">WhatsApp/Telegram 935-719-978</div>
+    <div class="banner-item">🚀 <span>Ventas PRO</span> IPTV estable sin cortes</div>
+    <div class="banner-item">Web • Software • IPTV premium</div>
+    <div class="banner-item">WhatsApp: 935-719-978</div>
 </div>
 
 <!-- 🎬 VIDEO -->
