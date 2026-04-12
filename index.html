@@ -18,12 +18,12 @@ body {
     overflow: hidden;
 }
 
-/* 🎬 VIDEO */
+/* 🎬 FULL SCREEN REAL */
 .player-container {
+    position: fixed;
+    inset: 0;
     width: 100%;
-    height: 100vh;
-    height: 100svh;
-    height: 100dvh;
+    height: 100%;
 }
 
 video {
@@ -32,30 +32,29 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER ARRIBA PEQUEÑO */
+/* 📢 BANNER MÓVIL PRO (ULTRA CLEAN) */
 .banner {
     position: fixed;
     top: calc(6px + env(safe-area-inset-top));
     left: 6px;
 
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
+    max-width: 190px;
 
-    max-width: 200px;
+    padding: 6px 8px;
+    border-radius: 10px;
 
-    padding: 5px 7px;
-    border-radius: 8px;
-
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     color: #fff;
-    font-size: 8px;
+    font-size: 7.8px;
     font-weight: 600;
     line-height: 1.2;
 
     z-index: 999;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 /* highlight */
@@ -64,17 +63,18 @@ video {
     font-weight: 800;
 }
 
-/* items sin párrafos */
+/* cada bloque limpio sin párrafos reales */
 .banner-item {
-    white-space: normal;
+    display: block;
+    margin-bottom: 2px;
 }
 
-/* 📱 MÁS PEQUEÑO EN CELULAR */
+/* 📱 EXTRA SMALL */
 @media (max-width: 400px) {
     .banner {
-        max-width: 150px;
+        max-width: 160px;
         font-size: 7px;
-        padding: 4px 6px;
+        padding: 5px 6px;
     }
 }
 </style>
@@ -82,14 +82,14 @@ video {
 
 <body>
 
-<!-- 📢 BANNER PEQUEÑO ARRIBA -->
+<!-- 📢 BANNER VENTAS PRO -->
 <div class="banner">
-    <div class="banner-item">🚀 <span> Adquiere ya!!!</span> Venta de IPTV, estable y sin cortes</div>
-    <div class="banner-item">Web • Software • Tv Box y más</div>
+    <div class="banner-item">🚀 <span>IPTV Premium</span> estable sin cortes</div>
+    <div class="banner-item">Web • Software • TV Box</div>
     <div class="banner-item">WhatsApp: 935-719-978</div>
 </div>
 
-<!-- 🎬 VIDEO -->
+<!-- 🎬 VIDEO FULL SCREEN -->
 <div class="player-container">
     <video id="video" autoplay muted playsinline></video>
 </div>
