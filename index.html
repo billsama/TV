@@ -32,50 +32,50 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER PRO */
+/* 📢 BANNER MÓVIL PRO (COMPACTO + ORDENADO) */
 .banner {
     position: fixed;
-    top: calc(10px + env(safe-area-inset-top));
-    left: 10px;
+    top: 6px;
+    left: 6px;
 
     display: flex;
-    flex-wrap: wrap; /* 🔥 auto salto */
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
 
-    max-width: 260px;
+    max-width: 170px;   /* 🔥 pequeño */
+    padding: 6px 8px;
 
-    padding: 8px 10px;
-    border-radius: 12px;
+    border-radius: 10px;
 
-    background: rgba(0, 0, 0, 0.70);
-    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
 
     color: #fff;
-    font-size: 9px;
+    font-size: 8px;     /* 🔥 pequeño real */
     font-weight: 600;
     line-height: 1.2;
 
     z-index: 999;
 }
 
-/* highlight */
+/* texto destacado */
 .banner span {
     color: #00ffae;
     font-weight: 800;
 }
 
-/* 📱 MOBILE MÁS PEQUEÑO */
-@media (max-width: 600px) {
+/* cada bloque limpio */
+.banner-item {
+    white-space: normal;
+}
+
+/* 🔥 mejor aún en pantallas muy pequeñas */
+@media (max-width: 400px) {
     .banner {
-        top: 6px;
-        left: 6px;
-
-        max-width: 170px;
-        font-size: 8px;
-
-        padding: 6px 8px;
-        border-radius: 10px;
-        gap: 4px;
+        max-width: 150px;
+        font-size: 7.5px;
+        padding: 5px 6px;
     }
 }
 </style>
@@ -83,10 +83,10 @@ video {
 
 <body>
 
-<!-- 📢 BANNER SIN PÁRRAFOS (FLEX WRAP) -->
+<!-- 📢 BANNER COMPACTO -->
 <div class="banner">
-    <div>🚀 <span>Streaming Premium HD</span></div>
-    <div>sin anuncios • sin cortes • WhatsApp/Telegram 935-719-978</div>
+    <div class="banner-item">🚀 <span>HD Premium</span> sin anuncios</div>
+    <div class="banner-item">WhatsApp/Telegram 935-719-978</div>
 </div>
 
 <!-- 🎬 VIDEO -->
@@ -144,7 +144,7 @@ setTimeout(() => {
     video.play().catch(()=>{});
 }, 1000);
 
-/* MOBILE FIX */
+/* TOUCH FIX */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
