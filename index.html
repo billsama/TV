@@ -32,7 +32,7 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER ARRIBA IZQUIERDA (FIX REAL) */
+/* 📢 BANNER DESKTOP */
 .banner {
     position: fixed;
     top: calc(10px + env(safe-area-inset-top));
@@ -60,14 +60,18 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MOBILE (YA NO CENTRA, SE QUEDA IZQUIERDA ARRIBA) */
+/* 📱 MOBILE ULTRA PEQUEÑO */
 @media (max-width: 600px) {
     .banner {
-        left: 10px;
-        top: calc(8px + env(safe-area-inset-top));
-        transform: none; /* 🔥 IMPORTANTE: evita centrado */
-        font-size: 9px;
-        max-width: 200px;
+        top: 6px;
+        left: 6px;
+
+        font-size: 8px;   /* 🔥 MÁS PEQUEÑO */
+        padding: 6px 8px; /* 🔥 MÁS COMPACTO */
+        max-width: 170px; /* 🔥 MÁS DELGADO */
+
+        border-radius: 8px;
+        line-height: 1.2;
     }
 }
 </style>
@@ -77,8 +81,9 @@ video {
 
 <!-- 📢 BANNER -->
 <div class="banner">
-    <div>🚀 <span>Streaming Premium HD</span> sin anuncios • sin cortes</div>
-    <div>WhatsApp / Telegram: 935-719-978</div>
+    🚀 <span>Streaming Premium HD</span><br>
+    sin anuncios • sin cortes<br>
+    WhatsApp / Telegram: 935-719-978
 </div>
 
 <!-- 🎬 VIDEO -->
