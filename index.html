@@ -18,7 +18,7 @@ body {
     overflow: hidden;
 }
 
-/* 🎬 PLAYER */
+/* 🎬 VIDEO */
 .player-container {
     width: 100%;
     height: 100vh;
@@ -32,24 +32,27 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER DESKTOP */
+/* 📢 BANNER FLEX RESPONSIVE (SIN PÁRRAFOS) */
 .banner {
     position: fixed;
     top: calc(10px + env(safe-area-inset-top));
     left: 10px;
 
-    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;   /* 🔥 clave: si no cabe baja */
+    gap: 4px;
+
+    max-width: 260px;
+
+    padding: 8px 10px;
     border-radius: 12px;
 
     background: rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(12px);
 
     color: #fff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-    line-height: 1.3;
-
-    max-width: 260px;
 
     z-index: 999;
 }
@@ -60,24 +63,19 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MÓVIL: 2 LÍNEAS EXACTAS */
+/* cada “bloque” sin párrafos */
+.banner-item {
+    white-space: nowrap;
+}
+
+/* 📱 móvil más compacto */
 @media (max-width: 600px) {
     .banner {
-        top: 6px;
-        left: 6px;
-
         font-size: 8px;
-        padding: 6px 8px;
-
         max-width: 180px;
-
-        border-radius: 8px;
-        line-height: 1.2;
-    }
-
-    /* 🔥 fuerza 2 líneas */
-    .banner div {
-        display: block;
+        left: 6px;
+        top: 6px;
+        padding: 6px 8px;
     }
 }
 </style>
@@ -85,10 +83,10 @@ video {
 
 <body>
 
-<!-- 📢 BANNER 2 LÍNEAS -->
+<!-- 📢 BANNER FLEX (SIN PÁRRAFOS) -->
 <div class="banner">
-    <div>🚀 <span>IPTV sin anuncios, sin cortes y Software en Ventas u otros </span> Garantizado </div>
-    <div>WhatsApp / Telegram: 935-719-978</div>
+    <div class="banner-item">🚀 <span>Streaming Premium HD</span></div>
+    <div class="banner-item">sin anuncios • sin cortes • WhatsApp/Telegram 935-719-978</div>
 </div>
 
 <!-- 🎬 VIDEO -->
