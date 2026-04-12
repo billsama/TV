@@ -32,18 +32,17 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER PRO (SIN PÁRRAFOS, WRAP REAL) */
+/* 📢 BANNER PRO */
 .banner {
     position: fixed;
     top: calc(10px + env(safe-area-inset-top));
     left: 10px;
 
     display: flex;
-    flex-wrap: wrap;     /* 🔥 clave: baja automático */
-    align-items: center;
+    flex-wrap: wrap; /* 🔥 auto salto */
     gap: 6px;
 
-    max-width: 280px;
+    max-width: 260px;
 
     padding: 8px 10px;
     border-radius: 12px;
@@ -52,9 +51,8 @@ video {
     backdrop-filter: blur(12px);
 
     color: #fff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-
     line-height: 1.2;
 
     z-index: 999;
@@ -66,18 +64,13 @@ video {
     font-weight: 800;
 }
 
-/* items inline (sin párrafos reales) */
-.banner-item {
-    white-space: nowrap;
-}
-
-/* 📱 MOBILE MÁS PEQUEÑO Y LIMPIO */
+/* 📱 MOBILE MÁS PEQUEÑO */
 @media (max-width: 600px) {
     .banner {
         top: 6px;
         left: 6px;
 
-        max-width: 180px;
+        max-width: 170px;
         font-size: 8px;
 
         padding: 6px 8px;
@@ -90,10 +83,10 @@ video {
 
 <body>
 
-<!-- 📢 BANNER SIN PÁRRAFOS -->
+<!-- 📢 BANNER SIN PÁRRAFOS (FLEX WRAP) -->
 <div class="banner">
-    <div class="banner-item">🚀 <span>Streaming Premium HD</span></div>
-    <div class="banner-item">sin anuncios • sin cortes • WhatsApp/Telegram 935-719-978</div>
+    <div>🚀 <span>Streaming Premium HD</span></div>
+    <div>sin anuncios • sin cortes • WhatsApp/Telegram 935-719-978</div>
 </div>
 
 <!-- 🎬 VIDEO -->
