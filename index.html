@@ -18,7 +18,6 @@ body {
     overflow: hidden;
 }
 
-/* 🎬 PLAYER FULL SCREEN MOBILE FIX */
 .player-container {
     width: 100%;
     height: 100vh;
@@ -32,54 +31,35 @@ video {
     object-fit: cover;
 }
 
-/* 🌟 BANNER PRO */
+/* BANNER */
 .banner {
     position: fixed;
     top: calc(12px + env(safe-area-inset-top));
     left: 50%;
     transform: translateX(-50%);
-
     padding: 12px 18px;
     border-radius: 50px;
-
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0,0,0,0.65);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
     color: #fff;
     font-size: 13px;
     font-weight: 600;
     text-align: center;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     z-index: 999;
-
-    max-width: 90%;
 }
 
 .banner span {
     color: #00ffae;
-    font-weight: 800;
-}
-
-/* 📱 MOBILE */
-@media (max-width: 600px) {
-    .banner {
-        font-size: 11px;
-        padding: 10px 14px;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🌟 MENSAJE -->
 <div class="banner">
-    🚀 <span>Streaming Premium</span> HD sin cortes • sin publicidad • experiencia tipo TV
+    🚀 <span>Streaming Premium</span> HD sin cortes
 </div>
 
-<!-- 🎬 PLAYER -->
 <div class="player-container">
     <video id="video" autoplay muted playsinline></video>
 </div>
@@ -87,7 +67,6 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
@@ -97,40 +76,38 @@ const playlist = [
 "https://www.dropbox.com/scl/fi/c10q0u7wx3zyjgb7dub50/TikVid.io_7624632577709575444.mp4?rlkey=fa0q2z97t77vml11j1evn25pw&st=fxzvk8eg&raw=1"
 ];
 
-/* 🔥 SHUFFLE PRO SYSTEM */
 let shuffled = [];
 let current = 0;
 
-/* 🎲 MEZCLA REAL (tipo Spotify) */
+/* 🔀 SHUFFLE */
 function shufflePlaylist() {
     shuffled = [...playlist]
-        .map(value => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
+        .map(v => ({ v, r: Math.random() }))
+        .sort((a,b) => a.r - b.r)
+        .map(x => x.v);
 
     current = 0;
 }
 
 /* ▶ PLAY */
 function playVideo() {
-    if (current >= shuffled.length) {
-        shufflePlaylist();
-    }
+    if (current >= shuffled.length) shufflePlaylist();
 
     video.src = shuffled[current];
     video.load();
 
-    video.play().catch(() => {
+    video.play().catch(()=> {
         setTimeout(playVideo, 1000);
     });
 
     current++;
 }
 
-/* ❌ ERROR RECOVERY */
-video.addEventListener("error", () => {
-    playVideo();
-});
+/* 🎬 END */
+video.addEventListener("ended", playVideo);
+
+/* ❌ ERROR */
+video.addEventListener("error", playVideo);
 
 /* ⏳ BUFFER FIX */
 video.addEventListener("waiting", () => {
@@ -139,17 +116,23 @@ video.addEventListener("waiting", () => {
     }, 3000);
 });
 
-/* 🎬 END */
-video.addEventListener("ended", playVideo);
-
 /* 🚀 START */
 shufflePlaylist();
 playVideo();
 
-/* 🔊 UNMUTE REAL (mobile gesture fix) */
+/* 🔊 AUDIO ACTIVADO A LOS 1 SEGUNDO */
+setTimeout(() => {
+    video.muted = false;
+    video.volume = 1;
+
+    video.play().catch(()=>{});
+}, 1000);
+
+/* 📱 CLICK FALLBACK (OBLIGATORIO EN MOBILE) */
 document.addEventListener("click", () => {
     video.muted = false;
-    video.play().catch(()=>{});
+    video.volume = 1;
+    video.play();
 }, { once: true });
 
 </script>
