@@ -32,17 +32,18 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER 2 PÁRRAFOS ARRIBA IZQUIERDA */
+/* 📢 BANNER ARRIBA IZQUIERDA */
 .banner {
     position: fixed;
-    top: calc(8px + env(safe-area-inset-top));
+    top: calc(10px + env(safe-area-inset-top));
     left: 10px;
 
     padding: 10px 12px;
     border-radius: 12px;
 
-    background: rgba(0, 0, 0, 0.70);
+    background: rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     color: #fff;
     font-size: 10px;
@@ -60,7 +61,7 @@ video {
     font-weight: 800;
 }
 
-/* 📱 MOBILE */
+/* 📱 MOBILE: centrado automático */
 @media (max-width: 600px) {
     .banner {
         left: 50%;
@@ -75,7 +76,7 @@ video {
 
 <body>
 
-<!-- 📢 BANNER 2 PÁRRAFOS -->
+<!-- 📢 2 PÁRRAFOS IZQUIERDA ARRIBA -->
 <div class="banner">
     <div>🚀 <span>Streaming Premium HD</span> sin anuncios • sin cortes</div>
     <div>WhatsApp / Telegram: 935-719-978</div>
@@ -101,7 +102,6 @@ const playlist = [
 let shuffled = [];
 let current = 0;
 
-/* 🔀 SHUFFLE */
 function shufflePlaylist() {
     shuffled = [...playlist]
         .map(v => ({ v, r: Math.random() }))
@@ -111,7 +111,6 @@ function shufflePlaylist() {
     current = 0;
 }
 
-/* ▶ PLAY */
 function playVideo() {
     if (current >= shuffled.length) shufflePlaylist();
 
@@ -128,7 +127,6 @@ function playVideo() {
 video.addEventListener("ended", playVideo);
 video.addEventListener("error", playVideo);
 
-/* START */
 shufflePlaylist();
 playVideo();
 
