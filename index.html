@@ -31,19 +31,18 @@ video {
     object-fit: cover;
 }
 
-/* 🌟 BANNER PRO */
+/* 🌟 BANNER SIMPLE */
 .banner {
     position: fixed;
     top: calc(12px + env(safe-area-inset-top));
     left: 50%;
     transform: translateX(-50%);
 
-    padding: 12px 14px;
-    border-radius: 18px;
+    padding: 12px 16px;
+    border-radius: 16px;
 
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
 
     color: #fff;
     font-size: 12px;
@@ -51,70 +50,23 @@ video {
     text-align: center;
 
     max-width: 92%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
     z-index: 999;
 }
 
-/* highlight */
 .banner span {
     color: #00ffae;
     font-weight: 800;
-}
-
-/* 📲 BOTONES REDES */
-.socials {
-    margin-top: 8px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn {
-    padding: 6px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-    transition: 0.2s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-}
-
-.telegram {
-    background: #229ED9;
-}
-
-.whatsapp {
-    background: #25D366;
-}
-
-@media (max-width: 600px) {
-    .banner {
-        font-size: 10px;
-        padding: 10px 12px;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🚀 BANNER CON REDES -->
+<!-- 🚀 TEXTO ACTUALIZADO -->
 <div class="banner">
     🚀 <span>Streaming Premium HD</span><br>
-    sin anuncios • sin cortes • acceso ilimitado
-
-    <div class="socials">
-        <a class="btn telegram" href="https://t.me/TU_TELEGRAM" target="_blank">
-            📲 Telegram
-        </a>
-        <a class="btn whatsapp" href="https://wa.me/TU_WHATSAPP" target="_blank">
-            💬 WhatsApp
-        </a>
-    </div>
+    sin anuncios • sin cortes • acceso ilimitado<br><br>
+    WhatsApp y Telegram: 935-719-978
 </div>
 
 <!-- 🎬 VIDEO -->
@@ -125,7 +77,6 @@ video {
 <script>
 const video = document.getElementById("video");
 
-/* 🎬 PLAYLIST */
 const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
 "https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
@@ -162,7 +113,6 @@ function playVideo() {
     current++;
 }
 
-/* END */
 video.addEventListener("ended", playVideo);
 video.addEventListener("error", playVideo);
 
@@ -170,14 +120,14 @@ video.addEventListener("error", playVideo);
 shufflePlaylist();
 playVideo();
 
-/* 🔊 AUDIO 1s */
+/* 🔊 AUDIO A LOS 1 SEGUNDO */
 setTimeout(() => {
     video.muted = false;
     video.volume = 1;
     video.play().catch(()=>{});
 }, 1000);
 
-/* MOBILE UNLOCK */
+/* MOBILE FIX */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
