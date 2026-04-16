@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Player PRO</title>
+
 <style>
 * {
     margin: 0;
@@ -11,7 +18,7 @@ body {
     overflow: hidden;
 }
 
-/* VIDEO FULL */
+/* 🎬 VIDEO FULL */
 .player-container {
     position: fixed;
     inset: 0;
@@ -87,3 +94,80 @@ video {
     }
 }
 </style>
+</head>
+
+<body>
+
+<!-- 📢 BANNER -->
+<div class="banner">
+    <div class="banner-item">🚀 <span>IPTV Premium</span> estable sin cortes</div>
+    <div class="banner-item">• Ventas de Software Web • TV Box • Antivirus • Otros</div>
+    <div class="banner-item">WhatsApp: 935-719-978</div>
+</div>
+
+<!-- 🎬 VIDEO -->
+<div class="player-container">
+    <video id="video" autoplay muted playsinline></video>
+</div>
+
+<script>
+const video = document.getElementById("video");
+
+const playlist = [
+"https://dl.dropboxusercontent.com/scl/fi/4zbtcy2zdg1upztjvw9ty/tv_Sjow.mp4?rlkey=fz4swcg4iul7kqlq0jdt7rajk",
+"https://dl.dropboxusercontent.com/scl/fi/vlyjfym5lkq74j60vv3d7/wsdw.mp4?rlkey=cefh6u2imupuuxlnb3x8g17jt",
+"https://dl.dropboxusercontent.com/scl/fi/1tgi7i2xjdfuoin8b9aw1/gag.mp4?rlkey=sqzfdxe5cphqt5a2z4pz5fjn6",
+"https://dl.dropboxusercontent.com/scl/fi/6v7230f6drvhrxaxc8282/scdddg.mp4?rlkey=4uf552fthex3e93i28br4t7cd",
+"https://dl.dropboxusercontent.com/scl/fi/c4rifovakuhmbvds9ybq2/scdvdv.mp4?rlkey=erq3a307ywolnyev6qd8wpkjk",
+"https://dl.dropboxusercontent.com/scl/fi/wcktveyjs0rmuvz28z01t/QUIIZTOK.mp4?rlkey=liizv1alk9yzi06ecrxlo533n",
+"https://dl.dropboxusercontent.com/scl/fi/hy6kvjz8knjkxx2noln0f/ZYMARGO.mp4?rlkey=jo4avkoosl2k90prudf7ft6ae"
+];
+
+let shuffled = [];
+let current = 0;
+
+function shufflePlaylist() {
+    shuffled = [...playlist]
+        .map(v => ({ v, r: Math.random() }))
+        .sort((a,b) => a.r - b.r)
+        .map(x => x.v);
+
+    current = 0;
+}
+
+function playVideo() {
+    if (current >= shuffled.length) shufflePlaylist();
+
+    video.src = shuffled[current];
+    video.load();
+
+    video.play().catch(() => {
+        setTimeout(playVideo, 1000);
+    });
+
+    current++;
+}
+
+video.addEventListener("ended", playVideo);
+video.addEventListener("error", playVideo);
+
+shufflePlaylist();
+playVideo();
+
+/* 🔊 ACTIVAR AUDIO */
+setTimeout(() => {
+    video.muted = false;
+    video.volume = 1;
+    video.play().catch(()=>{});
+}, 1000);
+
+/* TOUCH FIX */
+document.addEventListener("click", () => {
+    video.muted = false;
+    video.play();
+}, { once: true });
+
+</script>
+
+</body>
+</html>
