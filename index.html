@@ -54,21 +54,18 @@ video {
     box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* TITULO */
 .title {
     font-size: 10px;
     font-weight: 800;
     color: #00ffae;
 }
 
-/* SUB */
 .subtitle {
     font-size: 8px;
     opacity: 0.8;
     margin-bottom: 3px;
 }
 
-/* SERVICIOS */
 .services {
     display: flex;
     flex-wrap: wrap;
@@ -83,27 +80,15 @@ video {
     border-radius: 5px;
 }
 
-/* CONTACTO */
 .contact {
     font-size: 9px;
     font-weight: 700;
     color: #00ffae;
 }
 
-/* 📱 CELULAR EXTRA PEQUEÑO */
+/* 📱 EXTRA */
 @media (max-width: 360px) {
-    .banner {
-        font-size: 8px;
-        width: 72vw;
-    }
-
-    .title {
-        font-size: 9px;
-    }
-
-    .services {
-        font-size: 7.5px;
-    }
+    .banner { font-size: 8px; }
 }
 
 /* 💻 PC */
@@ -111,19 +96,6 @@ video {
     .banner {
         font-size: 12px;
         width: 260px;
-        padding: 9px;
-    }
-
-    .title {
-        font-size: 14px;
-    }
-
-    .services {
-        font-size: 11px;
-    }
-
-    .contact {
-        font-size: 12px;
     }
 }
 </style>
@@ -131,7 +103,6 @@ video {
 
 <body>
 
-<!-- 🔥 BANNER -->
 <div class="banner">
     <div class="title">🚀 IPTV PREMIUM</div>
     <div class="subtitle">Sin cortes • HD</div>
@@ -146,7 +117,6 @@ video {
     <div class="contact">📲 935 719 978</div>
 </div>
 
-<!-- 🎬 VIDEO -->
 <div class="player-container">
     <video id="video" autoplay muted playsinline></video>
 </div>
@@ -161,7 +131,10 @@ const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/6v7230f6drvhrxaxc8282/scdddg.mp4?rlkey=4uf552fthex3e93i28br4t7cd",
 "https://dl.dropboxusercontent.com/scl/fi/c4rifovakuhmbvds9ybq2/scdvdv.mp4?rlkey=erq3a307ywolnyev6qd8wpkjk",
 "https://dl.dropboxusercontent.com/scl/fi/wcktveyjs0rmuvz28z01t/QUIIZTOK.mp4?rlkey=liizv1alk9yzi06ecrxlo533n",
-"https://dl.dropboxusercontent.com/scl/fi/hy6kvjz8knjkxx2noln0f/ZYMARGO.mp4?rlkey=jo4avkoosl2k90prudf7ft6ae"
+"https://dl.dropboxusercontent.com/scl/fi/hy6kvjz8knjkxx2noln0f/ZYMARGO.mp4?rlkey=jo4avkoosl2k90prudf7ft6ae",
+
+// ✅ NUEVO VIDEO AGREGADO
+"https://dl.dropboxusercontent.com/scl/fi/4s2a60pjay3xmtxmamfge/CAPITAA.mp4?rlkey=e9w3ywydjyfa2cz6b0dd7v0l0"
 ];
 
 let shuffled = [];
