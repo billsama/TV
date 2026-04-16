@@ -32,7 +32,7 @@ video {
     object-fit: cover;
 }
 
-/* 🔥 BANNER PRO RESPONSIVE */
+/* 🔥 BANNER BASE */
 .banner {
     position: fixed;
     top: calc(10px + env(safe-area-inset-top));
@@ -49,7 +49,7 @@ video {
 
     color: #fff;
 
-    font-size: clamp(11px, 1.6vw, 15px);
+    font-size: 14px;
     line-height: 1.4;
 
     z-index: 999;
@@ -61,7 +61,7 @@ video {
 .banner span {
     color: #00ffae;
     font-weight: 800;
-    font-size: clamp(12px, 1.8vw, 16px);
+    font-size: 15px;
 }
 
 /* ITEMS */
@@ -71,17 +71,36 @@ video {
     opacity: 0.95;
 }
 
-/* WhatsApp destacado */
+/* WhatsApp */
 .banner-item:last-child {
     font-weight: 700;
-    letter-spacing: 0.3px;
 }
 
-/* 📱 MOBILE EXTRA PEQUEÑO */
+/* 📱 CELULARES */
+@media (max-width: 600px) {
+    .banner {
+        font-size: 10px;
+        padding: 7px 9px;
+        max-width: 85vw;
+    }
+
+    .banner span {
+        font-size: 11px;
+    }
+
+    .banner-item {
+        margin-bottom: 3px;
+    }
+}
+
+/* 📱 EXTRA PEQUEÑO */
 @media (max-width: 360px) {
     .banner {
-        padding: 8px 10px;
-        border-radius: 12px;
+        font-size: 9px;
+    }
+
+    .banner span {
+        font-size: 10px;
     }
 }
 
@@ -90,6 +109,7 @@ video {
     .banner {
         top: 20px;
         left: 20px;
+        font-size: 15px;
         max-width: 360px;
     }
 }
@@ -154,14 +174,14 @@ video.addEventListener("error", playVideo);
 shufflePlaylist();
 playVideo();
 
-/* 🔊 ACTIVAR AUDIO */
+/* 🔊 AUDIO */
 setTimeout(() => {
     video.muted = false;
     video.volume = 1;
     video.play().catch(()=>{});
 }, 1000);
 
-/* TOUCH FIX */
+/* TOUCH */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
