@@ -32,7 +32,7 @@ video {
     object-fit: cover;
 }
 
-/* 📢 BANNER MÓVIL PRO (ULTRA CLEAN) */
+/* 📢 BANNER */
 .banner {
     position: fixed;
     top: calc(6px + env(safe-area-inset-top));
@@ -57,19 +57,16 @@ video {
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-/* highlight */
 .banner span {
     color: #00ffae;
     font-weight: 800;
 }
 
-/* cada bloque limpio sin párrafos reales */
 .banner-item {
     display: block;
     margin-bottom: 2px;
 }
 
-/* 📱 EXTRA SMALL */
 @media (max-width: 400px) {
     .banner {
         max-width: 160px;
@@ -82,14 +79,14 @@ video {
 
 <body>
 
-<!-- 📢 BANNER VENTAS PRO -->
+<!-- 📢 BANNER -->
 <div class="banner">
     <div class="banner-item">🚀 <span>IPTV Premium</span> estable sin cortes</div>
     <div class="banner-item">Web • Software • TV Box</div>
     <div class="banner-item">WhatsApp: 935-719-978</div>
 </div>
 
-<!-- 🎬 VIDEO FULL SCREEN -->
+<!-- 🎬 VIDEO -->
 <div class="player-container">
     <video id="video" autoplay muted playsinline></video>
 </div>
@@ -103,7 +100,9 @@ const playlist = [
 "https://dl.dropboxusercontent.com/scl/fi/1tgi7i2xjdfuoin8b9aw1/gag.mp4?rlkey=sqzfdxe5cphqt5a2z4pz5fjn6",
 "https://dl.dropboxusercontent.com/scl/fi/6v7230f6drvhrxaxc8282/scdddg.mp4?rlkey=4uf552fthex3e93i28br4t7cd",
 "https://dl.dropboxusercontent.com/scl/fi/c4rifovakuhmbvds9ybq2/scdvdv.mp4?rlkey=erq3a307ywolnyev6qd8wpkjk",
-"https://www.dropbox.com/scl/fi/c10q0u7wx3zyjgb7dub50/TikVid.io_7624632577709575444.mp4?rlkey=fa0q2z97t77vml11j1evn25pw&st=fxzvk8eg&raw=1"
+
+// ✅ NUEVO VIDEO
+"https://dl.dropboxusercontent.com/scl/fi/8uw8zryd2aekn84q2ldxe/QUIZTITKTOK.mp4?rlkey=h0bzvzpawbnc6natt15zf5331"
 ];
 
 let shuffled = [];
@@ -137,7 +136,7 @@ video.addEventListener("error", playVideo);
 shufflePlaylist();
 playVideo();
 
-/* 🔊 AUDIO 1s */
+/* 🔊 ACTIVAR AUDIO */
 setTimeout(() => {
     video.muted = false;
     video.volume = 1;
