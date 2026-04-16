@@ -30,81 +30,108 @@ video {
     object-fit: cover;
 }
 
-/* 🔥 BANNER COMPACTO */
+/* 🔥 BANNER PRO LLAMATIVO */
 .banner {
     position: fixed;
-    top: calc(8px + env(safe-area-inset-top));
-    left: 8px;
+    top: calc(10px + env(safe-area-inset-top));
+    left: 10px;
 
-    width: min(75vw, 260px);
+    width: min(85vw, 280px);
 
-    padding: 8px 9px;
-    border-radius: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
 
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.45));
+    backdrop-filter: blur(14px);
 
     color: #fff;
-    font-size: 11px;
-    line-height: 1.25;
 
     z-index: 999;
 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.6);
 }
 
-/* TITULO */
-.banner span {
+/* 🚀 TITULO */
+.title {
+    font-size: 13px;
+    font-weight: 800;
     color: #00ffae;
-    font-weight: 700;
+    margin-bottom: 4px;
 }
 
-/* ITEMS */
-.banner-item {
-    margin-bottom: 3px;
+/* SUB */
+.subtitle {
+    font-size: 10px;
+    opacity: 0.85;
+    margin-bottom: 6px;
 }
 
-/* SERVICIOS ORDENADOS */
+/* 🔥 SERVICIOS BONITOS */
 .services {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px 8px;
+    font-size: 10px;
+    margin-bottom: 6px;
 }
 
-.services span {
-    white-space: nowrap;
-    opacity: 0.9;
+.services div {
+    background: rgba(255,255,255,0.05);
+    padding: 3px 6px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* 📲 CONTACTO */
+.contact {
+    font-size: 11px;
+    font-weight: 700;
+    color: #00ffae;
+    text-align: center;
 }
 
 /* 📱 CELULAR */
 @media (max-width: 600px) {
-    .banner {
+    .title {
+        font-size: 11px;
+    }
+
+    .subtitle {
         font-size: 9px;
-        padding: 6px 7px;
-        width: 70vw;
     }
 
     .services {
+        font-size: 9px;
         gap: 2px 6px;
+    }
+
+    .contact {
+        font-size: 10px;
+    }
+
+    .banner {
+        width: 75vw;
+        padding: 8px 9px;
     }
 }
 
 /* 📱 MUY PEQUEÑO */
 @media (max-width: 360px) {
     .banner {
-        font-size: 8.5px;
-        width: 72vw;
+        width: 78vw;
+    }
+
+    .services {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
 /* 💻 PC */
 @media (min-width: 1024px) {
     .banner {
-        font-size: 13px;
         width: 300px;
         top: 20px;
         left: 20px;
-        padding: 10px 12px;
     }
 }
 </style>
@@ -114,17 +141,19 @@ video {
 
 <!-- 🔥 BANNER -->
 <div class="banner">
-    <div class="banner-item">🚀 <span>IPTV Premium</span></div>
 
-    <div class="banner-item services">
-        <span>• Software</span>
-        <span>• TV Box</span>
-        <span>• Antivirus</span>
-        <span>• Cuentas</span>
-        <span>• Otros</span>
+    <div class="title">🚀 IPTV PREMIUM</div>
+    <div class="subtitle">Estable • Sin cortes • Alta calidad</div>
+
+    <div class="services">
+        <div>Software</div>
+        <div>TV Box</div>
+        <div>Antivirus</div>
+        <div>Cuentas</div>
     </div>
 
-    <div class="banner-item">📲 935-719-978</div>
+    <div class="contact">📲 935 719 978</div>
+
 </div>
 
 <!-- 🎬 VIDEO -->
@@ -176,14 +205,11 @@ video.addEventListener("error", playVideo);
 shufflePlaylist();
 playVideo();
 
-/* 🔊 AUDIO */
 setTimeout(() => {
     video.muted = false;
-    video.volume = 1;
     video.play().catch(()=>{});
 }, 1000);
 
-/* TOUCH */
 document.addEventListener("click", () => {
     video.muted = false;
     video.play();
