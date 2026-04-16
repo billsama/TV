@@ -30,108 +30,100 @@ video {
     object-fit: cover;
 }
 
-/* 🔥 BANNER PRO LLAMATIVO */
+/* 🔥 BANNER ULTRA COMPACTO */
 .banner {
     position: fixed;
-    top: calc(10px + env(safe-area-inset-top));
-    left: 10px;
+    top: calc(6px + env(safe-area-inset-top));
+    left: 6px;
 
-    width: min(85vw, 280px);
+    width: min(70vw, 220px);
 
-    padding: 10px 12px;
-    border-radius: 14px;
+    padding: 6px 7px;
+    border-radius: 10px;
 
-    background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.45));
-    backdrop-filter: blur(14px);
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(10px);
 
     color: #fff;
 
+    font-size: 9px;
+    line-height: 1.2;
+
     z-index: 999;
 
-    box-shadow: 0 6px 25px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* 🚀 TITULO */
+/* TITULO */
 .title {
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 800;
     color: #00ffae;
-    margin-bottom: 4px;
 }
 
 /* SUB */
 .subtitle {
-    font-size: 10px;
-    opacity: 0.85;
-    margin-bottom: 6px;
+    font-size: 8px;
+    opacity: 0.8;
+    margin-bottom: 3px;
 }
 
-/* 🔥 SERVICIOS BONITOS */
+/* SERVICIOS */
 .services {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px 8px;
-    font-size: 10px;
-    margin-bottom: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 5px;
+    font-size: 8px;
+    margin-bottom: 3px;
 }
 
-.services div {
-    background: rgba(255,255,255,0.05);
-    padding: 3px 6px;
-    border-radius: 6px;
-    text-align: center;
+.services span {
+    background: rgba(255,255,255,0.06);
+    padding: 2px 4px;
+    border-radius: 5px;
 }
 
-/* 📲 CONTACTO */
+/* CONTACTO */
 .contact {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 700;
     color: #00ffae;
-    text-align: center;
 }
 
-/* 📱 CELULAR */
-@media (max-width: 600px) {
-    .title {
-        font-size: 11px;
-    }
-
-    .subtitle {
-        font-size: 9px;
-    }
-
-    .services {
-        font-size: 9px;
-        gap: 2px 6px;
-    }
-
-    .contact {
-        font-size: 10px;
-    }
-
-    .banner {
-        width: 75vw;
-        padding: 8px 9px;
-    }
-}
-
-/* 📱 MUY PEQUEÑO */
+/* 📱 CELULAR EXTRA PEQUEÑO */
 @media (max-width: 360px) {
     .banner {
-        width: 78vw;
+        font-size: 8px;
+        width: 72vw;
+    }
+
+    .title {
+        font-size: 9px;
     }
 
     .services {
-        grid-template-columns: 1fr 1fr;
+        font-size: 7.5px;
     }
 }
 
 /* 💻 PC */
 @media (min-width: 1024px) {
     .banner {
-        width: 300px;
-        top: 20px;
-        left: 20px;
+        font-size: 12px;
+        width: 260px;
+        padding: 9px;
+    }
+
+    .title {
+        font-size: 14px;
+    }
+
+    .services {
+        font-size: 11px;
+    }
+
+    .contact {
+        font-size: 12px;
     }
 }
 </style>
@@ -141,19 +133,17 @@ video {
 
 <!-- 🔥 BANNER -->
 <div class="banner">
-
     <div class="title">🚀 IPTV PREMIUM</div>
-    <div class="subtitle">Estable • Sin cortes • Alta calidad</div>
+    <div class="subtitle">Sin cortes • HD</div>
 
     <div class="services">
-        <div>Software</div>
-        <div>TV Box</div>
-        <div>Antivirus</div>
-        <div>Cuentas</div>
+        <span>Software</span>
+        <span>TV Box</span>
+        <span>Antivirus</span>
+        <span>Cuentas</span>
     </div>
 
     <div class="contact">📲 935 719 978</div>
-
 </div>
 
 <!-- 🎬 VIDEO -->
